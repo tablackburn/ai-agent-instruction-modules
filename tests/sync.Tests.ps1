@@ -29,8 +29,8 @@ Describe 'sync.ps1' {
         $script:MockInstructionsDir = Join-Path $MockAimDir 'instructions\core'
         New-Item -ItemType Directory -Path $MockInstructionsDir -Force | Out-Null
 
-        $TestModuleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Test workflow content'
-        Set-Content -Path (Join-Path $MockInstructionsDir 'agent-workflow.md') -Value $TestModuleContent
+        $testModuleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Test workflow content'
+        Set-Content -Path (Join-Path $MockInstructionsDir 'agent-workflow.md') -Value $testModuleContent
 
         $script:TempSyncScript = Join-Path $MockScriptsDir 'sync.ps1'
     }
@@ -52,15 +52,15 @@ Describe 'sync.ps1' {
     Context 'When aim.json exists with cached modules' {
         BeforeEach {
             # Create cache with module content
-            $CacheDir = Join-Path $TempDir '.aim-cache'
-            New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
-            Set-Content -Path (Join-Path $CacheDir 'core_agent-workflow.md') -Value '# Agent Workflow`n`nTest workflow content'
+            $cacheDir = Join-Path $TempDir '.aim-cache'
+            New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+            Set-Content -Path (Join-Path $cacheDir 'core_agent-workflow.md') -Value '# Agent Workflow`n`nTest workflow content'
 
             # Create a valid aim.json using cached module
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should regenerate AGENTS.md' {
@@ -68,11 +68,11 @@ Describe 'sync.ps1' {
             & $TempSyncScript -TargetPath $TempDir -SkipPull 2>&1 | Out-Null
 
             # Assert
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            Test-Path $AgentsPath | Should -BeTrue
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            Test-Path $agentsPath | Should -BeTrue
 
-            $AgentsContent = Get-Content $AgentsPath -Raw
-            $AgentsContent | Should -Match 'Agent Workflow'
+            $agentsContent = Get-Content $agentsPath -Raw
+            $agentsContent | Should -Match 'Agent Workflow'
         }
 
         It 'Should generate file without errors using -SkipPull' {
@@ -87,15 +87,15 @@ Describe 'sync.ps1' {
     Context 'Git operations' {
         BeforeEach {
             # Create cache with module content
-            $CacheDir = Join-Path $TempDir '.aim-cache'
-            New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
-            Set-Content -Path (Join-Path $CacheDir 'core_agent-workflow.md') -Value '# Agent Workflow'
+            $cacheDir = Join-Path $TempDir '.aim-cache'
+            New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+            Set-Content -Path (Join-Path $cacheDir 'core_agent-workflow.md') -Value '# Agent Workflow'
 
             # Create a valid aim.json
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should handle non-git directory gracefully' {
@@ -115,11 +115,11 @@ Describe 'sync.ps1' {
     Context 'Awesome-copilot fallback modules' {
         BeforeEach {
             # Create config with awesome-copilot module
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = $true
                 'languages/python'    = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should create cache directory when fetching fallbacks' {
@@ -134,8 +134,8 @@ Describe 'sync.ps1' {
             & $TempSyncScript -TargetPath $TempDir -SkipPull 2>&1 | Out-Null
 
             # Assert
-            $CachePath = Join-Path $TempDir '.aim-cache'
-            Test-Path $CachePath | Should -BeTrue
+            $cachePath = Join-Path $TempDir '.aim-cache'
+            Test-Path $cachePath | Should -BeTrue
         }
 
         It 'Should fetch and cache fallback modules' {
@@ -150,11 +150,11 @@ Describe 'sync.ps1' {
             & $TempSyncScript -TargetPath $TempDir -SkipPull 2>&1 | Out-Null
 
             # Assert
-            $CacheFile = Join-Path $TempDir '.aim-cache\languages_python.md'
-            Test-Path $CacheFile | Should -BeTrue
+            $cacheFile = Join-Path $TempDir '.aim-cache\languages_python.md'
+            Test-Path $cacheFile | Should -BeTrue
 
-            $CachedContent = Get-Content $CacheFile -Raw
-            $CachedContent | Should -Match 'Mocked Python Instructions'
+            $cachedContent = Get-Content $cacheFile -Raw
+            $cachedContent | Should -Match 'Mocked Python Instructions'
         }
 
         It 'Should include cached content in AGENTS.md' {
@@ -169,9 +169,9 @@ Describe 'sync.ps1' {
             & $TempSyncScript -TargetPath $TempDir -SkipPull 2>&1 | Out-Null
 
             # Assert
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            $AgentsContent = Get-Content $AgentsPath -Raw
-            $AgentsContent | Should -Match 'Python'
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            $agentsContent = Get-Content $agentsPath -Raw
+            $agentsContent | Should -Match 'Python'
         }
 
         It 'Should handle fetch failures gracefully' {
@@ -203,10 +203,10 @@ Describe 'sync.ps1' {
     Context 'When fallback is disabled' {
         BeforeEach {
             # Create config with fallback disabled
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'languages/python' = 'awesome-copilot'
             } -FallbackEnabled $false
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should not create cache directory when fallback disabled' {
@@ -216,23 +216,23 @@ Describe 'sync.ps1' {
             & $TempSyncScript -TargetPath $TempDir -SkipPull 2>&1 | Out-Null
 
             # Assert
-            $CachePath = Join-Path $TempDir '.aim-cache'
-            Test-Path $CachePath | Should -BeFalse
+            $cachePath = Join-Path $TempDir '.aim-cache'
+            Test-Path $cachePath | Should -BeFalse
         }
     }
 
     Context 'Cache updates' {
         BeforeEach {
             # Create cache with old content
-            $CacheDir = Join-Path $TempDir '.aim-cache'
-            New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
-            Set-Content -Path (Join-Path $CacheDir 'core_agent-workflow.md') -Value '# Old cached content'
+            $cacheDir = Join-Path $TempDir '.aim-cache'
+            New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+            Set-Content -Path (Join-Path $cacheDir 'core_agent-workflow.md') -Value '# Old cached content'
 
             # Create a config using cached module
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
 
             # Create an existing AGENTS.md with old content
             Set-Content -Path (Join-Path $TempDir 'AGENTS.md') -Value '# Old AGENTS.md content'
@@ -240,17 +240,17 @@ Describe 'sync.ps1' {
 
         It 'Should regenerate AGENTS.md from current cache' {
             # Update the cached module content
-            $CacheDir = Join-Path $TempDir '.aim-cache'
-            Set-Content -Path (Join-Path $CacheDir 'core_agent-workflow.md') -Value '# Updated workflow content v2'
+            $cacheDir = Join-Path $TempDir '.aim-cache'
+            Set-Content -Path (Join-Path $cacheDir 'core_agent-workflow.md') -Value '# Updated workflow content v2'
 
             # Act
             & $TempSyncScript -TargetPath $TempDir -SkipPull 2>&1 | Out-Null
 
             # Assert
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            $AgentsContent = Get-Content $AgentsPath -Raw
-            $AgentsContent | Should -Match 'Updated workflow content v2'
-            $AgentsContent | Should -Not -Match 'Old AGENTS.md content'
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            $agentsContent = Get-Content $agentsPath -Raw
+            $agentsContent | Should -Match 'Updated workflow content v2'
+            $agentsContent | Should -Not -Match 'Old AGENTS.md content'
         }
     }
 }

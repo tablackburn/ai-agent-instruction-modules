@@ -29,8 +29,8 @@ Describe 'deploy.ps1' {
         $script:MockInstructionsDir = Join-Path $MockAimDir 'instructions\core'
         New-Item -ItemType Directory -Path $MockInstructionsDir -Force | Out-Null
 
-        $TestModuleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Test content'
-        Set-Content -Path (Join-Path $MockInstructionsDir 'agent-workflow.md') -Value $TestModuleContent
+        $testModuleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Test content'
+        Set-Content -Path (Join-Path $MockInstructionsDir 'agent-workflow.md') -Value $testModuleContent
 
         $script:TempDeployScript = Join-Path $MockScriptsDir 'deploy.ps1'
     }
@@ -48,13 +48,13 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            Test-Path $ConfigPath | Should -BeTrue
+            $configPath = Join-Path $TempDir 'aim.json'
+            Test-Path $configPath | Should -BeTrue
 
-            $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-            $Config.modules.'core/agent-workflow' | Should -BeTrue
-            $Config.modules.'core/code-quality' | Should -BeTrue
-            $Config.modules.'core/security' | Should -BeTrue
+            $config = Get-Content $configPath -Raw | ConvertFrom-Json
+            $config.modules.'core/agent-workflow' | Should -BeTrue
+            $config.modules.'core/code-quality' | Should -BeTrue
+            $config.modules.'core/security' | Should -BeTrue
         }
 
         It 'Should include schema reference in config' {
@@ -62,9 +62,9 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-            $Config.'$schema' | Should -Match 'schema\.json'
+            $configPath = Join-Path $TempDir 'aim.json'
+            $config = Get-Content $configPath -Raw | ConvertFrom-Json
+            $config.'$schema' | Should -Match 'schema\.json'
         }
 
         It 'Should include fallback configuration' {
@@ -72,11 +72,11 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-            $Config.fallback.enabled | Should -BeTrue
-            $Config.fallback.source | Should -Match 'awesome-copilot'
-            $Config.fallback.branch | Should -Be 'main'
+            $configPath = Join-Path $TempDir 'aim.json'
+            $config = Get-Content $configPath -Raw | ConvertFrom-Json
+            $config.fallback.enabled | Should -BeTrue
+            $config.fallback.source | Should -Match 'awesome-copilot'
+            $config.fallback.branch | Should -Be 'main'
         }
 
         It 'Should generate AGENTS.md file' {
@@ -84,8 +84,8 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            Test-Path $AgentsPath | Should -BeTrue
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            Test-Path $agentsPath | Should -BeTrue
         }
 
         It 'Should include module sections in AGENTS.md' {
@@ -93,23 +93,23 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            $AgentsContent = Get-Content $AgentsPath -Raw
-            $AgentsContent | Should -Match 'Agent Workflow'
-            $AgentsContent | Should -Match 'Code Quality'
-            $AgentsContent | Should -Match 'Security'
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            $agentsContent = Get-Content $agentsPath -Raw
+            $agentsContent | Should -Match 'Agent Workflow'
+            $agentsContent | Should -Match 'Code Quality'
+            $agentsContent | Should -Match 'Security'
         }
     }
 
     Context 'When aim.json already exists' {
         BeforeEach {
             # Create existing config
-            $ExistingConfig = @{
+            $existingConfig = @{
                 version = '1.0.0'
                 modules = @{ 'custom/module' = $true }
             }
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            Set-Content -Path $ConfigPath -Value ($ExistingConfig | ConvertTo-Json)
+            $configPath = Join-Path $TempDir 'aim.json'
+            Set-Content -Path $configPath -Value ($existingConfig | ConvertTo-Json)
         }
 
         It 'Should not overwrite without -Force' {
@@ -117,10 +117,10 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-            $Config.modules.'custom/module' | Should -BeTrue
-            $Config.modules.'core/agent-workflow' | Should -BeNullOrEmpty
+            $configPath = Join-Path $TempDir 'aim.json'
+            $config = Get-Content $configPath -Raw | ConvertFrom-Json
+            $config.modules.'custom/module' | Should -BeTrue
+            $config.modules.'core/agent-workflow' | Should -BeNullOrEmpty
         }
 
         It 'Should overwrite with -Force' {
@@ -128,49 +128,49 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir -Force 2>&1 | Out-Null
 
             # Assert
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-            $Config.modules.'core/agent-workflow' | Should -BeTrue
+            $configPath = Join-Path $TempDir 'aim.json'
+            $config = Get-Content $configPath -Raw | ConvertFrom-Json
+            $config.modules.'core/agent-workflow' | Should -BeTrue
         }
 
         It 'Should still regenerate AGENTS.md without -Force' {
             # Create an old AGENTS.md
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            Set-Content -Path $AgentsPath -Value '# Old Content'
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            Set-Content -Path $agentsPath -Value '# Old Content'
 
             # Act
             & $TempDeployScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert - AGENTS.md should be regenerated
-            $AgentsContent = Get-Content $AgentsPath -Raw
-            $AgentsContent | Should -Match 'AI Agent Instructions'
+            $agentsContent = Get-Content $agentsPath -Raw
+            $agentsContent | Should -Match 'AI Agent Instructions'
         }
     }
 
     Context 'When profile is specified' {
         BeforeEach {
             # Create mock profiles directory
-            $ProfilesDir = Join-Path $MockAimDir 'config\profiles'
-            New-Item -ItemType Directory -Path $ProfilesDir -Force | Out-Null
+            $profilesDir = Join-Path $MockAimDir 'config\profiles'
+            New-Item -ItemType Directory -Path $profilesDir -Force | Out-Null
 
             # Create minimal profile
-            $MinimalProfile = @{
+            $minimalProfile = @{
                 modules = @{
                     'core/agent-workflow' = $true
                     'core/security'       = $true
                 }
             }
-            Set-Content -Path (Join-Path $ProfilesDir 'minimal.json') -Value ($MinimalProfile | ConvertTo-Json)
+            Set-Content -Path (Join-Path $profilesDir 'minimal.json') -Value ($minimalProfile | ConvertTo-Json)
 
             # Create web-developer profile
-            $WebDevProfile = @{
+            $webDevProfile = @{
                 modules = @{
                     'core/agent-workflow'  = $true
                     'languages/javascript' = $true
                     'languages/typescript' = 'awesome-copilot'
                 }
             }
-            Set-Content -Path (Join-Path $ProfilesDir 'web-developer.json') -Value ($WebDevProfile | ConvertTo-Json)
+            Set-Content -Path (Join-Path $profilesDir 'web-developer.json') -Value ($webDevProfile | ConvertTo-Json)
         }
 
         It 'Should apply minimal profile' {
@@ -178,10 +178,10 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir -Profile 'minimal' 2>&1 | Out-Null
 
             # Assert
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-            $Config.modules.'core/agent-workflow' | Should -BeTrue
-            $Config.modules.'core/security' | Should -BeTrue
+            $configPath = Join-Path $TempDir 'aim.json'
+            $config = Get-Content $configPath -Raw | ConvertFrom-Json
+            $config.modules.'core/agent-workflow' | Should -BeTrue
+            $config.modules.'core/security' | Should -BeTrue
         }
 
         It 'Should apply web-developer profile with mixed sources' {
@@ -189,11 +189,11 @@ Describe 'deploy.ps1' {
             & $TempDeployScript -TargetPath $TempDir -Profile 'web-developer' 2>&1 | Out-Null
 
             # Assert
-            $ConfigPath = Join-Path $TempDir 'aim.json'
-            $Config = Get-Content $ConfigPath -Raw | ConvertFrom-Json
-            $Config.modules.'core/agent-workflow' | Should -BeTrue
-            $Config.modules.'languages/javascript' | Should -BeTrue
-            $Config.modules.'languages/typescript' | Should -Be 'awesome-copilot'
+            $configPath = Join-Path $TempDir 'aim.json'
+            $config = Get-Content $configPath -Raw | ConvertFrom-Json
+            $config.modules.'core/agent-workflow' | Should -BeTrue
+            $config.modules.'languages/javascript' | Should -BeTrue
+            $config.modules.'languages/typescript' | Should -Be 'awesome-copilot'
         }
     }
 

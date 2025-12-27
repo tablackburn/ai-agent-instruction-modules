@@ -182,18 +182,18 @@ function Get-TestScriptPaths {
     [CmdletBinding()]
     param()
 
-    $TestRoot = $PSScriptRoot
-    $AimRoot = Split-Path -Parent $TestRoot
-    $ScriptsPath = Join-Path $AimRoot 'scripts'
+    $testRoot = $PSScriptRoot
+    $aimRoot = Split-Path -Parent $testRoot
+    $scriptsPath = Join-Path $aimRoot 'scripts'
 
     return @{
-        AimRoot       = $AimRoot
-        ScriptsPath   = $ScriptsPath
-        DeployScript  = Join-Path $ScriptsPath 'deploy.ps1'
-        SyncScript    = Join-Path $ScriptsPath 'sync.ps1'
-        BuildScript   = Join-Path $ScriptsPath 'build-agents-md.ps1'
-        Instructions  = Join-Path $AimRoot 'instructions'
-        Profiles      = Join-Path $AimRoot 'config\profiles'
+        AimRoot       = $aimRoot
+        ScriptsPath   = $scriptsPath
+        DeployScript  = Join-Path $scriptsPath 'deploy.ps1'
+        SyncScript    = Join-Path $scriptsPath 'sync.ps1'
+        BuildScript   = Join-Path $scriptsPath 'build-agents-md.ps1'
+        Instructions  = Join-Path $aimRoot 'instructions'
+        Profiles      = Join-Path $aimRoot 'config\profiles'
     }
 }
 

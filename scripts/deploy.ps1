@@ -45,34 +45,33 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # Determine paths
-$ScriptRoot = $PSScriptRoot
-$AimRoot = Split-Path -Parent $ScriptRoot
+$scriptRoot = $PSScriptRoot
+$aimRoot = Split-Path -Parent $scriptRoot
 
 if ([string]::IsNullOrEmpty($TargetPath)) {
     # Default to parent of .aim folder (assumes .aim is in target repo)
-    $TargetPath = Split-Path -Parent $AimRoot
+    $TargetPath = Split-Path -Parent $aimRoot
 }
 
-$ConfigFile = Join-Path $TargetPath 'aim.json'
-$AgentsFile = Join-Path $TargetPath 'AGENTS.md'
+$configFile = Join-Path $TargetPath 'aim.json'
 
-Write-Host "AIM Deploy" -ForegroundColor Cyan
-Write-Host "==========" -ForegroundColor Cyan
-Write-Host ""
+Write-Host 'AIM Deploy' -ForegroundColor Cyan
+Write-Host '==========' -ForegroundColor Cyan
+Write-Host ''
 Write-Host "Target path: $TargetPath"
-Write-Host "AIM source:  $AimRoot"
-Write-Host ""
+Write-Host "AIM source:  $aimRoot"
+Write-Host ''
 
 # Check if aim.json already exists
-if ((Test-Path $ConfigFile) -and -not $Force) {
-    Write-Host "aim.json already exists. Use -Force to overwrite." -ForegroundColor Yellow
-    Write-Host "Running build to regenerate AGENTS.md..." -ForegroundColor Yellow
-    & "$ScriptRoot\build-agents-md.ps1" -TargetPath $TargetPath
+if ((Test-Path $configFile) -and -not $Force) {
+    Write-Host 'aim.json already exists. Use -Force to overwrite.' -ForegroundColor Yellow
+    Write-Host 'Running build to regenerate AGENTS.md...' -ForegroundColor Yellow
+    & "$scriptRoot\build-agents-md.ps1" -TargetPath $TargetPath
     exit 0
 }
 
 # Load profile or create default config
-$Config = @{
+$config = @{
     '$schema' = 'https://raw.githubusercontent.com/tablackburn/ai-agent-instruction-modules/main/schema.json'
     version = '1.0.0'
     modules = @{
@@ -90,36 +89,36 @@ $Config = @{
 }
 
 if ($Profile) {
-    $ProfilePath = Join-Path $AimRoot "config\profiles\$Profile.json"
-    if (Test-Path $ProfilePath) {
+    $profilePath = Join-Path $aimRoot "config\profiles\$Profile.json"
+    if (Test-Path $profilePath) {
         Write-Host "Applying profile: $Profile" -ForegroundColor Green
-        $ProfileConfig = Get-Content $ProfilePath -Raw | ConvertFrom-Json -AsHashtable
+        $profileConfig = Get-Content $profilePath -Raw | ConvertFrom-Json -AsHashtable
         # Merge profile modules into config
-        foreach ($key in $ProfileConfig.modules.Keys) {
-            $Config.modules[$key] = $ProfileConfig.modules[$key]
+        foreach ($key in $profileConfig.modules.Keys) {
+            $config.modules[$key] = $profileConfig.modules[$key]
         }
     }
     else {
-        Write-Warning "Profile '$Profile' not found at $ProfilePath. Using defaults."
+        Write-Warning "Profile '$Profile' not found at $profilePath. Using defaults."
     }
 }
 
 # Write config file
-$ConfigJson = $Config | ConvertTo-Json -Depth 10
-Set-Content -Path $ConfigFile -Value $ConfigJson -Encoding UTF8
+$configJson = $config | ConvertTo-Json -Depth 10
+Set-Content -Path $configFile -Value $configJson -Encoding UTF8
 
-Write-Host "Created aim.json" -ForegroundColor Green
+Write-Host 'Created aim.json' -ForegroundColor Green
 
 # Generate AGENTS.md
-Write-Host ""
-Write-Host "Generating AGENTS.md..." -ForegroundColor Cyan
-& "$ScriptRoot\build-agents-md.ps1" -TargetPath $TargetPath
+Write-Host ''
+Write-Host 'Generating AGENTS.md...' -ForegroundColor Cyan
+& "$scriptRoot\build-agents-md.ps1" -TargetPath $TargetPath
 
-Write-Host ""
-Write-Host "Deployment complete!" -ForegroundColor Green
-Write-Host ""
-Write-Host "Next steps:" -ForegroundColor Yellow
-Write-Host "  1. Edit aim.json to enable/disable modules"
-Write-Host "  2. Run .\.aim\scripts\build-agents-md.ps1 to regenerate AGENTS.md"
-Write-Host "  3. Commit AGENTS.md and aim.json to your repository"
-Write-Host ""
+Write-Host ''
+Write-Host 'Deployment complete!' -ForegroundColor Green
+Write-Host ''
+Write-Host 'Next steps:' -ForegroundColor Yellow
+Write-Host '  1. Edit aim.json to enable/disable modules'
+Write-Host '  2. Run .\.aim\scripts\build-agents-md.ps1 to regenerate AGENTS.md'
+Write-Host '  3. Commit AGENTS.md and aim.json to your repository'
+Write-Host ''

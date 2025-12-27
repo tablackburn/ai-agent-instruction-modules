@@ -50,14 +50,14 @@ Describe 'build-agents-md.ps1' {
     Context 'AGENTS.md header generation' {
         BeforeEach {
             # Create a module
-            $ModuleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Test content'
-            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $ModuleContent
+            $moduleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Test content'
+            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $moduleContent
 
             # Create config
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = $true
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should generate header with title' {
@@ -65,8 +65,8 @@ Describe 'build-agents-md.ps1' {
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '# AI Agent Instructions'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '# AI Agent Instructions'
         }
 
         It 'Should include AIM reference and version' {
@@ -77,9 +77,9 @@ Describe 'build-agents-md.ps1' {
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'AIM'
-            $AgentsContent | Should -Match 'v1\.2\.3'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'AIM'
+            $agentsContent | Should -Match 'v1\.2\.3'
         }
 
         It 'Should include module count' {
@@ -87,8 +87,8 @@ Describe 'build-agents-md.ps1' {
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'Enabled modules: 1'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'Enabled modules: 1'
         }
 
         It 'Should include sync date' {
@@ -96,27 +96,27 @@ Describe 'build-agents-md.ps1' {
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $Today = Get-Date -Format 'yyyy-MM-dd'
-            $AgentsContent | Should -Match "Last sync: $Today"
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $today = Get-Date -Format 'yyyy-MM-dd'
+            $agentsContent | Should -Match "Last sync: $today"
         }
     }
 
     Context 'Table of contents' {
         BeforeEach {
             # Create multiple modules
-            $Module1 = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Content 1'
-            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $Module1
+            $module1 = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Content 1'
+            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $module1
 
-            $Module2 = New-MockModuleContent -Id 'core/code-quality' -Name 'Code Quality' -Body 'Content 2'
-            Set-Content -Path (Join-Path $MockInstructionsDir 'core\code-quality.md') -Value $Module2
+            $module2 = New-MockModuleContent -Id 'core/code-quality' -Name 'Code Quality' -Body 'Content 2'
+            Set-Content -Path (Join-Path $MockInstructionsDir 'core\code-quality.md') -Value $module2
 
             # Create config with multiple modules
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = $true
                 'core/code-quality'   = $true
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should generate table of contents' {
@@ -124,8 +124,8 @@ Describe 'build-agents-md.ps1' {
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '## Table of Contents'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '## Table of Contents'
         }
 
         It 'Should include links to each module' {
@@ -133,20 +133,20 @@ Describe 'build-agents-md.ps1' {
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '\[Agent Workflow\]\(#agent-workflow\)'
-            $AgentsContent | Should -Match '\[Code Quality\]\(#code-quality\)'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '\[Agent Workflow\]\(#agent-workflow\)'
+            $agentsContent | Should -Match '\[Code Quality\]\(#code-quality\)'
         }
     }
 
     Context 'Module content processing' {
         BeforeEach {
             # Create cache directory with cached content to simulate a cached local module
-            $CacheDir = Join-Path $TempDir '.aim-cache'
-            New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
+            $cacheDir = Join-Path $TempDir '.aim-cache'
+            New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
 
             # Create cached content with frontmatter to test stripping
-            $CachedContent = @"
+            $cachedContent = @"
 ---
 id: core/agent-workflow
 name: Agent Workflow
@@ -156,13 +156,13 @@ name: Agent Workflow
 
 The actual workflow instructions.
 "@
-            Set-Content -Path (Join-Path $CacheDir 'core_agent-workflow.md') -Value $CachedContent
+            Set-Content -Path (Join-Path $cacheDir 'core_agent-workflow.md') -Value $cachedContent
 
             # Create config using awesome-copilot so it reads from cache
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should strip YAML frontmatter' {
@@ -170,9 +170,9 @@ The actual workflow instructions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
             # Frontmatter markers should be stripped
-            $AgentsContent | Should -Match 'The actual workflow instructions'
+            $agentsContent | Should -Match 'The actual workflow instructions'
         }
 
         It 'Should wrap content in BEGIN/END markers' {
@@ -180,9 +180,9 @@ The actual workflow instructions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '<!-- BEGIN: core/agent-workflow -->'
-            $AgentsContent | Should -Match '<!-- END: core/agent-workflow -->'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '<!-- BEGIN: core/agent-workflow -->'
+            $agentsContent | Should -Match '<!-- END: core/agent-workflow -->'
         }
 
         It 'Should add section headers for modules' {
@@ -190,18 +190,18 @@ The actual workflow instructions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '## Agent Workflow'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '## Agent Workflow'
         }
     }
 
     Context 'Uncached module handling' {
         BeforeEach {
             # Create config referencing an uncached module
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/nonexistent' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should include sync instructions for uncached modules' {
@@ -209,29 +209,29 @@ The actual workflow instructions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'Run sync\.ps1 to fetch'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'Run sync\.ps1 to fetch'
         }
     }
 
     Context 'Awesome-copilot cached modules' {
         BeforeEach {
             # Create cache directory with cached content
-            $CacheDir = Join-Path $TempDir '.aim-cache'
-            New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
+            $cacheDir = Join-Path $TempDir '.aim-cache'
+            New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
 
-            $CachedContent = @"
+            $cachedContent = @"
 # Python Best Practices
 
 Use type hints for all functions.
 "@
-            Set-Content -Path (Join-Path $CacheDir 'languages_python.md') -Value $CachedContent
+            Set-Content -Path (Join-Path $cacheDir 'languages_python.md') -Value $cachedContent
 
             # Create config with awesome-copilot module
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'languages/python' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should include cached fallback content' {
@@ -239,8 +239,8 @@ Use type hints for all functions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'Use type hints for all functions'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'Use type hints for all functions'
         }
 
         It 'Should use correct section name from module path' {
@@ -248,50 +248,50 @@ Use type hints for all functions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '## Python'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '## Python'
         }
     }
 
     Context 'Uncached fallback modules' {
         BeforeEach {
             # Create config with awesome-copilot module but no cache
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'languages/python' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should include sync instructions for uncached modules' {
             # Act
-            $Output = & $TempBuildScript -TargetPath $TempDir 2>&1
+            $output = & $TempBuildScript -TargetPath $TempDir 2>&1
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'Run sync\.ps1 to fetch'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'Run sync\.ps1 to fetch'
         }
     }
 
     Context 'Custom instructions' {
         BeforeEach {
             # Create a module
-            $ModuleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Standard content'
-            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $ModuleContent
+            $moduleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Standard content'
+            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $moduleContent
 
             # Create custom instructions file
-            $CustomContent = @"
+            $customContent = @"
 # Project-Specific Rules
 
 Always use tabs instead of spaces.
 Follow our naming conventions.
 "@
-            Set-Content -Path (Join-Path $TempDir 'CUSTOM.md') -Value $CustomContent
+            Set-Content -Path (Join-Path $TempDir 'CUSTOM.md') -Value $customContent
 
             # Create config with custom instructions path
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = $true
             } -CustomInstructionsPath 'CUSTOM.md'
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should append custom instructions section' {
@@ -299,8 +299,8 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '## Custom Instructions'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '## Custom Instructions'
         }
 
         It 'Should include custom instructions content' {
@@ -308,9 +308,9 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'Always use tabs instead of spaces'
-            $AgentsContent | Should -Match 'Follow our naming conventions'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'Always use tabs instead of spaces'
+            $agentsContent | Should -Match 'Follow our naming conventions'
         }
 
         It 'Should wrap custom instructions in markers' {
@@ -318,20 +318,91 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '<!-- BEGIN: custom -->'
-            $AgentsContent | Should -Match '<!-- END: custom -->'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '<!-- BEGIN: custom -->'
+            $agentsContent | Should -Match '<!-- END: custom -->'
+        }
+    }
+
+    Context 'Path traversal prevention' {
+        BeforeEach {
+            # Create a module
+            $moduleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Standard content'
+            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $moduleContent
+
+            # Create a file outside target directory to attempt to include
+            $script:OutsideDir = Join-Path ([System.IO.Path]::GetTempPath()) "aim-outside-$([Guid]::NewGuid().ToString('N').Substring(0,8))"
+            New-Item -ItemType Directory -Path $OutsideDir -Force | Out-Null
+            Set-Content -Path (Join-Path $OutsideDir 'secret.md') -Value 'SECRET DATA SHOULD NOT APPEAR'
+        }
+
+        AfterEach {
+            if (Test-Path $OutsideDir) {
+                Remove-Item -Path $OutsideDir -Recurse -Force -ErrorAction SilentlyContinue
+            }
+        }
+
+        It 'Should reject path traversal attempts with ..' {
+            # Create config with path traversal attempt
+            $config = New-MockConfig -Modules @{
+                'core/agent-workflow' = $true
+            } -CustomInstructionsPath '../../../secret.md'
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
+
+            # Act
+            $output = & $TempBuildScript -TargetPath $TempDir 2>&1
+
+            # Assert - should not include secret content
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Not -Match 'SECRET DATA'
+            $agentsContent | Should -Not -Match '## Custom Instructions'
+        }
+
+        It 'Should warn when path traversal is detected' {
+            # Create config with path traversal attempt
+            $config = New-MockConfig -Modules @{
+                'core/agent-workflow' = $true
+            } -CustomInstructionsPath '../outside/secret.md'
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
+
+            # Act
+            $output = & $TempBuildScript -TargetPath $TempDir 3>&1 2>&1
+
+            # Assert - should emit warning
+            $warningOutput = $output | Where-Object { $_ -is [System.Management.Automation.WarningRecord] -or $_ -match 'outside target directory' }
+            $warningOutput | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Should allow valid relative paths within target' {
+            # Create subdirectory and custom instructions file
+            $subDir = Join-Path $TempDir 'docs'
+            New-Item -ItemType Directory -Path $subDir -Force | Out-Null
+            Set-Content -Path (Join-Path $subDir 'custom.md') -Value 'Valid custom instructions'
+
+            # Create config with valid relative path
+            $config = New-MockConfig -Modules @{
+                'core/agent-workflow' = $true
+            } -CustomInstructionsPath 'docs/custom.md'
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
+
+            # Act
+            & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
+
+            # Assert - should include custom content
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'Valid custom instructions'
+            $agentsContent | Should -Match '## Custom Instructions'
         }
     }
 
     Context 'No modules enabled' {
         BeforeEach {
             # Create config with no enabled modules
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = $false
                 'core/code-quality'   = $false
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should still generate AGENTS.md with header' {
@@ -339,26 +410,26 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            Test-Path $AgentsPath | Should -BeTrue
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            Test-Path $agentsPath | Should -BeTrue
 
-            $AgentsContent = Get-Content $AgentsPath -Raw
-            $AgentsContent | Should -Match '# AI Agent Instructions'
-            $AgentsContent | Should -Match 'Enabled modules: 0'
+            $agentsContent = Get-Content $agentsPath -Raw
+            $agentsContent | Should -Match '# AI Agent Instructions'
+            $agentsContent | Should -Match 'Enabled modules: 0'
         }
     }
 
     Context 'Version extraction' {
         BeforeEach {
             # Create a module
-            $ModuleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Content'
-            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $ModuleContent
+            $moduleContent = New-MockModuleContent -Id 'core/agent-workflow' -Name 'Agent Workflow' -Body 'Content'
+            Set-Content -Path (Join-Path $MockInstructionsDir 'core\agent-workflow.md') -Value $moduleContent
 
             # Create config
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = $true
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should extract version from CHANGELOG.md' {
@@ -369,8 +440,8 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'v2\.5\.0'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'v2\.5\.0'
         }
 
         It 'Should use default version when CHANGELOG not found' {
@@ -380,23 +451,23 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match 'v0\.1\.0'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match 'v0\.1\.0'
         }
     }
 
     Context 'File generation' {
         BeforeEach {
             # Create cached module
-            $CacheDir = Join-Path $TempDir '.aim-cache'
-            New-Item -ItemType Directory -Path $CacheDir -Force | Out-Null
-            Set-Content -Path (Join-Path $CacheDir 'core_agent-workflow.md') -Value '# Agent Workflow'
+            $cacheDir = Join-Path $TempDir '.aim-cache'
+            New-Item -ItemType Directory -Path $cacheDir -Force | Out-Null
+            Set-Content -Path (Join-Path $cacheDir 'core_agent-workflow.md') -Value '# Agent Workflow'
 
             # Create config
-            $Config = New-MockConfig -Modules @{
+            $config = New-MockConfig -Modules @{
                 'core/agent-workflow' = 'awesome-copilot'
             }
-            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $Config)
+            Set-Content -Path (Join-Path $TempDir 'aim.json') -Value (ConvertTo-MockConfigJson -Config $config)
         }
 
         It 'Should generate AGENTS.md file' {
@@ -404,8 +475,8 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsPath = Join-Path $TempDir 'AGENTS.md'
-            Test-Path $AgentsPath | Should -BeTrue
+            $agentsPath = Join-Path $TempDir 'AGENTS.md'
+            Test-Path $agentsPath | Should -BeTrue
         }
 
         It 'Should create valid markdown file' {
@@ -413,9 +484,9 @@ Follow our naming conventions.
             & $TempBuildScript -TargetPath $TempDir 2>&1 | Out-Null
 
             # Assert
-            $AgentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
-            $AgentsContent | Should -Match '# AI Agent Instructions'
-            $AgentsContent | Should -Match '## Table of Contents'
+            $agentsContent = Get-Content (Join-Path $TempDir 'AGENTS.md') -Raw
+            $agentsContent | Should -Match '# AI Agent Instructions'
+            $agentsContent | Should -Match '## Table of Contents'
         }
     }
 }

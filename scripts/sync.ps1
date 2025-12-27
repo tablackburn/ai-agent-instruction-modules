@@ -36,92 +36,92 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # Determine paths
-$ScriptRoot = $PSScriptRoot
-$AimRoot = Split-Path -Parent $ScriptRoot
+$scriptRoot = $PSScriptRoot
+$aimRoot = Split-Path -Parent $scriptRoot
 
 if ([string]::IsNullOrEmpty($TargetPath)) {
-    $TargetPath = Split-Path -Parent $AimRoot
+    $TargetPath = Split-Path -Parent $aimRoot
 }
 
-$ConfigFile = Join-Path $TargetPath 'aim.json'
-$CachePath = Join-Path $TargetPath '.aim-cache'
+$configFile = Join-Path $TargetPath 'aim.json'
+$cachePath = Join-Path $TargetPath '.aim-cache'
 
-Write-Host "AIM Sync" -ForegroundColor Cyan
-Write-Host "========" -ForegroundColor Cyan
-Write-Host ""
+Write-Host 'AIM Sync' -ForegroundColor Cyan
+Write-Host '========' -ForegroundColor Cyan
+Write-Host ''
 
 # Check for aim.json
-if (-not (Test-Path $ConfigFile)) {
-    Write-Error "aim.json not found at $ConfigFile. Run deploy.ps1 first."
+if (-not (Test-Path $configFile)) {
+    Write-Error "aim.json not found at $configFile. Run deploy.ps1 first."
     exit 1
 }
 
 # Pull latest AIM changes
 if (-not $SkipPull) {
-    Write-Host "Pulling latest AIM updates..." -ForegroundColor Yellow
-    Push-Location $AimRoot
+    Write-Host 'Pulling latest AIM updates...' -ForegroundColor Yellow
+    Push-Location $aimRoot
     try {
-        $GitStatus = git status --porcelain 2>&1
+        $gitStatus = git status --porcelain 2>&1
         if ($LASTEXITCODE -eq 0) {
             git pull --ff-only 2>&1 | ForEach-Object { Write-Host "  $_" }
             if ($LASTEXITCODE -ne 0) {
-                Write-Warning "Git pull failed. Continuing with existing modules."
+                Write-Warning 'Git pull failed. Continuing with existing modules.'
             }
         }
         else {
-            Write-Host "  Not a git repository or git not available. Skipping pull." -ForegroundColor Yellow
+            Write-Host '  Not a git repository or git not available. Skipping pull.' -ForegroundColor Yellow
         }
     }
     finally {
         Pop-Location
     }
-    Write-Host ""
+    Write-Host ''
 }
 
 # Load configuration
-$Config = Get-Content $ConfigFile -Raw | ConvertFrom-Json -AsHashtable
+$config = Get-Content $configFile -Raw | ConvertFrom-Json -AsHashtable
 
 # Fetch awesome-copilot fallback modules
-$FallbackModules = @()
-foreach ($moduleName in $Config.modules.Keys) {
-    $moduleValue = $Config.modules[$moduleName]
+$fallbackModules = @()
+foreach ($moduleName in $config.modules.Keys) {
+    $moduleValue = $config.modules[$moduleName]
     if ($moduleValue -eq 'awesome-copilot') {
-        $FallbackModules += $moduleName
+        $fallbackModules += $moduleName
     }
 }
 
-if ($FallbackModules.Count -gt 0 -and $Config.fallback.enabled) {
-    Write-Host "Fetching awesome-copilot fallback modules..." -ForegroundColor Yellow
+if ($fallbackModules.Count -gt 0 -and $config.fallback.enabled) {
+    Write-Host 'Fetching awesome-copilot fallback modules...' -ForegroundColor Yellow
 
     # Ensure cache directory exists
-    if (-not (Test-Path $CachePath)) {
-        New-Item -ItemType Directory -Path $CachePath -Force | Out-Null
+    if (-not (Test-Path $cachePath)) {
+        New-Item -ItemType Directory -Path $cachePath -Force | Out-Null
     }
 
-    foreach ($moduleName in $FallbackModules) {
+    foreach ($moduleName in $fallbackModules) {
         # Map module name to awesome-copilot path
         # e.g., languages/python -> python.instructions.md
-        $ModuleParts = $moduleName -split '/'
-        $FileName = "$($ModuleParts[-1]).instructions.md"
-        $FallbackUrl = "$($Config.fallback.source)/raw/$($Config.fallback.branch)/$($Config.fallback.basePath)/$FileName"
-        $CacheFile = Join-Path $CachePath "$($moduleName -replace '/', '_').md"
+        $moduleParts = $moduleName -split '/'
+        $fileName = "$($moduleParts[-1]).instructions.md"
+        $fallbackUrl = "$($config.fallback.source)/raw/$($config.fallback.branch)/$($config.fallback.basePath)/$fileName"
+        $cacheFile = Join-Path $cachePath "$($moduleName -replace '/', '_').md"
 
-        Write-Host "  Fetching: $moduleName -> $FileName"
+        Write-Host "  Fetching: $moduleName -> $fileName"
         try {
-            $Response = Invoke-WebRequest -Uri $FallbackUrl -UseBasicParsing -ErrorAction Stop
-            Set-Content -Path $CacheFile -Value $Response.Content -Encoding UTF8
-            Write-Host "    Cached: $CacheFile" -ForegroundColor Green
+            $response = Invoke-WebRequest -Uri $fallbackUrl -UseBasicParsing -ErrorAction Stop
+            Set-Content -Path $cacheFile -Value $response.Content -Encoding UTF8
+            Write-Host "    Cached: $cacheFile" -ForegroundColor Green
         }
         catch {
-            Write-Warning "    Failed to fetch $FallbackUrl : $_"
+            Write-Warning "    Failed to fetch $fallbackUrl : $_"
         }
     }
-    Write-Host ""
+    Write-Host ''
 }
 
 # Regenerate AGENTS.md
-Write-Host "Regenerating AGENTS.md..." -ForegroundColor Cyan
-& "$ScriptRoot\build-agents-md.ps1" -TargetPath $TargetPath
+Write-Host 'Regenerating AGENTS.md...' -ForegroundColor Cyan
+& "$scriptRoot\build-agents-md.ps1" -TargetPath $TargetPath
 
-Write-Host ""
-Write-Host "Sync complete!" -ForegroundColor Green
+Write-Host ''
+Write-Host 'Sync complete!' -ForegroundColor Green
