@@ -29,7 +29,9 @@ Use this matrix to determine which instruction files to read based on your task:
 | Any code or documentation | `shorthand.instructions.md` |
 | PowerShell code | `powershell.instructions.md` |
 | Documentation | `markdown.instructions.md` |
+| README files | `readme.instructions.md` |
 | GitHub CLI usage | `github-cli.instructions.md` |
+| Creating releases | `releases.instructions.md` |
 | Repository-specific work | `repository-specific.instructions.md` |
 | Updating instructions | `update.instructions.md` |
 
@@ -39,7 +41,9 @@ Use this matrix to determine which instruction files to read based on your task:
 - `shorthand.instructions.md` - Avoid shorthand and abbreviations
 - `powershell.instructions.md` - PowerShell coding standards
 - `markdown.instructions.md` - Markdown formatting standards
+- `readme.instructions.md` - README maintenance guidelines
 - `github-cli.instructions.md` - GitHub CLI usage guidelines
+- `releases.instructions.md` - Release management guidelines
 - `repository-specific.instructions.md` - Repository-specific customizations
 - `update.instructions.md` - Procedures for updating instructions
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `readme.instructions.md` - README maintenance guidelines
+- `releases.instructions.md` - Release management guidelines (semantic versioning, changelogs, pre/post-release checklists)
+
 ## [0.3.0] - 2025-12-27
 
 ### Added
