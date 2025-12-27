@@ -21,6 +21,13 @@ exists in this repository. If either exists, ask the user whether to:
 2. Only copy files that don't already exist (preserve customizations)
 3. Abort
 
+Check for existing instruction files (CLAUDE.md, .claude/, COPILOT.md, .cursorrules,
+.github/copilot-instructions.md). If found, review their content and migrate any
+repository-specific instructions (branch policies, workflows, tooling requirements)
+into the new repository-specific.instructions.md file. Do not migrate content that
+duplicates or conflicts with the standard AIM instruction modules. Ask the user
+whether to remove or archive the original instruction files after migration.
+
 Then proceed based on the user's choice: Copy AGENTS.template.md to the root as
 AGENTS.md. Create the instructions/ folder if it doesn't exist. Copy all files
 from the cloned instructions/ folder EXCEPT repository-specific.instructions.md.
@@ -51,6 +58,13 @@ exists. If either exists, ask the user whether to:
 1. Overwrite existing files (fresh deployment)
 2. Only copy files that don't already exist (preserve customizations)
 3. Abort
+
+Check for existing instruction files (CLAUDE.md, .claude/, COPILOT.md, .cursorrules,
+.github/copilot-instructions.md). If found, review their content and migrate any
+repository-specific instructions (branch policies, workflows, tooling requirements)
+into the new repository-specific.instructions.md file. Do not migrate content that
+duplicates or conflicts with the standard AIM instruction modules. Ask the user
+whether to remove or archive the original instruction files after migration.
 
 Then proceed based on the user's choice: Copy AGENTS.template.md to the root as
 AGENTS.md. Create the instructions/ folder if needed and copy all files from the
