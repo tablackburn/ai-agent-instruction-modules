@@ -26,7 +26,7 @@ Analyze the user's request and identify all areas it touches. Common patterns:
 
 ### 2. Consider Applicable Instructions
 
-Review the enabled instruction modules in this AGENTS.md file to understand:
+Review the instruction files listed in the repository's `AGENTS.md` to understand:
 
 - Language-specific coding standards
 - Framework conventions

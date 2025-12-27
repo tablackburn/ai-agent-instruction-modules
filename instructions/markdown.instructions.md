@@ -5,7 +5,7 @@ description: 'Markdown formatting standards'
 
 # Markdown Style Guidelines
 
-Consistent Markdown formatting for documentation and code comments.
+Consistent Markdown formatting for documentation files.
 
 ## Blank Lines
 

@@ -1,6 +1,6 @@
 ---
 applyTo: '**/*'
-description: 'GitHub CLI usage guidelines and best practices'
+description: 'GitHub CLI usage guidelines and best practices (operational instructions for running gh commands, not file-specific)'
 ---
 
 # GitHub CLI Guidelines
@@ -217,15 +217,15 @@ gh auth status
 ### Issue-to-Branch Workflow
 
 ```bash
-# Create issue and get number
-gh issue create --title "Feature: New functionality" --body "Description"
+# Create issue and capture the issue number
+ISSUE_NUM=$(gh issue create --title "Feature: New functionality" --body "Description" --json number --jq '.number')
 
-# Create feature branch
-git checkout -b feature/issue-123-new-functionality
+# Create feature branch using the captured issue number
+git checkout -b "feature/issue-${ISSUE_NUM}-new-functionality"
 
 # Push and create PR
-git push -u origin feature/issue-123-new-functionality
-gh pr create --title "Feature: New functionality" --body "Closes #123"
+git push -u origin "feature/issue-${ISSUE_NUM}-new-functionality"
+gh pr create --title "Feature: New functionality" --body "Closes #${ISSUE_NUM}"
 ```
 
 ### Common Flags

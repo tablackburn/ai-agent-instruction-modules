@@ -31,7 +31,7 @@ function Get-Data {
 }
 
 # Function with pipeline input
-function Process-Data {
+function Get-PipelineInput {
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param(
@@ -55,13 +55,27 @@ Prefer type accelerators over full .NET type names:
 - `[PSCustomObject]`, `[PSCredential]`, `[datetime]`, `[regex]`
 
 ```powershell
-# Good
-[OutputType([PSCustomObject])]
-[hashtable]$Configuration
+# Good - type accelerators in parameter declarations
+function Get-Setting {
+    [CmdletBinding()]
+    [OutputType([PSCustomObject])]
+    param(
+        [Parameter(Mandatory)]
+        [hashtable]
+        $Configuration
+    )
+}
 
-# Avoid
-[OutputType([System.Management.Automation.PSCustomObject])]
-[System.Collections.Hashtable]$Configuration
+# Avoid - full .NET type names
+function Get-Setting {
+    [CmdletBinding()]
+    [OutputType([System.Management.Automation.PSCustomObject])]
+    param(
+        [Parameter(Mandatory)]
+        [System.Collections.Hashtable]
+        $Configuration
+    )
+}
 ```
 
 ## Naming Conventions
@@ -180,6 +194,37 @@ try {
 catch {
     $errorRecord = $_  # Capture immediately
     Write-Error "Failed: $($errorRecord.Exception.Message)"
+}
+```
+
+## Credential Handling
+
+1. Use `[PSCredential]` for credential parameters, never `[string]` for passwords
+2. Make credentials optional when the function can run without them
+3. Use `[System.Management.Automation.Credential()]` attribute for flexibility
+
+```powershell
+function Connect-Service {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]
+        $Server,
+
+        [Parameter()]
+        [ValidateNotNull()]
+        [System.Management.Automation.PSCredential]
+        [System.Management.Automation.Credential()]
+        $Credential = [System.Management.Automation.PSCredential]::Empty
+    )
+
+    # Check if credentials were provided
+    if ($Credential -eq [System.Management.Automation.PSCredential]::Empty) {
+        # Use current user context
+    }
+    else {
+        # Use provided credentials
+    }
 }
 ```
 

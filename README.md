@@ -55,7 +55,8 @@ exists. If either exists, ask the user whether to:
 Then proceed based on the user's choice: Copy AGENTS.template.md to the root as
 AGENTS.md. Create the instructions/ folder if needed and copy all files from the
 cloned instructions/ folder EXCEPT repository-specific.instructions.md. Remove the
-cloned repository folder.
+cloned repository folder using Remove-Item -Recurse -Force (PowerShell) or rm -rf
+(bash).
 
 Create instructions/repository-specific.instructions.md with this content:
 
