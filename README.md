@@ -31,6 +31,49 @@ Update the 'Last sync' placeholder in AGENTS.md to today's date (e.g., 2025-12-2
 remove the HTML comment block at the top of the file, as instructed in the template.
 ```
 
+### PowerShell Module Template
+
+For PowerShell module repositories, use this streamlined prompt that pre-configures
+repository-specific instructions:
+
+```text
+Clone the ai-agent-instruction-modules repository from
+https://github.com/tablackburn/ai-agent-instruction-modules to the current working
+directory. Copy AGENTS.template.md to the root as AGENTS.md. Create the instructions/
+folder and copy all files from the cloned instructions/ folder EXCEPT
+repository-specific.instructions.md. Remove the cloned repository folder.
+
+Create instructions/repository-specific.instructions.md with this content:
+
+---
+applyTo: '**'
+description: 'Repository-specific context and guidelines'
+---
+
+# Repository-Specific Instructions
+
+## Repository Context
+
+- **Purpose**: [PowerShell module for ...]
+- **Language**: PowerShell
+- **Distribution**: PowerShell Gallery / GitHub Releases
+
+## Development Guidelines
+
+- Follow the patterns in powershell.instructions.md
+- Use Pester for all tests (tests/*.Tests.ps1)
+- Maintain comment-based help for public functions
+- Target PowerShell 7+ unless cross-compatibility is required
+
+## Module Structure
+
+- `src/` - Module source files (.psm1, .psd1)
+- `tests/` - Pester test files
+- `docs/` - Documentation (if applicable)
+
+Update the 'Last sync' date in AGENTS.md to today and remove the HTML comment block.
+```
+
 ### Manual Alternative
 
 1. Copy `AGENTS.template.md` to your repository root as `AGENTS.md`
@@ -80,6 +123,58 @@ ai-agent-instruction-modules/
     └── ci.yml                            # GitHub Actions workflow
 ```
 
+## Example: PowerShell Module Repository
+
+After deploying AIM to a PowerShell module repository, your structure will look like:
+
+```text
+my-powershell-module/
+├── AGENTS.md
+├── instructions/
+│   ├── agent-workflow.instructions.md
+│   ├── powershell.instructions.md
+│   ├── markdown.instructions.md
+│   ├── github-cli.instructions.md
+│   ├── repository-specific.instructions.md
+│   └── update.instructions.md
+├── src/
+│   ├── MyModule.psd1
+│   └── MyModule.psm1
+├── tests/
+│   └── MyModule.Tests.ps1
+└── README.md
+```
+
+Your `repository-specific.instructions.md` might include:
+
+```markdown
+---
+applyTo: '**'
+description: 'Repository-specific context and guidelines'
+---
+
+# Repository-Specific Instructions
+
+## Repository Context
+
+- **Purpose**: PowerShell module for managing Azure resources
+- **Language**: PowerShell 7+
+- **Distribution**: PowerShell Gallery
+
+## Development Guidelines
+
+- All public functions require comment-based help with examples
+- Use approved verbs only (Get-Verb)
+- Pester tests required for new functionality
+- CI must pass before merging
+
+## Release Process
+
+1. Update module version in .psd1
+2. Update CHANGELOG.md
+3. Create GitHub release (triggers gallery publish)
+```
+
 ## Testing
 
 Run tests locally:
@@ -105,6 +200,21 @@ To update centralized instructions:
 5. Commit and push
 
 Downstream repositories must manually request updates from AI agents.
+
+## Community Templates
+
+AIM currently provides instructions for PowerShell and Markdown. We welcome
+contributions for other languages and frameworks.
+
+**Wanted:**
+
+- Language modules: Python, TypeScript, Go, Rust, C#
+- Framework guides: React, FastAPI, ASP.NET, Django
+- Tool integrations: Docker, Terraform, Kubernetes
+
+To contribute a new instruction module, see [CONTRIBUTING.md](CONTRIBUTING.md). Each
+module should include YAML frontmatter with `applyTo` patterns and follow the
+conventions established in existing modules.
 
 ## Contributing
 
