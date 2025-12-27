@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `contributing.instructions.md` - Agent-assisted workflow for contributing improvements back to upstream AIM repository
+
+### Changed
+
+- Updated `CONTRIBUTING.md` to match current repository structure (removed outdated script references, updated frontmatter format)
+
 ## [0.4.0] - 2025-12-27
 
 ### Added

@@ -12,20 +12,24 @@ Thank you for your interest in contributing to AI Agent Instruction Modules!
 
 ### Adding New Modules
 
-- Language-specific guidelines
-- Framework conventions
-- Tool integrations
+- Language-specific guidelines (Python, TypeScript, Go, Rust, C#)
+- Framework conventions (React, FastAPI, ASP.NET, Django)
+- Tool integrations (Docker, Terraform, Kubernetes)
 - Development practices
 
-### Improving Infrastructure
+### Improving Documentation
 
-- Script enhancements
-- Profile presets
-- Documentation
+- README improvements
+- Changelog updates
+- Example enhancements
 
 ## Contribution Process
 
 1. **Fork the repository**
+   ```bash
+   gh repo fork tablackburn/ai-agent-instruction-modules --clone
+   cd ai-agent-instruction-modules
+   ```
 
 2. **Create a feature branch**
    ```bash
@@ -36,14 +40,20 @@ Thank you for your interest in contributing to AI Agent Instruction Modules!
    - Follow existing patterns and conventions
    - Test your changes locally
 
-4. **Commit with clear messages**
+4. **Run tests**
+   ```powershell
+   Invoke-Pester -Path .\tests\
+   ```
+
+5. **Commit with conventional commits**
    ```bash
    git commit -m "feat: Add Python type hints module"
    ```
 
-5. **Push and create a Pull Request**
+6. **Push and create a Pull Request**
    ```bash
    git push origin feature/your-feature-name
+   gh pr create
    ```
 
 ## Module Guidelines
@@ -54,15 +64,14 @@ Every instruction module must include YAML frontmatter:
 
 ```yaml
 ---
-id: category/module-name
-name: Human Readable Name
-description: Brief description of the module
-applyTo: "**/*.ext"
-requires: []
-recommends: []
-tags: ["category", "topic"]
+applyTo: '**/*.py'
+description: 'Brief description of the module'
 ---
 ```
+
+**Required fields:**
+- `applyTo` - Glob pattern for applicable files
+- `description` - One-line description of the module's purpose
 
 ### Content
 
@@ -70,14 +79,20 @@ tags: ["category", "topic"]
 - Use placeholder examples (`<owner>`, `<repo>`, `example.com`)
 - Focus on best practices, not specific tools or vendors
 - Include code examples where helpful
-- Follow Markdown conventions in `styles/markdown.md`
+- Follow Markdown conventions in `markdown.instructions.md`
+
+### File Naming
+
+- Use `.instructions.md` extension
+- Use lowercase with hyphens (e.g., `python-typing.instructions.md`)
+- Place files in the `instructions/` folder
 
 ### Testing
 
 Before submitting:
 
-1. Run `build-agents-md.ps1` to verify your module builds correctly
-2. Check that frontmatter is valid YAML
+1. Run `Invoke-Pester -Path .\tests\` to verify all tests pass
+2. Check that frontmatter is valid YAML with required fields
 3. Verify links and references work
 
 ## Code of Conduct

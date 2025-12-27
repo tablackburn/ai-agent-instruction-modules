@@ -29,6 +29,7 @@ Use this matrix to determine which instruction files to read based on your task:
 | Creating releases | `releases.instructions.md` |
 | Repository-specific work | `repository-specific.instructions.md` |
 | Updating instructions | `update.instructions.md` |
+| Contributing to upstream | `contributing.instructions.md` |
 
 ## Available Instruction Files
 
@@ -41,6 +42,7 @@ Use this matrix to determine which instruction files to read based on your task:
 - `releases.instructions.md` - Release management guidelines
 - `repository-specific.instructions.md` - Repository-specific customizations
 - `update.instructions.md` - Procedures for updating instructions
+- `contributing.instructions.md` - Contributing improvements to upstream
 
 ## Quick Reference
 
