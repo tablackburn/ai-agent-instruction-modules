@@ -63,11 +63,36 @@ if (Test-Path $changelogPath) {
 # Collect enabled modules
 $enabledModules = @()
 foreach ($moduleName in $config.modules.Keys | Sort-Object) {
+    # Security: Validate module name format to prevent path injection
+    if ($moduleName -notmatch '^[a-zA-Z0-9]+/[a-zA-Z0-9_-]+$') {
+        Write-Warning "Security: Skipping invalid module name '$moduleName'. Module names must match pattern: category/module-name"
+        continue
+    }
+
+    # Security: Additional check for path traversal attempts
+    if ($moduleName -match '\.\.' -or $moduleName -match '^/' -or $moduleName -match '\\') {
+        Write-Warning "Security: Skipping suspicious module name '$moduleName'. Path traversal sequences are not allowed."
+        continue
+    }
+
     $moduleValue = $config.modules[$moduleName]
-    if ($moduleValue -eq $true -or $moduleValue -eq 'awesome-copilot') {
+
+    # Determine source: handle boolean, string, and object formats
+    $source = $null
+    if ($moduleValue -eq $true) {
+        $source = 'local'
+    }
+    elseif ($moduleValue -eq 'awesome-copilot') {
+        $source = 'awesome-copilot'
+    }
+    elseif ($moduleValue -is [hashtable] -and $moduleValue.source -eq 'awesome-copilot') {
+        $source = 'awesome-copilot'
+    }
+
+    if ($source) {
         $enabledModules += @{
             Name = $moduleName
-            Source = if ($moduleValue -eq 'awesome-copilot') { 'awesome-copilot' } else { 'local' }
+            Source = $source
         }
     }
 }
@@ -158,12 +183,23 @@ foreach ($module in $enabledModules) {
 if ($config.customInstructionsPath) {
     $customPath = Join-Path $TargetPath $config.customInstructionsPath
 
-    # Validate path is within target directory (prevent path traversal attacks)
+    # Security: Validate path is within target directory (prevent path traversal attacks)
     $resolvedTarget = [System.IO.Path]::GetFullPath($TargetPath)
     $resolvedCustom = [System.IO.Path]::GetFullPath($customPath)
-    if (-not $resolvedCustom.StartsWith($resolvedTarget + [System.IO.Path]::DirectorySeparatorChar) -and
-        $resolvedCustom -ne $resolvedTarget) {
-        Write-Warning "Custom instructions path '$($config.customInstructionsPath)' is outside target directory. Skipping."
+
+    # Use case-insensitive comparison on Windows, case-sensitive on Unix
+    $pathComparison = if ($IsWindows -or $env:OS -match 'Windows') {
+        [System.StringComparison]::OrdinalIgnoreCase
+    } else {
+        [System.StringComparison]::Ordinal
+    }
+
+    $targetWithSeparator = $resolvedTarget + [System.IO.Path]::DirectorySeparatorChar
+    $isWithinTarget = $resolvedCustom.StartsWith($targetWithSeparator, $pathComparison) -or
+                      $resolvedCustom.Equals($resolvedTarget, $pathComparison)
+
+    if (-not $isWithinTarget) {
+        Write-Warning "Security: Custom instructions path '$($config.customInstructionsPath)' is outside target directory. Skipping."
     }
     elseif (Test-Path $customPath) {
         $content += '---'
