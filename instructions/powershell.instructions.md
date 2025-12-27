@@ -1,11 +1,6 @@
 ---
-id: languages/powershell
-name: PowerShell
-description: PowerShell coding standards and best practices
-applyTo: "**/*.ps1,**/*.psm1,**/*.psd1"
-requires: []
-recommends: ["core/code-quality"]
-tags: ["language", "powershell", "scripting"]
+applyTo: '**/*.ps1,**/*.psm1,**/*.psd1'
+description: 'PowerShell coding standards and best practices'
 ---
 
 # PowerShell Style Guidelines

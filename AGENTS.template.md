@@ -1,10 +1,15 @@
 # AI Agent Instructions
 
+<!-- THIS IS THE TEMPLATE FILE for downstream repositories.
+     When deploying to a repository, DELETE THIS COMMENT.
+     When updating instructions from the centralized repository, fetch THIS file (AGENTS.template.md).
+     DO NOT fetch AGENTS.md from the template repository - that's the template repository's own implementation. -->
+
 AI agents working in this repository must follow these instructions.
 
 Template Version: 0.2.0
 
-Last sync: 2025-12-27
+Last sync: YYYY-MM-DD (Update this date when syncing from the centralized repository)
 
 ## Instructions for AI Agents
 

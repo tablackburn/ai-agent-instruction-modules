@@ -1,11 +1,6 @@
 ---
-id: styles/markdown
-name: Markdown
-description: Markdown formatting standards
-applyTo: "**/*.md"
-requires: []
-recommends: []
-tags: ["style", "markdown", "documentation"]
+applyTo: '**/*.md'
+description: 'Markdown formatting standards'
 ---
 
 # Markdown Style Guidelines

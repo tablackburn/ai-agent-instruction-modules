@@ -1,11 +1,6 @@
 ---
-id: core/agent-workflow
-name: Agent Workflow
-description: Mandatory pre-flight protocol for AI agents
-applyTo: "**/*"
-requires: []
-recommends: []
-tags: ["core", "workflow", "protocol"]
+applyTo: '**/*'
+description: 'Mandatory pre-flight protocol for AI agents'
 ---
 
 # Agent Workflow Instructions

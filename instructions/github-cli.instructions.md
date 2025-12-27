@@ -1,11 +1,6 @@
 ---
-id: tools/github-cli
-name: GitHub CLI
-description: GitHub CLI usage guidelines and best practices
-applyTo: "**/*"
-requires: []
-recommends: ["practices/git-workflow"]
-tags: ["tool", "github", "cli"]
+applyTo: '**/*'
+description: 'GitHub CLI usage guidelines and best practices'
 ---
 
 # GitHub CLI Guidelines

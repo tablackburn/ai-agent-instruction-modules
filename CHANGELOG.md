@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-12-27
+
+### Changed
+
+- **BREAKING**: Restructured to follow private repository pattern
+  - Removed automation scripts (`deploy.ps1`, `build-agents-md.ps1`, `sync.ps1`)
+  - Removed JSON configuration system (`aim.json`, `schema.json`, profiles)
+  - Flattened instructions folder structure (removed nested categories)
+  - Renamed instruction files to use `.instructions.md` extension
+  - Simplified YAML frontmatter to `applyTo` and `description` only
+
+### Added
+
+- `AGENTS.template.md` - Template file for downstream repositories
+- `update.instructions.md` - Agent-driven update procedures
+- `repository-specific.instructions.md` - Template for repo-specific customizations
+- Copy-paste deployment prompts in README (agent-driven setup)
+- New validation tests for file structure and version consistency
+
+### Removed
+
+- `scripts/deploy.ps1` - Replaced by copy-paste prompt
+- `scripts/build-agents-md.ps1` - No longer needed (direct file copying)
+- `scripts/sync.ps1` - Replaced by agent-driven update procedure
+- `config/` folder and all profile presets
+- `schema.json` - No longer using JSON configuration
+- Nested instruction folder structure (`core/`, `languages/`, etc.)
+- awesome-copilot fallback system
+
 ## [0.1.0] - 2025-12-26
 
 ### Added
@@ -36,5 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tablackburn/ai-agent-instruction-modules/releases/tag/v0.1.0

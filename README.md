@@ -4,166 +4,115 @@ Modular, opt-in AI agent instructions for any codebase.
 
 AIM provides a curated collection of instruction modules that work with all popular AI coding agents including GitHub Copilot, Claude, Cursor, Windsurf, and any agent that supports the [agents.md](https://agents.md/) standard.
 
-## Features
+## Quick Setup
 
-- **Modular**: Pick only the instruction modules you need
-- **Opt-in Configuration**: Simple JSON config to enable/disable modules
-- **Centralized Updates**: Sync latest instructions without losing your customizations
-- **Fallback Support**: Leverage [awesome-copilot](https://github.com/github/awesome-copilot) for additional languages
-- **Cross-Platform**: PowerShell Core scripts work on Windows, macOS, and Linux
+### Deployment
 
-## Quick Start
+Copy and paste this prompt into your AI agent with your target repository open:
 
-### Prerequisites
+```text
+Clone the ai-agent-instruction-modules repository from
+https://github.com/tablackburn/ai-agent-instruction-modules to the current working
+directory. Copy AGENTS.template.md to the root of this repository as AGENTS.md.
+Create the instructions/ folder if it doesn't exist. Then copy all files from the
+cloned instructions/ folder to the local instructions/ folder EXCEPT
+repository-specific.instructions.md (do not copy that file—you will create it fresh
+in the next step). After copying, immediately remove the cloned repository folder
+using Remove-Item -Recurse -Force (PowerShell) or rm -rf (bash) to maintain a clean
+workspace.
 
-- [PowerShell Core](https://github.com/PowerShell/PowerShell) (pwsh) 7.0 or later
-- Git
+Then, create a NEW file named repository-specific.instructions.md in the instructions/
+folder with repository-specific instructions or information tailored to THIS repository
+(for example: special branch policies, unique workflows, required tools, or any details
+that apply only to this repository and not all repositories). Do not copy this file from
+the template repository.
 
-### Installation
+Update the 'Last sync' placeholder in AGENTS.md to today's date (e.g., 2025-12-27) and
+remove the HTML comment block at the top of the file, as instructed in the template.
+```
 
-1. Clone this repository into your project:
+### Manual Alternative
+
+1. Copy `AGENTS.template.md` to your repository root as `AGENTS.md`
+2. Copy all files from `instructions/` folder (except `repository-specific.instructions.md`)
+3. Create a new `repository-specific.instructions.md` file tailored to your repository
+4. Update the sync date and remove the HTML comment from `AGENTS.md`
+
+## Updating Instructions
+
+To update instructions in a downstream repository, ask your AI agent:
+
+```text
+Update the AI agent instructions from the centralized repository at
+https://github.com/tablackburn/ai-agent-instruction-modules following the procedures
+in instructions/update.instructions.md
+```
+
+The agent will sync the latest template and instruction files while preserving your repository-specific customizations.
+
+## What This Provides
+
+- **PowerShell standards** - Cmdlet naming, parameter conventions, and scripting best practices
+- **Markdown standards** - Documentation formatting and structure guidelines
+- **GitHub CLI integration** - Efficient PR and issue management workflows
+- **Update procedures** - Instructions for keeping downstream repositories current
+
+## Repository Structure
+
+```text
+ai-agent-instruction-modules/
+├── AGENTS.template.md                    # Template for downstream repositories
+├── AGENTS.md                             # This repository's implementation
+├── CHANGELOG.md                          # Version history
+├── README.md                             # This file
+├── CONTRIBUTING.md                       # Contribution guidelines
+├── LICENSE                               # MIT License
+├── instructions/                         # Instruction files directory
+│   ├── agent-workflow.instructions.md    # AI agent task workflow
+│   ├── powershell.instructions.md        # PowerShell coding standards
+│   ├── markdown.instructions.md          # Markdown formatting standards
+│   ├── github-cli.instructions.md        # GitHub CLI usage
+│   ├── repository-specific.instructions.md # Repository-specific customizations
+│   └── update.instructions.md            # Update procedures
+├── tests/                                # Pester test directory
+│   └── *.Tests.ps1                       # Validation tests
+└── .github/workflows/                    # CI/CD workflows
+    └── ci.yml                            # GitHub Actions workflow
+```
+
+## Testing
+
+Run tests locally:
 
 ```powershell
-git clone https://github.com/tablackburn/ai-agent-instruction-modules.git .aim
+Invoke-Pester -Path .\tests\
 ```
 
-2. Run the deploy script:
+Tests verify:
 
-```powershell
-.\.aim\scripts\deploy.ps1
-```
+- Instruction file integrity
+- Template structure
+- Version consistency
 
-3. Edit `aim.json` to enable/disable modules:
+## For Maintainers
 
-```json
-{
-  "modules": {
-    "core/agent-workflow": true,
-    "core/code-quality": true,
-    "languages/powershell": true,
-    "languages/python": "awesome-copilot"
-  }
-}
-```
+To update centralized instructions:
 
-4. Regenerate your `AGENTS.md`:
+1. Edit files in `instructions/` folder
+2. Update `AGENTS.template.md` version and content
+3. Update `AGENTS.md` to match (sync from template)
+4. Update `CHANGELOG.md` with changes
+5. Commit and push
 
-```powershell
-.\.aim\scripts\build-agents-md.ps1
-```
-
-## Updating
-
-To pull the latest instruction modules:
-
-```powershell
-.\.aim\scripts\sync.ps1
-```
-
-This will:
-- Pull latest changes from the AIM repository
-- Preserve your `aim.json` configuration
-- Regenerate `AGENTS.md` with updated content
-
-## Configuration
-
-### aim.json
-
-The `aim.json` file in your project root controls which modules are enabled:
-
-```json
-{
-  "$schema": "https://raw.githubusercontent.com/tablackburn/ai-agent-instruction-modules/main/schema.json",
-  "version": "1.0.0",
-  "modules": {
-    "core/agent-workflow": true,
-    "core/code-quality": true,
-    "languages/powershell": true,
-    "languages/python": "awesome-copilot"
-  },
-  "fallback": {
-    "enabled": true,
-    "source": "https://github.com/github/awesome-copilot",
-    "branch": "main",
-    "basePath": "instructions"
-  },
-  "customInstructionsPath": "./custom-instructions.md"
-}
-```
-
-### Module Values
-
-- `true` - Use AIM's local module
-- `false` - Disabled
-- `"awesome-copilot"` - Fetch from the awesome-copilot repository
-
-### Profiles
-
-Use a predefined profile for quick setup:
-
-```powershell
-.\.aim\scripts\deploy.ps1 -Profile minimal
-```
-
-Available profiles:
-- `minimal` - Core modules only
-- `web-developer` - JavaScript, TypeScript, React, Node.js
-- `python-developer` - Python, FastAPI, testing
-- `full-stack` - All available modules
-
-## Available Modules
-
-### Core (Recommended)
-| Module | Description |
-|--------|-------------|
-| `core/agent-workflow` | Pre-flight protocol for AI agents |
-| `core/code-quality` | General code quality guidelines |
-| `core/security` | Security best practices |
-
-### Languages
-| Module | Description |
-|--------|-------------|
-| `languages/powershell` | PowerShell coding standards |
-
-### Practices
-| Module | Description |
-|--------|-------------|
-| `practices/git-workflow` | Git conventions and workflow |
-
-### Tools
-| Module | Description |
-|--------|-------------|
-| `tools/github-cli` | GitHub CLI usage guidelines |
-
-### Styles
-| Module | Description |
-|--------|-------------|
-| `styles/markdown` | Markdown formatting standards |
-
-## Custom Instructions
-
-Add repository-specific instructions by creating a `custom-instructions.md` file and referencing it in your config:
-
-```json
-{
-  "customInstructionsPath": "./custom-instructions.md"
-}
-```
-
-This content will be appended to your generated `AGENTS.md`.
-
-## How It Works
-
-1. **Deploy**: Clones AIM and creates initial `aim.json`
-2. **Configure**: Edit `aim.json` to select your modules
-3. **Build**: Generates a single `AGENTS.md` from enabled modules
-4. **Sync**: Updates modules while preserving your configuration
-
-The generated `AGENTS.md` follows the [agents.md standard](https://agents.md/) and works with any compatible AI coding agent.
+Downstream repositories must manually request updates from AI agents.
 
 ## Contributing
 
 Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## License
 
