@@ -13,22 +13,27 @@ Copy and paste this prompt into your AI agent with your target repository open:
 ```text
 Clone the ai-agent-instruction-modules repository from
 https://github.com/tablackburn/ai-agent-instruction-modules to the current working
-directory. Copy AGENTS.template.md to the root of this repository as AGENTS.md.
-Create the instructions/ folder if it doesn't exist. Then copy all files from the
-cloned instructions/ folder to the local instructions/ folder EXCEPT
-repository-specific.instructions.md (do not copy that file—you will create it fresh
-in the next step). After copying, immediately remove the cloned repository folder
-using Remove-Item -Recurse -Force (PowerShell) or rm -rf (bash) to maintain a clean
-workspace.
+directory.
 
-Then, create a NEW file named repository-specific.instructions.md in the instructions/
-folder with repository-specific instructions or information tailored to THIS repository
-(for example: special branch policies, unique workflows, required tools, or any details
-that apply only to this repository and not all repositories). Do not copy this file from
-the template repository.
+Before copying any files, check if AGENTS.md or the instructions/ folder already
+exists in this repository. If either exists, ask the user whether to:
+1. Overwrite existing files (fresh deployment)
+2. Only copy files that don't already exist (preserve customizations)
+3. Abort
 
-Update the 'Last sync' placeholder in AGENTS.md to today's date (e.g., 2025-12-27) and
-remove the HTML comment block at the top of the file, as instructed in the template.
+Then proceed based on the user's choice: Copy AGENTS.template.md to the root as
+AGENTS.md. Create the instructions/ folder if it doesn't exist. Copy all files
+from the cloned instructions/ folder EXCEPT repository-specific.instructions.md.
+After copying, remove the cloned repository folder using Remove-Item -Recurse
+-Force (PowerShell) or rm -rf (bash).
+
+Then, create a NEW file named repository-specific.instructions.md in instructions/
+with repository-specific instructions tailored to THIS repository (for example:
+special branch policies, unique workflows, required tools, or any details that
+apply only to this repository). Do not copy this file from the template repository.
+
+Update the 'Last sync' placeholder in AGENTS.md to today's date (e.g., 2025-12-27)
+and remove the HTML comment block at the top of the file.
 ```
 
 ### PowerShell Module Template
@@ -39,9 +44,18 @@ repository-specific instructions:
 ```text
 Clone the ai-agent-instruction-modules repository from
 https://github.com/tablackburn/ai-agent-instruction-modules to the current working
-directory. Copy AGENTS.template.md to the root as AGENTS.md. Create the instructions/
-folder and copy all files from the cloned instructions/ folder EXCEPT
-repository-specific.instructions.md. Remove the cloned repository folder.
+directory.
+
+Before copying any files, check if AGENTS.md or the instructions/ folder already
+exists. If either exists, ask the user whether to:
+1. Overwrite existing files (fresh deployment)
+2. Only copy files that don't already exist (preserve customizations)
+3. Abort
+
+Then proceed based on the user's choice: Copy AGENTS.template.md to the root as
+AGENTS.md. Create the instructions/ folder if needed and copy all files from the
+cloned instructions/ folder EXCEPT repository-specific.instructions.md. Remove the
+cloned repository folder.
 
 Create instructions/repository-specific.instructions.md with this content:
 
