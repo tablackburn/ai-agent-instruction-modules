@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2025-12-27
+
+### Added
+
+- Version pinning via `aim.config.json` - pin to "latest" or specific version (e.g., "0.2.0")
+- CHANGELOG-based change summaries during updates - agents now summarize what changed between versions
+- Credential Handling section in PowerShell instructions with `[PSCredential]` patterns
+
+### Fixed
+
+- PowerShell: Renamed `Process-Data` to `Get-PipelineInput` (unapproved verb)
+- PowerShell: Renamed `Get-Settings` to `Get-Setting` (singular noun rule)
+- PowerShell: Expanded type accelerator example to show full `param()` context
+- GitHub CLI: Dynamic issue number capture instead of hardcoded `#123`
+- GitHub CLI: Clarified operational nature in description (not file-specific)
+- Agent Workflow: Fixed confusing "this AGENTS.md file" reference
+- Markdown: Removed "code comments" from scope (only applies to .md files)
+
 ## [0.2.0] - 2025-12-27
 
 ### Changed
@@ -65,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/tablackburn/ai-agent-instruction-modules/releases/tag/v0.1.0
