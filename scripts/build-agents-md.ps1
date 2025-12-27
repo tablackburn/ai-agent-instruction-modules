@@ -90,7 +90,7 @@ $Content += "## Table of Contents"
 $Content += ""
 foreach ($module in $EnabledModules) {
     $DisplayName = ($module.Name -split '/')[-1]
-    $DisplayName = (Get-Culture).TextInfo.ToTitleCase($DisplayName -replace '-', ' ')
+    $DisplayName = (Get-Culture).TextInfo.ToTitleCase(($DisplayName -replace '-', ' '))
     $Anchor = $DisplayName.ToLower() -replace ' ', '-'
     $Content += "- [$DisplayName](#$Anchor)"
 }
@@ -102,7 +102,7 @@ foreach ($module in $EnabledModules) {
     $ModuleSource = $module.Source
 
     $DisplayName = ($ModuleName -split '/')[-1]
-    $DisplayName = (Get-Culture).TextInfo.ToTitleCase($DisplayName -replace '-', ' ')
+    $DisplayName = (Get-Culture).TextInfo.ToTitleCase(($DisplayName -replace '-', ' '))
 
     $Content += "---"
     $Content += ""
