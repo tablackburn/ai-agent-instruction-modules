@@ -55,12 +55,64 @@ Invoke-Pester -Path .\tests\
 
 ## Release Process
 
-1. Update `CHANGELOG.md` following Keep a Changelog format
-2. Update version in `AGENTS.template.md` and `AGENTS.md`
-3. Ensure all three versions match (template, AGENTS.md, changelog)
-4. Commit changes
-5. Create git tag matching version
-6. Push to trigger any release workflows
+**IMPORTANT: Every change to instruction files or templates requires a release.** Do not push changes without completing this process.
+
+### When to Release
+
+A release is required after ANY of the following:
+- Changes to files in `instructions/`
+- Changes to `AGENTS.md` or `AGENTS.template.md`
+- Changes to `CHANGELOG.md`
+- Changes to `README.md` that affect usage or deployment
+
+### Version Numbering (Semantic Versioning)
+
+- **MAJOR** (1.0.0): Breaking changes that require downstream action
+- **MINOR** (0.1.0): New features, new instruction files, significant additions
+- **PATCH** (0.0.1): Bug fixes, typo corrections, clarifications, small improvements
+
+### Release Steps
+
+1. **Update CHANGELOG.md**
+   - Add new version section under `[Unreleased]`
+   - Use format: `## [X.Y.Z] - YYYY-MM-DD`
+   - Categorize changes: Added, Changed, Fixed, Removed
+   - Update comparison links at bottom of file
+
+2. **Update version numbers**
+   - `AGENTS.template.md`: Update "Template Version: X.Y.Z"
+   - `AGENTS.md`: Update "Template Version: X.Y.Z"
+   - Verify all three locations match (template, AGENTS.md, changelog)
+
+3. **Commit the release**
+   ```bash
+   git add -A
+   git commit -m "chore: Release vX.Y.Z"
+   ```
+
+4. **Create and push tag**
+   ```bash
+   git tag -a vX.Y.Z -m "Release vX.Y.Z"
+   git push && git push --tags
+   ```
+
+5. **Create GitHub release**
+   ```bash
+   gh release create vX.Y.Z --title "vX.Y.Z" --notes "Release notes here"
+   ```
+   Or use `--generate-notes` to auto-generate from commits.
+
+### Release Checklist
+
+- [ ] CHANGELOG.md updated with new version section
+- [ ] CHANGELOG.md comparison links updated
+- [ ] AGENTS.template.md version updated
+- [ ] AGENTS.md version updated
+- [ ] All three versions match
+- [ ] Release commit created
+- [ ] Git tag created (vX.Y.Z format)
+- [ ] Changes pushed to origin
+- [ ] GitHub release created
 
 ## File Structure
 

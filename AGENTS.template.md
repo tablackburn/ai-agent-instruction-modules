@@ -7,7 +7,7 @@
 
 AI agents working in this repository must follow these instructions.
 
-Template Version: 0.2.1
+Template Version: 0.2.2
 
 Last sync: YYYY-MM-DD (Update this date when syncing from the centralized repository)
 
