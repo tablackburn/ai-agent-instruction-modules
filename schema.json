@@ -32,23 +32,6 @@
             "type": "string",
             "enum": ["awesome-copilot"],
             "description": "Use awesome-copilot as fallback source"
-          },
-          {
-            "type": "object",
-            "description": "Module configuration with integrity verification",
-            "properties": {
-              "source": {
-                "type": "string",
-                "enum": ["awesome-copilot"],
-                "description": "Source for the module"
-              },
-              "sha256": {
-                "type": "string",
-                "pattern": "^[a-fA-F0-9]{64}$",
-                "description": "SHA256 hash of the module content for integrity verification"
-              }
-            },
-            "required": ["source"]
           }
         ]
       }

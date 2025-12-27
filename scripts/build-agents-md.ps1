@@ -76,23 +76,10 @@ foreach ($moduleName in $config.modules.Keys | Sort-Object) {
     }
 
     $moduleValue = $config.modules[$moduleName]
-
-    # Determine source: handle boolean, string, and object formats
-    $source = $null
-    if ($moduleValue -eq $true) {
-        $source = 'local'
-    }
-    elseif ($moduleValue -eq 'awesome-copilot') {
-        $source = 'awesome-copilot'
-    }
-    elseif ($moduleValue -is [hashtable] -and $moduleValue.source -eq 'awesome-copilot') {
-        $source = 'awesome-copilot'
-    }
-
-    if ($source) {
+    if ($moduleValue -eq $true -or $moduleValue -eq 'awesome-copilot') {
         $enabledModules += @{
             Name = $moduleName
-            Source = $source
+            Source = if ($moduleValue -eq 'awesome-copilot') { 'awesome-copilot' } else { 'local' }
         }
     }
 }

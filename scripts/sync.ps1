@@ -85,58 +85,20 @@ $config = Get-Content $configFile -Raw | ConvertFrom-Json -AsHashtable
 $fallbackModules = @()
 foreach ($moduleName in $config.modules.Keys) {
     $moduleValue = $config.modules[$moduleName]
-
-    # Handle both string format ("awesome-copilot") and object format ({ source: "awesome-copilot", sha256: "..." })
-    $source = $null
-    $expectedHash = $null
-
     if ($moduleValue -eq 'awesome-copilot') {
-        $source = 'awesome-copilot'
-    }
-    elseif ($moduleValue -is [hashtable] -and $moduleValue.source -eq 'awesome-copilot') {
-        $source = 'awesome-copilot'
-        $expectedHash = $moduleValue.sha256
-    }
-
-    if ($source -eq 'awesome-copilot') {
-        $fallbackModules += @{
-            Name = $moduleName
-            ExpectedHash = $expectedHash
-        }
+        $fallbackModules += $moduleName
     }
 }
 
 if ($fallbackModules.Count -gt 0 -and $config.fallback.enabled) {
     Write-Host 'Fetching awesome-copilot fallback modules...' -ForegroundColor Yellow
 
-    # Security: Validate fallback source URL
+    # Security: Validate fallback source uses HTTPS
     $fallbackSource = $config.fallback.source
-    $allowedHosts = @(
-        'github.com',
-        'raw.githubusercontent.com',
-        'gitlab.com'
-    )
-
     try {
         $sourceUri = [System.Uri]::new($fallbackSource)
-
-        # Enforce HTTPS
         if ($sourceUri.Scheme -ne 'https') {
             Write-Error "Security: Fallback source must use HTTPS. Got: $($sourceUri.Scheme)"
-            exit 1
-        }
-
-        # Validate against allowed hosts
-        $isAllowedHost = $false
-        foreach ($allowedHost in $allowedHosts) {
-            if ($sourceUri.Host -eq $allowedHost -or $sourceUri.Host.EndsWith(".$allowedHost")) {
-                $isAllowedHost = $true
-                break
-            }
-        }
-
-        if (-not $isAllowedHost) {
-            Write-Error "Security: Fallback source host '$($sourceUri.Host)' is not in the allowed list: $($allowedHosts -join ', ')"
             exit 1
         }
     }
@@ -145,32 +107,15 @@ if ($fallbackModules.Count -gt 0 -and $config.fallback.enabled) {
         exit 1
     }
 
-    # Security: Validate branch name (prevent injection)
-    $branch = $config.fallback.branch
-    if ($branch -notmatch '^[a-zA-Z0-9._-]+$') {
-        Write-Error "Security: Invalid branch name '$branch'. Branch names must contain only alphanumeric characters, dots, underscores, and hyphens."
-        exit 1
-    }
-
-    # Security: Validate basePath (prevent path traversal)
-    $basePath = $config.fallback.basePath
-    if ($basePath -match '\.\.') {
-        Write-Error "Security: Invalid basePath '$basePath'. Path traversal sequences are not allowed."
-        exit 1
-    }
-
     # Ensure cache directory exists
     if (-not (Test-Path $cachePath)) {
         New-Item -ItemType Directory -Path $cachePath -Force | Out-Null
     }
 
-    foreach ($moduleInfo in $fallbackModules) {
-        $moduleName = $moduleInfo.Name
-        $expectedHash = $moduleInfo.ExpectedHash
-
+    foreach ($moduleName in $fallbackModules) {
         # Security: Validate module name format
         if ($moduleName -notmatch '^[a-zA-Z0-9]+/[a-zA-Z0-9_-]+$') {
-            Write-Warning "  Skipping invalid module name: $moduleName (must match pattern: category/module-name)"
+            Write-Warning "  Skipping invalid module name: $moduleName"
             continue
         }
 
@@ -184,28 +129,7 @@ if ($fallbackModules.Count -gt 0 -and $config.fallback.enabled) {
         Write-Host "  Fetching: $moduleName -> $fileName"
         try {
             $response = Invoke-WebRequest -Uri $fallbackUrl -UseBasicParsing -ErrorAction Stop
-            $content = $response.Content
-
-            # Security: Verify SHA256 hash if specified
-            if ($expectedHash) {
-                $contentBytes = [System.Text.Encoding]::UTF8.GetBytes($content)
-                $hashBytes = [System.Security.Cryptography.SHA256]::Create().ComputeHash($contentBytes)
-                $actualHash = [System.BitConverter]::ToString($hashBytes) -replace '-', ''
-
-                if ($actualHash -ne $expectedHash.ToUpper()) {
-                    Write-Warning "    Security: Hash mismatch for $moduleName!"
-                    Write-Warning "      Expected: $expectedHash"
-                    Write-Warning "      Actual:   $actualHash"
-                    Write-Warning "    Skipping this module. Update the sha256 in aim.json if the content change is expected."
-                    continue
-                }
-                Write-Host "    Integrity verified (SHA256)" -ForegroundColor Green
-            }
-            else {
-                Write-Host "    Warning: No SHA256 hash specified - content not verified" -ForegroundColor Yellow
-            }
-
-            Set-Content -Path $cacheFile -Value $content -Encoding UTF8
+            Set-Content -Path $cacheFile -Value $response.Content -Encoding UTF8
             Write-Host "    Cached: $cacheFile" -ForegroundColor Green
         }
         catch {

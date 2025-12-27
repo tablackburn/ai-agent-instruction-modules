@@ -8,10 +8,7 @@
     "core/security": true,
     "languages/powershell": false,
     "languages/python": "awesome-copilot",
-    "languages/typescript": {
-      "source": "awesome-copilot",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    },
+    "languages/typescript": "awesome-copilot",
     "practices/git-workflow": true,
     "tools/github-cli": false,
     "styles/markdown": true
