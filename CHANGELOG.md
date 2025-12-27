@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `git-workflow.instructions.md` - Git branching, commit messages, and PR conventions
+- `testing.instructions.md` - Language-agnostic test writing best practices
+
+### Changed
+
+- Updated `README.md` with comprehensive module list and updated repository structure
+
 ## [0.5.0] - 2025-12-27
 
 ### Added

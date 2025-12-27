@@ -64,32 +64,50 @@ The agent will sync the latest template and instruction files while preserving y
 
 ## What This Provides
 
-- **PowerShell standards** - Cmdlet naming, parameter conventions, and scripting best practices
-- **Markdown standards** - Documentation formatting and structure guidelines
-- **GitHub CLI integration** - Efficient PR and issue management workflows
-- **Update procedures** - Instructions for keeping downstream repositories current
+### Core Modules
+- **Agent workflow** - Pre-flight protocol for AI agents
+- **Shorthand** - Guidelines for avoiding abbreviations in code
+- **Git workflow** - Branching, commits, and pull request conventions
+- **Testing** - Test writing best practices and conventions
+
+### Language & Tool Modules
+- **PowerShell** - Cmdlet naming, parameter conventions, and scripting best practices
+- **Markdown** - Documentation formatting and structure guidelines
+- **README** - README maintenance guidelines
+- **GitHub CLI** - Efficient PR and issue management workflows
+
+### Repository Management
+- **Releases** - Release management with semantic versioning
+- **Update** - Procedures for keeping downstream repositories current
+- **Contributing** - Workflow for contributing improvements to upstream
 
 ## Repository Structure
 
 ```text
 ai-agent-instruction-modules/
-├── AGENTS.template.md                    # Template for downstream repositories
-├── AGENTS.md                             # This repository's implementation
-├── CHANGELOG.md                          # Version history
-├── README.md                             # This file
-├── CONTRIBUTING.md                       # Contribution guidelines
-├── LICENSE                               # MIT License
-├── instructions/                         # Instruction files directory
-│   ├── agent-workflow.instructions.md    # AI agent task workflow
-│   ├── powershell.instructions.md        # PowerShell coding standards
-│   ├── markdown.instructions.md          # Markdown formatting standards
-│   ├── github-cli.instructions.md        # GitHub CLI usage
-│   ├── repository-specific.instructions.md # Repository-specific customizations
-│   └── update.instructions.md            # Update procedures
-├── tests/                                # Pester test directory
-│   └── *.Tests.ps1                       # Validation tests
-└── .github/workflows/                    # CI/CD workflows
-    └── ci.yml                            # GitHub Actions workflow
+├── AGENTS.template.md                        # Template for downstream repositories
+├── AGENTS.md                                 # This repository's implementation
+├── CHANGELOG.md                              # Version history
+├── README.md                                 # This file
+├── CONTRIBUTING.md                           # Contribution guidelines
+├── LICENSE                                   # MIT License
+├── instructions/                             # Instruction modules
+│   ├── agent-workflow.instructions.md        # AI agent task workflow
+│   ├── shorthand.instructions.md             # Avoid abbreviations
+│   ├── git-workflow.instructions.md          # Git conventions
+│   ├── testing.instructions.md               # Test writing practices
+│   ├── powershell.instructions.md            # PowerShell standards
+│   ├── markdown.instructions.md              # Markdown formatting
+│   ├── readme.instructions.md                # README maintenance
+│   ├── github-cli.instructions.md            # GitHub CLI usage
+│   ├── releases.instructions.md              # Release management
+│   ├── contributing.instructions.md          # Contributing to upstream
+│   ├── update.instructions.md                # Update procedures
+│   └── repository-specific.instructions.md   # Repository customizations
+├── tests/                                    # Pester test directory
+│   └── *.Tests.ps1                           # Validation tests
+└── .github/workflows/                        # CI/CD workflows
+    └── ci.yml                                # GitHub Actions workflow
 ```
 
 ## Testing
@@ -118,10 +136,10 @@ To update centralized instructions:
 
 Downstream repositories must manually request updates from AI agents.
 
-## Community Templates
+## Community Contributions
 
-AIM currently provides instructions for PowerShell and Markdown. We welcome
-contributions for other languages and frameworks.
+AIM provides 12 instruction modules covering workflows, standards, and practices.
+We welcome contributions for additional languages and frameworks.
 
 **Wanted:**
 

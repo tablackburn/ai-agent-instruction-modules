@@ -27,6 +27,8 @@ Use this matrix to determine which instruction files to read based on your task:
 |-----------|----------------------|
 | Any task | `agent-workflow.instructions.md` |
 | Any code or documentation | `shorthand.instructions.md` |
+| Git operations | `git-workflow.instructions.md` |
+| Writing tests | `testing.instructions.md` |
 | PowerShell code | `powershell.instructions.md` |
 | Documentation | `markdown.instructions.md` |
 | README files | `readme.instructions.md` |
@@ -40,6 +42,8 @@ Use this matrix to determine which instruction files to read based on your task:
 
 - `agent-workflow.instructions.md` - Pre-flight protocol and task workflow
 - `shorthand.instructions.md` - Avoid shorthand and abbreviations
+- `git-workflow.instructions.md` - Git branching, commits, and PR conventions
+- `testing.instructions.md` - Test writing best practices
 - `powershell.instructions.md` - PowerShell coding standards
 - `markdown.instructions.md` - Markdown formatting standards
 - `readme.instructions.md` - README maintenance guidelines
