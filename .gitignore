@@ -1,0 +1,20 @@
+# AIM cache (generated in downstream repos)
+.aim-cache/
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test outputs
+TestResults/
+coverage/
+
+# Local config (never commit aim.json from testing)
+aim.json

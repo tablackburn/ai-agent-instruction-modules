@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/tablackburn/ai-agent-instruction-modules/main/schema.json",
+  "version": "1.0.0",
+  "profile": null,
+  "modules": {
+    "core/agent-workflow": true,
+    "core/code-quality": true,
+    "core/security": true,
+    "languages/powershell": false,
+    "languages/python": "awesome-copilot",
+    "languages/typescript": "awesome-copilot",
+    "practices/git-workflow": true,
+    "tools/github-cli": false,
+    "styles/markdown": true
+  },
+  "fallback": {
+    "enabled": true,
+    "source": "https://github.com/github/awesome-copilot",
+    "branch": "main",
+    "basePath": "instructions"
+  },
+  "customInstructionsPath": null
+}

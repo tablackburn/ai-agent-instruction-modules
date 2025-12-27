@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schema.json",
+  "description": "Python developer profile - Python, FastAPI, testing",
+  "modules": {
+    "core/agent-workflow": true,
+    "core/code-quality": true,
+    "core/security": true,
+    "languages/python": "awesome-copilot",
+    "frameworks/fastapi": "awesome-copilot",
+    "practices/git-workflow": true,
+    "practices/testing": "awesome-copilot",
+    "styles/markdown": true
+  }
+}

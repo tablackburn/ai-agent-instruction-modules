@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema.json",
+  "description": "Web developer profile - JavaScript, TypeScript, React, Node.js",
+  "modules": {
+    "core/agent-workflow": true,
+    "core/code-quality": true,
+    "core/security": true,
+    "languages/javascript": "awesome-copilot",
+    "languages/typescript": "awesome-copilot",
+    "frameworks/react": "awesome-copilot",
+    "frameworks/nextjs": "awesome-copilot",
+    "practices/git-workflow": true,
+    "practices/testing": "awesome-copilot",
+    "styles/markdown": true
+  }
+}
