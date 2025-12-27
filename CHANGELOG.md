@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-12-27
+
 ### Added
 
 - `shorthand.instructions.md` - Guidelines for avoiding shorthand and abbreviations in code and documentation
@@ -105,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.4...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.4...v0.3.0
 [0.2.4]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.3...v0.2.4
 [0.2.3]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.1...v0.2.2
