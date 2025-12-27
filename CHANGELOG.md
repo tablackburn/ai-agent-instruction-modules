@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2025-12-27
+
+### Added
+
+- Migration guidance for existing instruction files (CLAUDE.md, .cursorrules, etc.) in deployment prompts
+
 ## [0.2.2] - 2025-12-27
 
 ### Changed
@@ -89,7 +95,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.1.0...v0.2.0
