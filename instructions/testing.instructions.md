@@ -255,6 +255,52 @@ Prioritize testing:
 - High coverage doesn't guarantee quality
 - Focus on testing behavior, not implementation details
 
+## Bug Fix Testing
+
+### Test-First Bug Fixing
+
+When fixing a bug, always follow this workflow:
+
+1. **Write a failing test first** - Create at least one test that reproduces the bug
+2. **Verify the test fails** - Confirm the test fails for the expected reason
+3. **Fix the bug** - Implement the minimal fix to make the test pass
+4. **Verify all tests pass** - Ensure both the new test and existing tests pass
+
+**Example workflow:**
+
+```text
+# 1. Create test that exposes the bug
+test_calculateDiscount_withZeroQuantity_returnsZero()
+    # This test fails because of the bug
+
+# 2. Run tests - confirm failure
+> npm test
+FAIL: calculateDiscount returns NaN instead of 0
+
+# 3. Fix the bug in the source code
+
+# 4. Run tests - confirm fix
+> npm test
+PASS: All tests passing
+```
+
+### Why Test-First Matters
+
+- **Proves the bug exists** - The failing test documents the exact issue
+- **Prevents regressions** - The test ensures the bug won't return
+- **Validates the fix** - You know the fix works when the test passes
+- **Documents behavior** - Future developers understand the expected behavior
+
+### Bug Test Naming
+
+Name bug-related tests to indicate the scenario being fixed:
+
+```text
+calculateTotal_withNullItems_returnsZeroInsteadOfCrashing
+parseDate_withLeapYear_handlesFebruary29Correctly
+userAuth_withExpiredToken_returnsUnauthorizedNotServerError
+```
+
 ## Running Tests
 
 ### Before Committing
