@@ -26,31 +26,36 @@ Thank you for your interest in contributing to AI Agent Instruction Modules!
 ## Contribution Process
 
 1. **Fork the repository**
+
    ```bash
    gh repo fork tablackburn/ai-agent-instruction-modules --clone
    cd ai-agent-instruction-modules
    ```
 
-2. **Create a feature branch**
+1. **Create a feature branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-3. **Make your changes**
+1. **Make your changes**
    - Follow existing patterns and conventions
    - Test your changes locally
 
-4. **Run tests**
+1. **Run tests**
+
    ```powershell
    Invoke-Pester -Path .\tests\
    ```
 
-5. **Commit with conventional commits**
+1. **Commit with conventional commits**
+
    ```bash
    git commit -m "feat: Add Python type hints module"
    ```
 
-6. **Push and create a Pull Request**
+1. **Push and create a Pull Request**
+
    ```bash
    git push origin feature/your-feature-name
    gh pr create
@@ -70,6 +75,7 @@ description: 'Brief description of the module'
 ```
 
 **Required fields:**
+
 - `applyTo` - Glob pattern for applicable files
 - `description` - One-line description of the module's purpose
 
@@ -92,8 +98,8 @@ description: 'Brief description of the module'
 Before submitting:
 
 1. Run `Invoke-Pester -Path .\tests\` to verify all tests pass
-2. Check that frontmatter is valid YAML with required fields
-3. Verify links and references work
+1. Check that frontmatter is valid YAML with required fields
+1. Verify links and references work
 
 ## Code of Conduct
 

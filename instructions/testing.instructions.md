@@ -13,14 +13,15 @@ Language-agnostic guidelines for writing effective tests.
 
 Structure each test in three clear sections:
 
-```
+```javascript
 // Arrange - Set up test data and preconditions
 // Act - Execute the code being tested
 // Assert - Verify the expected outcome
 ```
 
 **Example:**
-```
+
+```javascript
 // Arrange
 user = createTestUser(name: "Alice", role: "admin")
 
@@ -35,7 +36,7 @@ expect(result).toBe(true)
 
 Alternative structure for behavior-focused tests:
 
-```
+```javascript
 // Given - Initial context
 // When - Action occurs
 // Then - Expected outcome
@@ -48,14 +49,16 @@ Alternative structure for behavior-focused tests:
 **Pattern:** `<unit>_<scenario>_<expectedResult>`
 
 **Good examples:**
-```
+
+```text
 calculateTotal_withEmptyCart_returnsZero
 userLogin_withInvalidPassword_throwsAuthError
 emailValidator_withValidEmail_returnsTrue
 ```
 
 **Avoid:**
-```
+
+```text
 test1
 testCalculate
 itWorks
@@ -65,7 +68,7 @@ itWorks
 
 Place test files alongside source files or in a dedicated test directory:
 
-```
+```text
 src/
   calculator.js
   calculator.test.js    # Adjacent to source
@@ -75,6 +78,7 @@ tests/
 ```
 
 Common extensions:
+
 - `.test.js`, `.test.ts`
 - `.spec.js`, `.spec.ts`
 - `_test.go`
@@ -111,13 +115,15 @@ Common extensions:
 Each test should verify one logical concept:
 
 **Good:**
-```
+
+```text
 test_addItem_increasesCartCount
 test_addItem_updatesCartTotal
 ```
 
 **Avoid:**
-```
+
+```text
 test_addItem_doesEverything  // Tests multiple things
 ```
 
@@ -131,13 +137,15 @@ test_addItem_doesEverything  // Tests multiple things
 ### Avoid Test Interdependence
 
 **Bad:**
-```
+
+```javascript
 test1_createUser()      // Creates user
 test2_loginUser()       // Assumes user exists from test1
 ```
 
 **Good:**
-```
+
+```javascript
 test_loginUser() {
     user = createTestUser()   // Each test creates its own data
     // ... test logic
@@ -147,14 +155,16 @@ test_loginUser() {
 ### Use Descriptive Assertions
 
 **Good:**
-```
+
+```javascript
 expect(user.isActive).toBe(true)
 expect(result).toContain("success")
 expect(list).toHaveLength(3)
 ```
 
 **Avoid:**
-```
+
+```javascript
 expect(x).toBe(true)  // What is x?
 assert(result)        // What should result be?
 ```
@@ -164,13 +174,15 @@ assert(result)        // What should result be?
 ### Use Meaningful Test Data
 
 **Good:**
-```
+
+```javascript
 email = "valid.user@example.com"
 invalidEmail = "not-an-email"
 ```
 
 **Avoid:**
-```
+
+```javascript
 email = "test"
 x = "asdf"
 ```
@@ -179,7 +191,7 @@ x = "asdf"
 
 Create helper functions for test data:
 
-```
+```javascript
 function createTestUser(overrides = {}) {
     return {
         id: generateId(),
@@ -231,10 +243,11 @@ adminUser = createTestUser({ role: "admin" })
 ### Focus on Critical Paths
 
 Prioritize testing:
+
 1. Business-critical functionality
-2. Error handling and edge cases
-3. Security-sensitive code
-4. Complex algorithms
+1. Error handling and edge cases
+1. Security-sensitive code
+1. Complex algorithms
 
 ### Coverage Goals
 
@@ -259,11 +272,11 @@ Prioritize testing:
 
 ## Anti-Patterns to Avoid
 
-| Anti-Pattern | Problem | Solution |
-|--------------|---------|----------|
-| Testing implementation | Brittle tests | Test behavior/outcomes |
-| Flaky tests | Unreliable CI | Fix timing/ordering issues |
-| Slow tests | Developer friction | Optimize or parallelize |
-| No assertions | False confidence | Always verify outcomes |
-| Commented-out tests | Hidden failures | Delete or fix tests |
-| Test data in production | Security risk | Use separate test environment |
+| Anti-Pattern            | Problem            | Solution                      |
+| ----------------------- | ------------------ | ----------------------------- |
+| Testing implementation  | Brittle tests      | Test behavior/outcomes        |
+| Flaky tests             | Unreliable CI      | Fix timing/ordering issues    |
+| Slow tests              | Developer friction | Optimize or parallelize       |
+| No assertions           | False confidence   | Always verify outcomes        |
+| Commented-out tests     | Hidden failures    | Delete or fix tests           |
+| Test data in production | Security risk      | Use separate test environment |

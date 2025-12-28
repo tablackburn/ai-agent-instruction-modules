@@ -10,11 +10,11 @@ Style rules for PowerShell code based on Microsoft guidelines and community stan
 ## Function Structure
 
 1. Always start functions with `[CmdletBinding()]` attribute
-2. Always include explicit `param()` block
-3. Use `process {}` block when accepting pipeline input
-4. For system-modifying cmdlets, use `[CmdletBinding(SupportsShouldProcess)]`
-5. Document output types with `[OutputType([TypeName])]` attribute
-6. Include comment-based help for all functions
+1. Always include explicit `param()` block
+1. Use `process {}` block when accepting pipeline input
+1. For system-modifying cmdlets, use `[CmdletBinding(SupportsShouldProcess)]`
+1. Document output types with `[OutputType([TypeName])]` attribute
+1. Include comment-based help for all functions
 
 ```powershell
 function Get-Data {
@@ -81,11 +81,11 @@ function Get-Setting {
 ## Naming Conventions
 
 1. Use approved PowerShell verbs only (verify with `Get-Verb`)
-2. Use singular nouns for function names (`Get-Item` not `Get-Items`)
-3. Use PascalCase for function names and parameters
-4. Use camelCase for local variables (`$userName`, `$itemCount`)
-5. Use descriptive variable names that indicate purpose
-6. Use full cmdlet names, never aliases (`Get-Process` not `gps`)
+1. Use singular nouns for function names (`Get-Item` not `Get-Items`)
+1. Use PascalCase for function names and parameters
+1. Use camelCase for local variables (`$userName`, `$itemCount`)
+1. Use descriptive variable names that indicate purpose
+1. Use full cmdlet names, never aliases (`Get-Process` not `gps`)
 
 ```powershell
 # Good - descriptive variable names
@@ -100,9 +100,9 @@ $users = Get-ADUser -Filter { Enabled -eq $true }
 ## Parameters
 
 1. Use full parameter names in scripts and functions
-2. Always use quotes around string parameter values
-3. Include validation on every parameter
-4. Place each component on its own line
+1. Always use quotes around string parameter values
+1. Include validation on every parameter
+1. Place each component on its own line
 
 ```powershell
 function Get-UserData {
@@ -129,11 +129,11 @@ function Get-UserData {
 ## Formatting
 
 1. Opening brace `{` at end of line, closing brace `}` on new line
-2. Use 4 spaces per indentation level
-3. Maximum line length: 115 characters
-4. Use splatting for long parameter lists
-5. Two blank lines before function definitions
-6. One blank line at end of file
+1. Use 4 spaces per indentation level
+1. Maximum line length: 115 characters
+1. Use splatting for long parameter lists
+1. Two blank lines before function definitions
+1. One blank line at end of file
 
 ```powershell
 function Test-Code {
@@ -169,8 +169,8 @@ Invoke-RestMethod @parameters
 ## Paths and File System
 
 1. Use `$PSScriptRoot` for script-relative paths
-2. Use `$Env:UserProfile` or `$HOME` instead of `~`
-3. Use `Join-Path` to construct paths
+1. Use `$Env:UserProfile` or `$HOME` instead of `~`
+1. Use `Join-Path` to construct paths
 
 ```powershell
 # Good
@@ -185,7 +185,7 @@ $userPath = '~\Documents'
 ## Error Handling
 
 1. Use `-ErrorAction 'Stop'` for cmdlets within try/catch
-2. Immediately copy `$_` in catch blocks before other commands
+1. Immediately copy `$_` in catch blocks before other commands
 
 ```powershell
 try {
@@ -200,8 +200,8 @@ catch {
 ## Credential Handling
 
 1. Use `[PSCredential]` for credential parameters, never `[string]` for passwords
-2. Make credentials optional when the function can run without them
-3. Use `[System.Management.Automation.Credential()]` attribute for flexibility
+1. Make credentials optional when the function can run without them
+1. Use `[System.Management.Automation.Credential()]` attribute for flexibility
 
 ```powershell
 function Connect-Service {
@@ -231,8 +231,8 @@ function Connect-Service {
 ## Output
 
 1. Write objects to pipeline immediately, don't batch into arrays
-2. Use `Write-Verbose` for detailed operation information
-3. Use `Write-Warning` for potential issues
+1. Use `Write-Verbose` for detailed operation information
+1. Use `Write-Warning` for potential issues
 
 ```powershell
 # Good - immediate output
@@ -289,8 +289,8 @@ function Get-UserData {
 ## Quotes
 
 1. Use single quotes for string literals
-2. Use double quotes only when variable expansion is needed
-3. Quote hashtable keys only when necessary (hyphens, spaces)
+1. Use double quotes only when variable expansion is needed
+1. Quote hashtable keys only when necessary (hyphens, spaces)
 
 ```powershell
 # Good
@@ -306,14 +306,14 @@ $title = 'Static string'
 ## Spacing
 
 1. Spaces around all operators: `$x = 1 + 2`
-2. Spaces around comparison operators: `$value -eq 10`
-3. Space after commas and semicolons
-4. No trailing spaces
+1. Spaces around comparison operators: `$value -eq 10`
+1. Space after commas and semicolons
+1. No trailing spaces
 
 ## Semicolons
 
 1. Do not use semicolons as line terminators
-2. Place each hashtable element on its own line
+1. Place each hashtable element on its own line
 
 ```powershell
 # Good

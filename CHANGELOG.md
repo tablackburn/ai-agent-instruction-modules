@@ -22,18 +22,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `contributing.instructions.md` - Agent-assisted workflow for contributing improvements back to upstream AIM repository
+- `contributing.instructions.md` - Agent-assisted workflow for contributing improvements back to
+  upstream AIM repository
 
 ### Changed
 
-- Updated `CONTRIBUTING.md` to match current repository structure (removed outdated script references, updated frontmatter format)
+- Updated `CONTRIBUTING.md` to match current repository structure (removed outdated script
+  references, updated frontmatter format)
 
 ## [0.4.0] - 2025-12-27
 
 ### Added
 
 - `readme.instructions.md` - README maintenance guidelines
-- `releases.instructions.md` - Release management guidelines (semantic versioning, changelogs, pre/post-release checklists)
+- `releases.instructions.md` - Release management guidelines (semantic versioning, changelogs,
+  pre/post-release checklists)
 
 ## [0.3.0] - 2025-12-27
 
@@ -57,7 +60,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Expanded Release Process section in repository-specific instructions with clear triggers, semantic versioning guidance, step-by-step process, and checklist
+- Expanded Release Process section in repository-specific instructions with clear triggers,
+  semantic versioning guidance, step-by-step process, and checklist
 
 ## [0.2.1] - 2025-12-27
 

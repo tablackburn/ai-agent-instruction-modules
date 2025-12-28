@@ -7,7 +7,9 @@ description: 'Mandatory pre-flight protocol for AI agents'
 
 ## Purpose
 
-This file defines the recommended workflow that AI agents should follow when working in repositories using AIM. It ensures agents understand the context and guidelines before starting work.
+This file defines the recommended workflow that AI agents should follow when working in
+repositories using AIM. It ensures agents understand the context and guidelines before
+starting work.
 
 ## Pre-Flight Protocol
 
@@ -70,9 +72,10 @@ This builds trust and catches misunderstandings early.
 ## When in Doubt
 
 1. **Ask for clarification** - Better to ask than implement incorrectly
-2. **Check existing code** - Follow established patterns in the codebase
-3. **Keep it simple** - The simplest solution that works is usually best
+1. **Check existing code** - Follow established patterns in the codebase
+1. **Keep it simple** - The simplest solution that works is usually best
 
 ## Custom Instructions
 
-If this repository has a custom instructions section, those guidelines take precedence for repository-specific conventions and may override or supplement the general instructions above.
+If this repository has a custom instructions section, those guidelines take precedence for
+repository-specific conventions and may override or supplement the general instructions above.

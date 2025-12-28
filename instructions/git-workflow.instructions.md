@@ -11,11 +11,12 @@ Guidelines for consistent Git usage across repositories.
 
 Use descriptive, lowercase branch names with hyphens:
 
-```
+```text
 <type>/<short-description>
 ```
 
 **Types:**
+
 - `feature/` - New functionality
 - `fix/` - Bug fixes
 - `docs/` - Documentation only
@@ -24,7 +25,8 @@ Use descriptive, lowercase branch names with hyphens:
 - `chore/` - Maintenance tasks
 
 **Examples:**
-```
+
+```text
 feature/user-authentication
 fix/login-validation-error
 docs/api-documentation
@@ -34,6 +36,7 @@ chore/update-dependencies
 ```
 
 **Avoid:**
+
 - Spaces or special characters
 - Overly long names
 - Generic names like `fix`, `update`, `changes`
@@ -42,7 +45,7 @@ chore/update-dependencies
 
 Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
 
-```
+```text
 <type>: <description>
 
 [optional body]
@@ -51,6 +54,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
 ```
 
 **Types:**
+
 - `feat:` - New feature
 - `fix:` - Bug fix
 - `docs:` - Documentation changes
@@ -60,6 +64,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
 - `chore:` - Maintenance tasks
 
 **Guidelines:**
+
 - Use imperative mood ("Add feature" not "Added feature")
 - Keep first line under 72 characters
 - Capitalize first letter after type
@@ -67,7 +72,8 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/) format:
 - Separate subject from body with blank line
 
 **Good examples:**
-```
+
+```text
 feat: Add user authentication flow
 fix: Resolve null reference in payment processing
 docs: Update API endpoint documentation
@@ -75,7 +81,8 @@ refactor: Extract validation logic to separate module
 ```
 
 **Avoid:**
-```
+
+```text
 Fixed stuff
 WIP
 updates
@@ -87,25 +94,28 @@ asdfasdf
 ### Before Creating a PR
 
 1. Ensure your branch is up to date with the base branch
-2. Run tests locally and verify they pass
-3. Review your own changes first
-4. Remove debugging code and console logs
+1. Run tests locally and verify they pass
+1. Review your own changes first
+1. Remove debugging code and console logs
 
 ### PR Title
 
 Use the same format as commit messages:
-```
+
+```text
 feat: Add user authentication flow
 ```
 
 ### PR Description
 
 Include:
+
 - **Summary** - What changed and why (1-3 bullet points)
 - **Test plan** - How to verify the changes work
 - **Breaking changes** - Note any breaking changes
 
 **Template:**
+
 ```markdown
 ## Summary
 
@@ -141,10 +151,10 @@ None
 ### Feature Branches
 
 1. Create feature branch from `main`
-2. Make changes in small, logical commits
-3. Push branch and create PR
-4. After review and approval, merge to `main`
-5. Delete feature branch after merge
+1. Make changes in small, logical commits
+1. Push branch and create PR
+1. After review and approval, merge to `main`
+1. Delete feature branch after merge
 
 ### Keeping Branches Updated
 

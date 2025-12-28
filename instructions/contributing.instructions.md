@@ -5,7 +5,8 @@ description: 'Guidelines for contributing improvements back to the upstream AIM 
 
 # Contributing Instructions for AI Agents
 
-When users want to improve, fix, or extend the AI agent instructions, this guide helps agents facilitate contributions back to the upstream AIM repository.
+When users want to improve, fix, or extend the AI agent instructions, this guide helps agents
+facilitate contributions back to the upstream AIM repository.
 
 ## When to Contribute Upstream vs. Modify Locally
 
@@ -44,6 +45,7 @@ git checkout -b feature/descriptive-branch-name
 ```
 
 Use descriptive branch names:
+
 - `feature/add-python-module` - New module
 - `fix/powershell-typo` - Bug fix
 - `docs/clarify-update-procedure` - Documentation improvement
@@ -53,11 +55,13 @@ Use descriptive branch names:
 Follow existing patterns in the repository:
 
 **For new instruction files:**
+
 - Place in `instructions/` folder
 - Use `.instructions.md` extension
 - Include required YAML frontmatter
 
 **For existing files:**
+
 - Preserve the file's structure and style
 - Make minimal, focused changes
 - Don't introduce unrelated modifications
@@ -77,6 +81,7 @@ git commit -m "feat: Add Python type hints module"
 ```
 
 Prefixes:
+
 - `feat:` - New feature or module
 - `fix:` - Bug fix or correction
 - `docs:` - Documentation only
@@ -101,10 +106,12 @@ description: 'Brief description of what this module covers'
 ```
 
 **Frontmatter fields:**
+
 - `applyTo` - Glob pattern for applicable files (e.g., `'**/*'`, `'**/*.py'`, `'**/README.md'`)
 - `description` - One-line description of the module's purpose
 
 **Content guidelines:**
+
 - Keep instructions generic and universally applicable
 - Use placeholder examples (`<owner>`, `<repo>`, `example.com`)
 - Avoid organization-specific references
@@ -116,6 +123,7 @@ description: 'Brief description of what this module covers'
 **Title:** Use conventional commit format (e.g., `feat: Add Python module`)
 
 **Description should include:**
+
 - Summary of changes (1-3 bullet points)
 - Motivation or problem being solved
 - Any breaking changes or migration notes

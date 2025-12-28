@@ -23,22 +23,22 @@ When editing files in `instructions/`:
    - `applyTo`: Glob patterns for file matching (e.g., `'**/*'` or `'**/*.ps1'`)
    - `description`: Brief description of the instruction file
 
-2. Keep instructions generic and universal:
+1. Keep instructions generic and universal:
    - Avoid organization-specific references
    - Use placeholder examples (`<owner>`, `<repo>`)
    - Focus on best practices applicable to any project
 
-3. Use the `.instructions.md` file extension for all instruction files
+1. Use the `.instructions.md` file extension for all instruction files
 
-4. Follow Markdown conventions in `markdown.instructions.md`
+1. Follow Markdown conventions in `markdown.instructions.md`
 
 ### Adding New Instruction Files
 
 1. Create the file in `instructions/` with `.instructions.md` extension
-2. Add YAML frontmatter with `applyTo` and `description`
-3. Update `AGENTS.template.md` to list the new file
-4. Update `AGENTS.md` to match the template
-5. Run tests to validate
+1. Add YAML frontmatter with `applyTo` and `description`
+1. Update `AGENTS.template.md` to list the new file
+1. Update `AGENTS.md` to match the template
+1. Run tests to validate
 
 ### Testing Changes
 
@@ -55,11 +55,13 @@ Invoke-Pester -Path .\tests\
 
 ## Release Process
 
-**IMPORTANT: Every change to instruction files or templates requires a release.** Do not push changes without completing this process.
+**IMPORTANT: Every change to instruction files or templates requires a release.** Do not push
+changes without completing this process.
 
 ### When to Release
 
 A release is required after ANY of the following:
+
 - Changes to files in `instructions/`
 - Changes to `AGENTS.md` or `AGENTS.template.md`
 - Changes to `CHANGELOG.md`
@@ -79,27 +81,31 @@ A release is required after ANY of the following:
    - Categorize changes: Added, Changed, Fixed, Removed
    - Update comparison links at bottom of file
 
-2. **Update version numbers**
+1. **Update version numbers**
    - `AGENTS.template.md`: Update "Template Version: X.Y.Z"
    - `AGENTS.md`: Update "Template Version: X.Y.Z"
    - Verify all three locations match (template, AGENTS.md, changelog)
 
-3. **Commit the release**
+1. **Commit the release**
+
    ```bash
    git add -A
    git commit -m "chore: Release vX.Y.Z"
    ```
 
-4. **Create and push tag**
+1. **Create and push tag**
+
    ```bash
    git tag -a vX.Y.Z -m "Release vX.Y.Z"
    git push && git push --tags
    ```
 
-5. **Create GitHub release**
+1. **Create GitHub release**
+
    ```bash
    gh release create vX.Y.Z --title "vX.Y.Z" --notes "Release notes here"
    ```
+
    Or use `--generate-notes` to auto-generate from commits.
 
 ### Release Checklist
@@ -116,7 +122,7 @@ A release is required after ANY of the following:
 
 ## File Structure
 
-```
+```text
 instructions/
 ├── agent-workflow.instructions.md    # Pre-flight protocol (read first)
 ├── powershell.instructions.md        # PowerShell standards
@@ -131,4 +137,5 @@ instructions/
 - `AGENTS.template.md` - The file distributed to downstream repositories
 - `AGENTS.md` - This repository's own implementation (should match template content)
 
-Both files must have matching version numbers. The template includes an HTML comment that downstream repos should remove.
+Both files must have matching version numbers. The template includes an HTML comment that
+downstream repos should remove.

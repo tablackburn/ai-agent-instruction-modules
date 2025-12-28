@@ -10,28 +10,30 @@ Last sync: 2025-12-27
 
 AI agents **must**:
 
-1. **When deploying or updating this template, follow `instructions/update.instructions.md` and update the Last sync date above.**
+1. **When deploying or updating this template, follow `instructions/update.instructions.md` and update
+   the Last sync date above.**
 
-2. **Read `instructions/agent-workflow.instructions.md` FIRST to determine which other instruction files apply to your task.** Follow all applicable instructions before proceeding with work.
+1. **Read `instructions/agent-workflow.instructions.md` FIRST to determine which other instruction
+   files apply to your task.** Follow all applicable instructions before proceeding with work.
 
 ## Instruction Applicability Matrix
 
 Use this matrix to determine which instruction files to read based on your task:
 
-| Task Type | Required Instructions |
-|-----------|----------------------|
-| Any task | `agent-workflow.instructions.md` |
-| Any code or documentation | `shorthand.instructions.md` |
-| Git operations | `git-workflow.instructions.md` |
-| Writing tests | `testing.instructions.md` |
-| PowerShell code | `powershell.instructions.md` |
-| Documentation | `markdown.instructions.md` |
-| README files | `readme.instructions.md` |
-| GitHub CLI usage | `github-cli.instructions.md` |
-| Creating releases | `releases.instructions.md` |
-| Repository-specific work | `repository-specific.instructions.md` |
-| Updating instructions | `update.instructions.md` |
-| Contributing to upstream | `contributing.instructions.md` |
+| Task Type                    | Required Instructions                  |
+| ---------------------------- | -------------------------------------- |
+| Any task                     | `agent-workflow.instructions.md`       |
+| Any code or documentation    | `shorthand.instructions.md`            |
+| Git operations               | `git-workflow.instructions.md`         |
+| Writing tests                | `testing.instructions.md`              |
+| PowerShell code              | `powershell.instructions.md`           |
+| Documentation                | `markdown.instructions.md`             |
+| README files                 | `readme.instructions.md`               |
+| GitHub CLI usage             | `github-cli.instructions.md`           |
+| Creating releases            | `releases.instructions.md`             |
+| Repository-specific work     | `repository-specific.instructions.md`  |
+| Updating instructions        | `update.instructions.md`               |
+| Contributing to upstream     | `contributing.instructions.md`         |
 
 ## Available Instruction Files
 
@@ -53,8 +55,8 @@ Use this matrix to determine which instruction files to read based on your task:
 ### Before Starting Any Task
 
 1. Identify the task type from the matrix above
-2. Read all applicable instruction files
-3. Follow the guidelines when implementing
+1. Read all applicable instruction files
+1. Follow the guidelines when implementing
 
 ### Best Practices
 

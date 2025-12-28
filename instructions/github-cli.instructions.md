@@ -75,6 +75,7 @@ gh issue list --search "bug in:title"
 ### Issue Labels
 
 Common labels to use:
+
 - `bug` - Something isn't working
 - `enhancement` - New feature or request
 - `documentation` - Documentation improvements

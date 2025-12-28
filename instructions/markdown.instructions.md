@@ -11,13 +11,17 @@ Consistent Markdown formatting for documentation files.
 
 - Use single blank lines between sections and elements
 - Never use multiple consecutive blank lines
-- Headings and lists must have a blank line above and below
+- Headings, lists, and code blocks must have a blank line above and below
 
 ## Headings
 
+- Use ATX style (`#`) not setext (underlines)
 - Use consistent heading levels (don't skip levels)
 - Start with a single H1 (`#`) for the document title
 - Use sentence case for headings
+- Include a space after `#` characters
+- No trailing punctuation (colons, periods, etc.)
+- Avoid duplicate heading text within the same document
 
 ## Lists
 
@@ -39,6 +43,7 @@ Text after list.
 
 ## Code Blocks
 
+- Use backticks (`` ` ``) not tildes (`~`) for code fences
 - Always specify language for fenced code blocks
 - Ensure closing triple backticks are on their own line
 - No trailing whitespace after closing backticks
@@ -61,18 +66,31 @@ Text after list.
 - Use `*italic*` for light emphasis
 - Use backticks for `code`, `filenames`, and `commands`
 - Use backticks for keyboard shortcuts like `Ctrl+C`
+- No spaces inside emphasis markers (`**text**` not `** text **`)
+- No spaces inside backticks (`` `code` `` not `` ` code ` ``)
+- Don't use bold/emphasis as a substitute for headings
 
 ## Links
 
 - Use descriptive link text (not "click here")
 - Use reference-style links for long URLs
 - Use reference-style links when the same URL appears multiple times
+- Links must have valid destinations (no empty hrefs)
 
 ```markdown
 See the [official documentation][docs] for more details.
 The [documentation][docs] covers advanced topics.
 
 [docs]: https://example.com/documentation
+```
+
+## Images
+
+- Always include alt text for accessibility
+- Use descriptive alt text that conveys the image content
+
+```markdown
+![Diagram showing data flow between components](./images/data-flow.png)
 ```
 
 ## Line Length
@@ -85,7 +103,9 @@ The [documentation][docs] covers advanced topics.
 
 - End all files with exactly one newline character
 - No trailing whitespace on any lines
+- Use spaces, not hard tabs
 - Use UTF-8 encoding
+- Avoid inline HTML when markdown alternatives exist
 
 ## Tables
 

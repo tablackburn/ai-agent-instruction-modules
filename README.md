@@ -2,7 +2,9 @@
 
 Modular, opt-in AI agent instructions for any codebase.
 
-AIM provides a curated collection of instruction modules that work with all popular AI coding agents including GitHub Copilot, Claude, Cursor, Windsurf, and any agent that supports the [agents.md](https://agents.md/) standard.
+AIM provides a curated collection of instruction modules that work with all popular AI coding
+agents including GitHub Copilot, Claude, Cursor, Windsurf, and any agent that supports the
+[agents.md](https://agents.md/) standard.
 
 ## Quick Setup
 
@@ -46,9 +48,9 @@ and remove the HTML comment block at the top of the file.
 ### Manual Alternative
 
 1. Copy `AGENTS.template.md` to your repository root as `AGENTS.md`
-2. Copy all files from `instructions/` folder (except `repository-specific.instructions.md`)
-3. Create a new `repository-specific.instructions.md` file tailored to your repository
-4. Update the sync date and remove the HTML comment from `AGENTS.md`
+1. Copy all files from `instructions/` folder (except `repository-specific.instructions.md`)
+1. Create a new `repository-specific.instructions.md` file tailored to your repository
+1. Update the sync date and remove the HTML comment from `AGENTS.md`
 
 ## Updating Instructions
 
@@ -60,23 +62,27 @@ https://github.com/tablackburn/ai-agent-instruction-modules following the proced
 in instructions/update.instructions.md
 ```
 
-The agent will sync the latest template and instruction files while preserving your repository-specific customizations.
+The agent will sync the latest template and instruction files while preserving your
+repository-specific customizations.
 
 ## What This Provides
 
 ### Core Modules
+
 - **Agent workflow** - Pre-flight protocol for AI agents
 - **Shorthand** - Guidelines for avoiding abbreviations in code
 - **Git workflow** - Branching, commits, and pull request conventions
 - **Testing** - Test writing best practices and conventions
 
 ### Language & Tool Modules
+
 - **PowerShell** - Cmdlet naming, parameter conventions, and scripting best practices
 - **Markdown** - Documentation formatting and structure guidelines
 - **README** - README maintenance guidelines
 - **GitHub CLI** - Efficient PR and issue management workflows
 
 ### Repository Management
+
 - **Releases** - Release management with semantic versioning
 - **Update** - Procedures for keeping downstream repositories current
 - **Contributing** - Workflow for contributing improvements to upstream
@@ -129,10 +135,10 @@ Tests verify:
 To update centralized instructions:
 
 1. Edit files in `instructions/` folder
-2. Update `AGENTS.template.md` version and content
-3. Update `AGENTS.md` to match (sync from template)
-4. Update `CHANGELOG.md` with changes
-5. Commit and push
+1. Update `AGENTS.template.md` version and content
+1. Update `AGENTS.md` to match (sync from template)
+1. Update `CHANGELOG.md` with changes
+1. Commit and push
 
 Downstream repositories must manually request updates from AI agents.
 
