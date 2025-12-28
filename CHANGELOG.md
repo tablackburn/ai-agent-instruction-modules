@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2025-12-27
+
+### Added
+
+- `.markdownlint.json` - Configuration file for automated markdown linting
+- New rules in `markdown.instructions.md`: ATX heading style, code fence style, emphasis
+  spacing, image alt text, no inline HTML, no hard tabs
+
+### Changed
+
+- Updated all markdown files for markdownlint compliance (200+ fixes)
+- Standardized ordered list prefixes to use `1. 1. 1.` style
+- Added language identifiers to all fenced code blocks
+- Fixed line lengths to stay within 100 characters
+- Added blank lines around code blocks and lists per MD031/MD032
+
 ## [0.6.0] - 2025-12-27
 
 ### Added
@@ -139,7 +155,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.3.0...v0.4.0
