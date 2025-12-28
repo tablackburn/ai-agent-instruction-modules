@@ -1,0 +1,25 @@
+{
+  "version": "latest",
+  "modules": {
+    "include": [
+      "agent-workflow",
+      "shorthand",
+      "git-workflow",
+      "testing",
+      "powershell",
+      "markdown"
+    ],
+    "exclude": []
+  },
+  "externalSources": {
+    "enabled": true,
+    "repositories": [
+      {
+        "name": "awesome-copilot",
+        "url": "https://github.com/github/awesome-copilot",
+        "path": "instructions",
+        "description": "Community-contributed instructions from GitHub's awesome-copilot repository"
+      }
+    ]
+  }
+}

@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2025-12-28
+
+### Added
+
+- `aim.config.json` - Configuration file for module selection and external sources
+- `aim.config.json.example` - Template configuration with external sources enabled
+- `instruction-templates/` folder - Source templates for distribution to downstream repositories
+- Module opt-in during deployment - Users can now select which instruction modules to include
+- Language detection during deployment - Automatically suggests modules based on detected languages
+- External source fallback - Fetch missing language instructions from github/awesome-copilot
+- User prompting before overwriting existing files during updates
+
+### Changed
+
+- **BREAKING**: Instruction templates moved from `instructions/` to `instruction-templates/`
+- **BREAKING**: Downstream repositories now copy from `instruction-templates/` instead of `instructions/`
+- `instructions/` folder now contains this repository's active instructions (dogfooding)
+- Updated deployment prompt with language detection and module selection
+- Enhanced `update.instructions.md` with intelligent module syncing and external source handling
+- Updated tests to validate new configuration schema and folder structure
+
 ## [0.7.0] - 2025-12-27
 
 ### Added
@@ -155,7 +176,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.4.0...v0.5.0

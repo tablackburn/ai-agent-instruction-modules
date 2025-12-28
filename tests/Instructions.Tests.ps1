@@ -9,11 +9,16 @@ Describe 'AI Agent Instructions Validation' {
         $script:agentsFilePath = Join-Path -Path $script:repoRoot -ChildPath 'AGENTS.md'
         $script:changelogFilePath = Join-Path -Path $script:repoRoot -ChildPath 'CHANGELOG.md'
         $script:instructionsPath = Join-Path -Path $script:repoRoot -ChildPath 'instructions'
+        $script:instructionTemplatesPath = Join-Path -Path $script:repoRoot -ChildPath 'instruction-templates'
+        $script:configFilePath = Join-Path -Path $script:repoRoot -ChildPath 'aim.config.json'
+        $script:configExamplePath = Join-Path -Path $script:repoRoot -ChildPath 'aim.config.json.example'
 
         # Check file existence
         $script:templateFileExists = Test-Path -Path $script:templateFilePath
         $script:agentsFileExists = Test-Path -Path $script:agentsFilePath
         $script:changelogFileExists = Test-Path -Path $script:changelogFilePath
+        $script:configFileExists = Test-Path -Path $script:configFilePath
+        $script:configExampleExists = Test-Path -Path $script:configExamplePath
 
         # Regular expression patterns
         $script:templateVersionPattern = '(?im)^\s*[>*\s-]*\**Template Version\**\s*[::]?\s*([\d]+\.[\d]+\.[\d]+)'
@@ -31,6 +36,14 @@ Describe 'AI Agent Instructions Validation' {
         }
         if ($script:changelogFileExists) {
             $script:changelogContent = Get-Content -Path $script:changelogFilePath -Raw
+        }
+        if ($script:configFileExists) {
+            $script:configContent = Get-Content -Path $script:configFilePath -Raw
+            $script:config = $script:configContent | ConvertFrom-Json
+        }
+        if ($script:configExampleExists) {
+            $script:configExampleContent = Get-Content -Path $script:configExamplePath -Raw
+            $script:configExample = $script:configExampleContent | ConvertFrom-Json
         }
 
         # Extract versions
@@ -62,54 +75,161 @@ Describe 'AI Agent Instructions Validation' {
         It 'instructions folder exists' {
             Test-Path -Path $script:instructionsPath | Should -BeTrue
         }
+
+        It 'instruction-templates folder exists' {
+            Test-Path -Path $script:instructionTemplatesPath | Should -BeTrue
+        }
+
+        It 'aim.config.json exists' {
+            Test-Path -Path $script:configFilePath | Should -BeTrue
+        }
+
+        It 'aim.config.json.example exists' {
+            Test-Path -Path $script:configExamplePath | Should -BeTrue
+        }
     }
 
-    Context 'Instruction Files' {
+    Context 'Instruction Template Files' {
 
-        It 'agent-workflow.instructions.md exists' {
-            $filePath = Join-Path -Path $script:instructionsPath -ChildPath 'agent-workflow.instructions.md'
+        It 'agent-workflow.instructions.md exists in instruction-templates' {
+            $filePath = Join-Path -Path $script:instructionTemplatesPath -ChildPath 'agent-workflow.instructions.md'
             Test-Path -Path $filePath | Should -BeTrue
         }
 
-
-        It 'update.instructions.md exists' {
-            $filePath = Join-Path -Path $script:instructionsPath -ChildPath 'update.instructions.md'
+        It 'update.instructions.md exists in instruction-templates' {
+            $filePath = Join-Path -Path $script:instructionTemplatesPath -ChildPath 'update.instructions.md'
             Test-Path -Path $filePath | Should -BeTrue
         }
 
-        It 'repository-specific.instructions.md exists' {
-            $filePath = Join-Path -Path $script:instructionsPath -ChildPath 'repository-specific.instructions.md'
+        It 'repository-specific.instructions.md exists in instruction-templates' {
+            $filePath = Join-Path -Path $script:instructionTemplatesPath -ChildPath 'repository-specific.instructions.md'
             Test-Path -Path $filePath | Should -BeTrue
         }
 
-        It 'All instruction files have .instructions.md extension' {
-            $invalidFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.md' |
+        It 'All instruction template files have .instructions.md extension' {
+            $invalidFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.md' |
                 Where-Object { $_.Name -notmatch '\.instructions\.md$' }
-            $invalidFiles | Should -BeNullOrEmpty -Because 'All markdown files in instructions/ should use .instructions.md extension'
+            $invalidFiles | Should -BeNullOrEmpty -Because 'All markdown files in instruction-templates/ should use .instructions.md extension'
         }
 
-        It 'All instruction files have YAML frontmatter' {
-            $instructionFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.instructions.md'
+        It 'All instruction template files have YAML frontmatter' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.instructions.md'
             foreach ($file in $instructionFiles) {
                 $content = Get-Content -Path $file.FullName -Raw
                 $content | Should -Match '^---\r?\n' -Because "$($file.Name) should start with YAML frontmatter"
             }
         }
 
-        It 'All instruction files have applyTo in frontmatter' {
-            $instructionFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.instructions.md'
+        It 'All instruction template files have applyTo in frontmatter' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.instructions.md'
             foreach ($file in $instructionFiles) {
                 $content = Get-Content -Path $file.FullName -Raw
                 $content | Should -Match 'applyTo:' -Because "$($file.Name) should have applyTo in frontmatter"
             }
         }
 
-        It 'All instruction files have description in frontmatter' {
-            $instructionFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.instructions.md'
+        It 'All instruction template files have description in frontmatter' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.instructions.md'
             foreach ($file in $instructionFiles) {
                 $content = Get-Content -Path $file.FullName -Raw
                 $content | Should -Match 'description:' -Because "$($file.Name) should have description in frontmatter"
             }
+        }
+    }
+
+    Context 'Active Instruction Files' {
+
+        It 'agent-workflow.instructions.md exists in instructions' {
+            $filePath = Join-Path -Path $script:instructionsPath -ChildPath 'agent-workflow.instructions.md'
+            Test-Path -Path $filePath | Should -BeTrue
+        }
+
+        It 'update.instructions.md exists in instructions' {
+            $filePath = Join-Path -Path $script:instructionsPath -ChildPath 'update.instructions.md'
+            Test-Path -Path $filePath | Should -BeTrue
+        }
+
+        It 'All active instruction files have .instructions.md extension' {
+            $invalidFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.md' |
+                Where-Object { $_.Name -notmatch '\.instructions\.md$' }
+            $invalidFiles | Should -BeNullOrEmpty -Because 'All markdown files in instructions/ should use .instructions.md extension'
+        }
+
+        It 'All active instruction files have YAML frontmatter' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName -Raw
+                $content | Should -Match '^---\r?\n' -Because "$($file.Name) should start with YAML frontmatter"
+            }
+        }
+    }
+
+    Context 'Configuration Schema' {
+
+        It 'aim.config.json is valid JSON' {
+            if (-not $script:configFileExists) {
+                Set-ItResult -Skipped -Because 'Config file does not exist'
+                return
+            }
+            { $script:configContent | ConvertFrom-Json } | Should -Not -Throw
+        }
+
+        It 'aim.config.json has version field' {
+            if (-not $script:configFileExists) {
+                Set-ItResult -Skipped -Because 'Config file does not exist'
+                return
+            }
+            $script:config.version | Should -Not -BeNullOrEmpty
+        }
+
+        It 'aim.config.json has modules field' {
+            if (-not $script:configFileExists) {
+                Set-ItResult -Skipped -Because 'Config file does not exist'
+                return
+            }
+            $script:config.modules | Should -Not -BeNull
+        }
+
+        It 'aim.config.json has modules.include field' {
+            if (-not $script:configFileExists) {
+                Set-ItResult -Skipped -Because 'Config file does not exist'
+                return
+            }
+            $script:config.modules.include | Should -Not -BeNullOrEmpty
+        }
+
+        It 'aim.config.json has externalSources field' {
+            if (-not $script:configFileExists) {
+                Set-ItResult -Skipped -Because 'Config file does not exist'
+                return
+            }
+            $script:config.externalSources | Should -Not -BeNull
+        }
+
+        It 'aim.config.json.example is valid JSON' {
+            if (-not $script:configExampleExists) {
+                Set-ItResult -Skipped -Because 'Config example file does not exist'
+                return
+            }
+            { $script:configExampleContent | ConvertFrom-Json } | Should -Not -Throw
+        }
+
+        It 'aim.config.json.example has externalSources.enabled set to true' {
+            if (-not $script:configExampleExists) {
+                Set-ItResult -Skipped -Because 'Config example file does not exist'
+                return
+            }
+            $script:configExample.externalSources.enabled | Should -BeTrue
+        }
+
+        It 'aim.config.json.example has awesome-copilot in repositories' {
+            if (-not $script:configExampleExists) {
+                Set-ItResult -Skipped -Because 'Config example file does not exist'
+                return
+            }
+            $awesomeCopilot = $script:configExample.externalSources.repositories | Where-Object { $_.name -eq 'awesome-copilot' }
+            $awesomeCopilot | Should -Not -BeNull
+            $awesomeCopilot.url | Should -Be 'https://github.com/github/awesome-copilot'
         }
     }
 
@@ -210,6 +330,14 @@ Describe 'AI Agent Instructions Validation' {
                 return
             }
             $script:templateContent | Should -Match 'agent-workflow\.instructions\.md'
+        }
+
+        It 'AGENTS.md references aim.config.json' {
+            if (-not $script:agentsFileExists) {
+                Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
+                return
+            }
+            $script:agentsContent | Should -Match 'aim\.config\.json'
         }
     }
 }

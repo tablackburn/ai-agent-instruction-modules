@@ -91,7 +91,7 @@ description: 'Brief description of the module'
 
 - Use `.instructions.md` extension
 - Use lowercase with hyphens (e.g., `python-typing.instructions.md`)
-- Place files in the `instructions/` folder
+- Place files in the `instruction-templates/` folder
 
 ### Testing
 

@@ -1,0 +1,22 @@
+{
+  "version": "latest",
+  "modules": {
+    "include": [
+      "agent-workflow",
+      "shorthand",
+      "git-workflow",
+      "testing",
+      "powershell",
+      "markdown",
+      "readme",
+      "github-cli",
+      "releases",
+      "contributing",
+      "update",
+      "repository-specific"
+    ]
+  },
+  "externalSources": {
+    "enabled": false
+  }
+}

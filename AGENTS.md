@@ -2,9 +2,9 @@
 
 AI agents working in this repository must follow these instructions.
 
-Template Version: 0.7.0
+Template Version: 0.8.0
 
-Last sync: 2025-12-27
+Last sync: 2025-12-28
 
 ## Instructions for AI Agents
 
@@ -15,6 +15,8 @@ AI agents **must**:
 
 1. **Read `instructions/agent-workflow.instructions.md` FIRST to determine which other instruction
    files apply to your task.** Follow all applicable instructions before proceeding with work.
+
+1. **Check `aim.config.json`** for module configuration and external source settings.
 
 ## Instruction Applicability Matrix
 
