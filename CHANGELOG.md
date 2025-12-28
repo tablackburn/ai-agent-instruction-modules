@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2025-12-28
+
+### Added
+
+- Post-task protocol in `agent-workflow.instructions.md` directing agents to check
+  `repository-specific.instructions.md` for release processes and other requirements
+
+### Fixed
+
+- Updated outdated `instructions/` references to `instruction-templates/` in
+  `repository-specific.instructions.md`
+
 ## [0.8.0] - 2025-12-28
 
 ### Added
@@ -176,7 +188,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.5.0...v0.6.0

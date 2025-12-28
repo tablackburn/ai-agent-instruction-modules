@@ -17,7 +17,7 @@ This is the source repository for AIM (AI Agent Instruction Modules).
 
 ### Modifying Instruction Files
 
-When editing files in `instructions/`:
+When editing files in `instruction-templates/`:
 
 1. Maintain YAML frontmatter with required fields:
    - `applyTo`: Glob patterns for file matching (e.g., `'**/*'` or `'**/*.ps1'`)
@@ -34,7 +34,7 @@ When editing files in `instructions/`:
 
 ### Adding New Instruction Files
 
-1. Create the file in `instructions/` with `.instructions.md` extension
+1. Create the file in `instruction-templates/` with `.instructions.md` extension
 1. Add YAML frontmatter with `applyTo` and `description`
 1. Update `AGENTS.template.md` to list the new file
 1. Update `AGENTS.md` to match the template
@@ -62,7 +62,7 @@ changes without completing this process.
 
 A release is required after ANY of the following:
 
-- Changes to files in `instructions/`
+- Changes to files in `instruction-templates/`
 - Changes to `AGENTS.md` or `AGENTS.template.md`
 - Changes to `CHANGELOG.md`
 - Changes to `README.md` that affect usage or deployment
@@ -123,13 +123,16 @@ A release is required after ANY of the following:
 ## File Structure
 
 ```text
-instructions/
-├── agent-workflow.instructions.md    # Pre-flight protocol (read first)
-├── powershell.instructions.md        # PowerShell standards
-├── markdown.instructions.md          # Markdown formatting
-├── github-cli.instructions.md        # GitHub CLI usage
-├── repository-specific.instructions.md # This file
-└── update.instructions.md            # Sync procedures
+instruction-templates/                  # Source templates for distribution
+├── agent-workflow.instructions.md      # Pre-flight protocol (read first)
+├── powershell.instructions.md          # PowerShell standards
+├── markdown.instructions.md            # Markdown formatting
+├── github-cli.instructions.md          # GitHub CLI usage
+├── repository-specific.instructions.md # Template for repo-specific customizations
+└── update.instructions.md              # Sync procedures
+
+instructions/                           # This repository's active instructions
+└── (configured via aim.config.json)
 ```
 
 ## Template vs Implementation

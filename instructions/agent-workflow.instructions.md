@@ -75,6 +75,21 @@ This builds trust and catches misunderstandings early.
 1. **Check existing code** - Follow established patterns in the codebase
 1. **Keep it simple** - The simplest solution that works is usually best
 
+## Post-Task Protocol
+
+### Before Committing
+
+1. **Run tests** - Ensure all tests pass before committing
+2. **Check repository-specific requirements** - Review `repository-specific.instructions.md` for
+   any post-task requirements such as:
+   - Release processes (version bumps, changelogs, tags)
+   - Commit message conventions beyond standard guidelines
+   - Required reviewers or approval workflows
+   - Documentation updates
+
+Following repository-specific requirements ensures consistency with the project's established
+workflows and prevents incomplete changes from being committed.
+
 ## Custom Instructions
 
 If this repository has a custom instructions section, those guidelines take precedence for
