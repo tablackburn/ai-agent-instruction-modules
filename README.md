@@ -1,10 +1,26 @@
-# AIM: AI Agent Instruction Modules
+![AIM: AI Agent Instruction Modules](https://tablackburn.github.io/img/aim-banner.svg)
+
+[![Latest Release][release-badge]][releases]
+[![License][license-badge]][license]
+[![GitHub Stars][stars-badge]][stargazers]
+![Agents Supported][agents-badge]
 
 Modular, opt-in AI agent instructions for any codebase.
 
 AIM provides a curated collection of instruction modules that work with all popular AI coding
 agents including GitHub Copilot, Claude, Cursor, Windsurf, and any agent that supports the
 [agents.md](https://agents.md/) standard.
+
+- [Announcement Blog Post](https://tablackburn.github.io/post/announcing-ai-agent-instruction-modules/)
+
+[release-badge]: https://img.shields.io/github/v/release/tablackburn/ai-agent-instruction-modules?display_name=tag
+[license-badge]: https://img.shields.io/github/license/tablackburn/ai-agent-instruction-modules
+[stars-badge]: https://img.shields.io/github/stars/tablackburn/ai-agent-instruction-modules
+[agents-badge]: https://img.shields.io/badge/agents-Copilot%20%7C%20Claude%20%7C%20Cursor-blue
+
+[releases]: https://github.com/tablackburn/ai-agent-instruction-modules/releases/latest
+[license]: https://github.com/tablackburn/ai-agent-instruction-modules/blob/main/LICENSE
+[stargazers]: https://github.com/tablackburn/ai-agent-instruction-modules/stargazers
 
 ## Quick Setup
 
