@@ -340,4 +340,169 @@ Describe 'AI Agent Instructions Validation' {
             $script:agentsContent | Should -Match 'aim\.config\.json'
         }
     }
+
+    Context 'Content Validation - Heading Structure' {
+
+        It 'All instruction templates have a level 1 heading after frontmatter' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName -Raw
+                # Remove YAML frontmatter and check for H1
+                $contentAfterFrontmatter = $content -replace '^---[\s\S]*?---\r?\n', ''
+                $contentAfterFrontmatter | Should -Match '^\s*# ' -Because "$($file.Name) should have a level 1 heading after frontmatter"
+            }
+        }
+
+        It 'All instruction templates have no skipped heading levels' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName
+                $previousLevel = 0
+                $lineNumber = 0
+                $inCodeBlock = $false
+                foreach ($line in $content) {
+                    $lineNumber++
+                    # Track code block state
+                    if ($line -match '^```') {
+                        $inCodeBlock = -not $inCodeBlock
+                        continue
+                    }
+                    # Skip lines inside code blocks
+                    if ($inCodeBlock) { continue }
+                    if ($line -match '^(#{1,6})\s+\S') {
+                        $currentLevel = $matches[1].Length
+                        # Allow going from any level to a lower level (e.g., ### to ##)
+                        # Only check for skips when going deeper (e.g., # to ### skips ##)
+                        if ($currentLevel -gt $previousLevel -and $currentLevel -gt ($previousLevel + 1) -and $previousLevel -gt 0) {
+                            throw "$($file.Name) line $lineNumber skips heading level (from H$previousLevel to H$currentLevel)"
+                        }
+                        $previousLevel = $currentLevel
+                    }
+                }
+            }
+        }
+
+        It 'All active instructions have a level 1 heading after frontmatter' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName -Raw
+                $contentAfterFrontmatter = $content -replace '^---[\s\S]*?---\r?\n', ''
+                $contentAfterFrontmatter | Should -Match '^\s*# ' -Because "$($file.Name) should have a level 1 heading after frontmatter"
+            }
+        }
+
+        It 'All active instructions have no skipped heading levels' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName
+                $previousLevel = 0
+                $lineNumber = 0
+                $inCodeBlock = $false
+                foreach ($line in $content) {
+                    $lineNumber++
+                    if ($line -match '^```') {
+                        $inCodeBlock = -not $inCodeBlock
+                        continue
+                    }
+                    if ($inCodeBlock) { continue }
+                    if ($line -match '^(#{1,6})\s+\S') {
+                        $currentLevel = $matches[1].Length
+                        if ($currentLevel -gt $previousLevel -and $currentLevel -gt ($previousLevel + 1) -and $previousLevel -gt 0) {
+                            throw "$($file.Name) line $lineNumber skips heading level (from H$previousLevel to H$currentLevel)"
+                        }
+                        $previousLevel = $currentLevel
+                    }
+                }
+            }
+        }
+    }
+
+    Context 'Content Validation - Internal Links' {
+
+        It 'All internal file references in instruction templates point to existing files' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName -Raw
+                # Match markdown links to .md files: [text](file.md) or [text](./file.md)
+                $linkPattern = '\[([^\]]+)\]\(\.?/?([^)]+\.md)\)'
+                $matches = [regex]::Matches($content, $linkPattern)
+                foreach ($match in $matches) {
+                    $linkedFile = $match.Groups[2].Value
+                    # Skip external URLs
+                    if ($linkedFile -match '^https?://') { continue }
+                    # Check relative to instruction-templates folder
+                    $fullPath = Join-Path -Path $script:instructionTemplatesPath -ChildPath $linkedFile
+                    if (-not (Test-Path -Path $fullPath)) {
+                        # Also check relative to repo root
+                        $fullPath = Join-Path -Path $script:repoRoot -ChildPath $linkedFile
+                    }
+                    Test-Path -Path $fullPath | Should -BeTrue -Because "$($file.Name) references '$linkedFile' which should exist"
+                }
+            }
+        }
+
+        It 'All internal file references in AGENTS.md point to existing files' {
+            if (-not $script:agentsFileExists) {
+                Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
+                return
+            }
+            $linkPattern = '\[([^\]]+)\]\(\.?/?([^)]+\.md)\)'
+            $matches = [regex]::Matches($script:agentsContent, $linkPattern)
+            foreach ($match in $matches) {
+                $linkedFile = $match.Groups[2].Value
+                if ($linkedFile -match '^https?://') { continue }
+                $fullPath = Join-Path -Path $script:repoRoot -ChildPath $linkedFile
+                Test-Path -Path $fullPath | Should -BeTrue -Because "AGENTS.md references '$linkedFile' which should exist"
+            }
+        }
+    }
+
+    Context 'Content Validation - Code Blocks' {
+
+        It 'All code blocks in instruction templates have language specifiers' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionTemplatesPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName
+                $lineNumber = 0
+                $inCodeBlock = $false
+                foreach ($line in $content) {
+                    $lineNumber++
+                    if ($line -match '^```(\S*)') {
+                        if (-not $inCodeBlock) {
+                            $language = $matches[1]
+                            if ([string]::IsNullOrWhiteSpace($language)) {
+                                throw "$($file.Name) line $lineNumber has a code block without a language specifier"
+                            }
+                            $inCodeBlock = $true
+                        } else {
+                            $inCodeBlock = $false
+                        }
+                    }
+                }
+            }
+        }
+
+        It 'All code blocks in active instructions have language specifiers' {
+            $instructionFiles = Get-ChildItem -Path $script:instructionsPath -Filter '*.instructions.md'
+            foreach ($file in $instructionFiles) {
+                $content = Get-Content -Path $file.FullName
+                $lineNumber = 0
+                $inCodeBlock = $false
+                foreach ($line in $content) {
+                    $lineNumber++
+                    if ($line -match '^```(\S*)') {
+                        if (-not $inCodeBlock) {
+                            $language = $matches[1]
+                            if ([string]::IsNullOrWhiteSpace($language)) {
+                                throw "$($file.Name) line $lineNumber has a code block without a language specifier"
+                            }
+                            $inCodeBlock = $true
+                        } else {
+                            $inCodeBlock = $false
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
