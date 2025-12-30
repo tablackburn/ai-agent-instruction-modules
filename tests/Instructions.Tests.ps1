@@ -1,5 +1,3 @@
-#Requires -Modules Pester
-
 Describe 'AI Agent Instructions Validation' {
 
     BeforeAll {
