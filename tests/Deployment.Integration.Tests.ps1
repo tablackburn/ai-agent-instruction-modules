@@ -131,6 +131,63 @@ Describe 'AIM Deployment Integration Tests' -Tag 'Integration' {
                 Remove-Item -Path $Path -Recurse -Force -ErrorAction SilentlyContinue
             }
         }
+
+        # Helper: Simulate AIM update on existing deployment
+        function Invoke-AIMUpdate {
+            param(
+                [string]$TargetPath,
+                [string[]]$NewModules = @()
+            )
+
+            $instructionsDir = Join-Path -Path $TargetPath -ChildPath 'instructions'
+            $configPath = Join-Path -Path $TargetPath -ChildPath 'aim.config.json'
+
+            # Read existing config
+            $config = Get-Content -Path $configPath | ConvertFrom-Json
+
+            # Sync new modules (simulating what update would do)
+            $addedModules = @()
+            foreach ($module in $NewModules) {
+                $sourcePath = Join-Path -Path $script:templatePath -ChildPath $module
+                if (Test-Path -Path $sourcePath) {
+                    $destPath = Join-Path -Path $instructionsDir -ChildPath $module
+                    # Only copy if not already present (simulating "new" modules)
+                    if (-not (Test-Path -Path $destPath)) {
+                        Copy-Item -Path $sourcePath -Destination $destPath -Force
+                        $addedModules += $module
+                    }
+                }
+            }
+
+            # Update config with new modules
+            $updatedInclude = @($config.modules.include) + $addedModules | Select-Object -Unique
+            $config.modules.include = $updatedInclude
+
+            # Write updated config
+            $config | ConvertTo-Json -Depth 4 | Set-Content -Path $configPath
+
+            return @{
+                AddedModules    = $addedModules
+                UpdatedConfig   = $config
+                InstructionsDir = $instructionsDir
+                ConfigPath      = $configPath
+            }
+        }
+
+        # Helper: Create config with external sources
+        function Set-ExternalSourcesConfig {
+            param(
+                [string]$ConfigPath,
+                [bool]$Enabled = $false,
+                [array]$Repositories = @()
+            )
+
+            $config = Get-Content -Path $ConfigPath | ConvertFrom-Json
+            $config.externalSources.enabled = $Enabled
+            $config.externalSources.repositories = $Repositories
+            $config | ConvertTo-Json -Depth 4 | Set-Content -Path $ConfigPath
+            return $config
+        }
     }
 
     Context 'Basic Deployment' {
@@ -306,6 +363,163 @@ Describe 'AIM Deployment Integration Tests' -Tag 'Integration' {
 
             Remove-TestRepository -Path $tempRepo
             Test-Path -Path $tempRepo | Should -BeFalse
+        }
+    }
+
+    Context 'Update Workflow Simulation' {
+
+        BeforeAll {
+            # Create initial deployment
+            $script:testRepo = New-TestRepository -FileExtensions @('.ps1')
+            $script:deploymentResult = Invoke-AIMDeployment -TargetPath $script:testRepo
+        }
+
+        AfterAll {
+            Remove-TestRepository -Path $script:testRepo
+        }
+
+        It 'Can add new modules via update' {
+            $updateResult = Invoke-AIMUpdate -TargetPath $script:testRepo -NewModules @('git-workflow.instructions.md')
+            $updateResult.AddedModules | Should -Contain 'git-workflow.instructions.md'
+
+            $gitPath = Join-Path -Path $updateResult.InstructionsDir -ChildPath 'git-workflow.instructions.md'
+            Test-Path -Path $gitPath | Should -BeTrue
+        }
+
+        It 'Update adds new modules to config' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.modules.include | Should -Contain 'git-workflow.instructions.md'
+        }
+
+        It 'Update preserves existing modules' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.modules.include | Should -Contain 'agent-workflow.instructions.md'
+            $config.modules.include | Should -Contain 'powershell.instructions.md'
+        }
+
+        It 'Update preserves repository-specific.instructions.md' {
+            # Modify repository-specific file
+            $repoSpecificPath = Join-Path -Path $script:deploymentResult.InstructionsDir -ChildPath 'repository-specific.instructions.md'
+            $customContent = "# Custom Repository Instructions`n`nThis is custom content."
+            Set-Content -Path $repoSpecificPath -Value $customContent
+
+            # Run another update
+            Invoke-AIMUpdate -TargetPath $script:testRepo -NewModules @('releases.instructions.md')
+
+            # Verify custom content preserved
+            $content = Get-Content -Path $repoSpecificPath -Raw
+            $content | Should -Match 'This is custom content'
+        }
+
+        It 'Update does not duplicate existing modules' {
+            # Try to add a module that already exists
+            $updateResult = Invoke-AIMUpdate -TargetPath $script:testRepo -NewModules @('powershell.instructions.md')
+            $updateResult.AddedModules | Should -Not -Contain 'powershell.instructions.md' -Because 'Module already exists'
+        }
+
+        It 'Multiple updates accumulate modules correctly' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            # Should have original + git-workflow + releases from previous tests
+            $config.modules.include | Should -Contain 'agent-workflow.instructions.md'
+            $config.modules.include | Should -Contain 'powershell.instructions.md'
+            $config.modules.include | Should -Contain 'git-workflow.instructions.md'
+            $config.modules.include | Should -Contain 'releases.instructions.md'
+        }
+    }
+
+    Context 'External Sources Configuration' {
+
+        BeforeAll {
+            $script:testRepo = New-TestRepository -FileExtensions @('.ps1')
+            $script:deploymentResult = Invoke-AIMDeployment -TargetPath $script:testRepo
+        }
+
+        AfterAll {
+            Remove-TestRepository -Path $script:testRepo
+        }
+
+        It 'Default deployment has external sources disabled' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.externalSources.enabled | Should -BeFalse
+        }
+
+        It 'Default deployment has empty repositories list' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.externalSources.repositories | Should -BeNullOrEmpty
+        }
+
+        It 'Can enable external sources' {
+            Set-ExternalSourcesConfig -ConfigPath $script:deploymentResult.ConfigPath -Enabled $true
+
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.externalSources.enabled | Should -BeTrue
+        }
+
+        It 'Can configure external repositories' {
+            $repos = @(
+                @{
+                    name        = 'awesome-copilot'
+                    url         = 'https://github.com/github/awesome-copilot'
+                    path        = 'instructions'
+                    description = 'Community-contributed instructions'
+                }
+            )
+            Set-ExternalSourcesConfig -ConfigPath $script:deploymentResult.ConfigPath -Enabled $true -Repositories $repos
+
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.externalSources.repositories | Should -HaveCount 1
+            $config.externalSources.repositories[0].name | Should -Be 'awesome-copilot'
+        }
+
+        It 'External source config has required fields' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $repo = $config.externalSources.repositories[0]
+            $repo.name | Should -Not -BeNullOrEmpty
+            $repo.url | Should -Not -BeNullOrEmpty
+            $repo.path | Should -Not -BeNullOrEmpty
+        }
+
+        It 'Can disable external sources after enabling' {
+            Set-ExternalSourcesConfig -ConfigPath $script:deploymentResult.ConfigPath -Enabled $false
+
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.externalSources.enabled | Should -BeFalse
+        }
+    }
+
+    Context 'Module Exclusion' {
+
+        BeforeAll {
+            $script:testRepo = New-TestRepository -FileExtensions @('.ps1', '.md')
+            $script:deploymentResult = Invoke-AIMDeployment -TargetPath $script:testRepo
+        }
+
+        AfterAll {
+            Remove-TestRepository -Path $script:testRepo
+        }
+
+        It 'Can add modules to exclude list' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.modules.exclude = @('markdown.instructions.md')
+            $config | ConvertTo-Json -Depth 4 | Set-Content -Path $script:deploymentResult.ConfigPath
+
+            $updatedConfig = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $updatedConfig.modules.exclude | Should -Contain 'markdown.instructions.md'
+        }
+
+        It 'Exclude list supports multiple items' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.modules.exclude = @('markdown.instructions.md', 'readme.instructions.md')
+            $config | ConvertTo-Json -Depth 4 | Set-Content -Path $script:deploymentResult.ConfigPath
+
+            $updatedConfig = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $updatedConfig.modules.exclude | Should -HaveCount 2
+        }
+
+        It 'Include and exclude can coexist' {
+            $config = Get-Content -Path $script:deploymentResult.ConfigPath | ConvertFrom-Json
+            $config.modules.include | Should -Not -BeNullOrEmpty
+            $config.modules.exclude | Should -Not -BeNullOrEmpty
         }
     }
 }
