@@ -4,6 +4,7 @@
 [![License][license-badge]][license]
 [![GitHub Stars][stars-badge]][stargazers]
 ![Agents Supported][agents-badge]
+[![AI Assisted][ai-badge]](https://claude.ai)
 
 Modular, opt-in AI agent instructions for any codebase.
 
@@ -17,6 +18,7 @@ agents including GitHub Copilot, Claude, Cursor, Windsurf, and any agent that su
 [license-badge]: https://img.shields.io/github/license/tablackburn/ai-agent-instruction-modules
 [stars-badge]: https://img.shields.io/github/stars/tablackburn/ai-agent-instruction-modules
 [agents-badge]: https://img.shields.io/badge/agents-Copilot%20%7C%20Claude%20%7C%20Cursor-blue
+[ai-badge]: https://img.shields.io/badge/AI-Assisted-blue
 
 [releases]: https://github.com/tablackburn/ai-agent-instruction-modules/releases/latest
 [license]: https://github.com/tablackburn/ai-agent-instruction-modules/blob/main/LICENSE
@@ -260,6 +262,11 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+
+## Acknowledgments
+
+This project was developed with assistance from [Claude](https://claude.ai) by Anthropic.
 
 ## License
 
