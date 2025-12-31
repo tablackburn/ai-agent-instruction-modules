@@ -325,3 +325,22 @@ $options = @{
 # Bad
 $options = @{ Name = 'Value'; Size = 100 }
 ```
+
+## Build Systems
+
+When a repository uses a build system (psake, Invoke-Build, etc.), use the build system's tasks for
+operations like testing, building, publishing, and deployment rather than running commands directly
+or creating separate scripts. Check for common build files:
+
+- `psakefile.ps1` or `psake.ps1` (psake)
+- `*.build.ps1` (Invoke-Build)
+- `build.ps1` (general build script)
+
+```powershell
+# Good - use the build system
+Invoke-psake -taskList Test
+Invoke-Build -Task Test
+
+# Avoid - bypassing the build system
+Invoke-Pester -Path .\tests\
+```

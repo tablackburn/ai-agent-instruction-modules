@@ -97,6 +97,10 @@ apply only to this repository).
 
 Update the 'Last sync' placeholder in AGENTS.md to today's date (e.g., 2025-12-28)
 and remove the HTML comment block at the top of the file.
+
+Finally, scan the repository for potential issues based on the deployed instructions
+and suggest improvements (e.g., missing documentation, code style inconsistencies,
+missing tests, security concerns).
 ```
 
 ### Manual Alternative
