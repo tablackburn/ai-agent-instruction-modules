@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.3] - 2025-12-31
+
+### Added
+
+- Build Systems section in `powershell.instructions.md` - agents should use existing build tools
+  (psake, Invoke-Build) rather than running commands directly or creating separate scripts
+- Post-deployment issue scanning step in README deployment prompt - agents now suggest improvements
+  after deploying instructions
+
 ## [0.8.2] - 2025-12-28
 
 ### Added
@@ -195,7 +204,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.2...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.3...HEAD
+[0.8.3]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.2...v0.8.3
 [0.8.2]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.1...v0.8.2
 [0.8.1]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.7.0...v0.8.0
