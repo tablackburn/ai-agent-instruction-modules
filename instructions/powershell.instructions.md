@@ -344,3 +344,63 @@ Invoke-Build -Task Test
 # Avoid - bypassing the build system
 Invoke-Pester -Path .\tests\
 ```
+
+## Static Analysis
+
+PSScriptAnalyzer warnings indicate real issues. Fix the underlying problem rather than suppressing warnings.
+
+### Warnings to Always Fix
+
+These warnings represent naming and style violations that should be corrected:
+
+- **PSUseSingularNouns** - Rename function to use singular noun (`Get-Item` not `Get-Items`)
+- **PSUseApprovedVerbs** - Use an approved verb from `Get-Verb`
+- **PSAvoidUsingCmdletAliases** - Replace alias with full cmdlet name
+- **PSAvoidUsingWriteHost** - Use `Write-Output`, `Write-Verbose`, or `Write-Information`
+
+```powershell
+# Bad - suppressing instead of fixing
+function Get-Items {  # PSUseSingularNouns warning
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
+    [CmdletBinding()]
+    param()
+    # Returns multiple items
+}
+
+# Good - fix the naming
+function Get-Item {
+    [CmdletBinding()]
+    param()
+    # Returns zero, one, or more items (singular noun is correct regardless)
+}
+```
+
+### Suppression Requirements
+
+When suppression is genuinely necessary (rare), include a justification:
+
+1. Use `SuppressMessageAttribute` with the `Justification` parameter
+2. Explain why the warning cannot be resolved
+3. Reference external constraints if applicable
+
+```powershell
+# Acceptable - justified suppression for API compatibility
+function Get-AWSItems {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
+        'PSUseSingularNouns',
+        '',
+        Justification = 'Matches AWS SDK naming convention for consistency with existing tooling'
+    )]
+    [CmdletBinding()]
+    param()
+}
+```
+
+### Never Suppress Without Justification
+
+Suppressions without justification are not acceptable:
+
+```powershell
+# Never do this
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
+```
