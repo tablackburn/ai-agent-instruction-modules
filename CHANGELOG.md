@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.4] - 2026-01-03
+
+### Added
+
+- Static Analysis section in `powershell.instructions.md` - agents should fix PSScriptAnalyzer
+  warnings rather than suppressing them, and must include justification when suppression is
+  necessary
+
 ## [0.8.3] - 2025-12-31
 
 ### Added
@@ -204,7 +212,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.3...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.4...HEAD
+[0.8.4]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.3...v0.8.4
 [0.8.3]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.2...v0.8.3
 [0.8.2]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.1...v0.8.2
 [0.8.1]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.0...v0.8.1
