@@ -1,4 +1,4 @@
-![AIM: AI Agent Instruction Modules](https://tablackburn.github.io/img/aim-banner.svg)
+![AIM: AI Agent Instruction Modules](assets/aim-logo-futuristic.svg)
 
 [![CI][ci-badge]][ci-workflow]
 [![Latest Release][release-badge]][releases]
