@@ -105,6 +105,16 @@ $users = Get-ADUser -Filter { Enabled -eq $true }
 1. Place each component on its own line
 
 ```powershell
+# Good - string parameter values are quoted
+Get-Process -Name 'powershell'
+Get-ChildItem -Path 'C:\Users' -Filter '*.txt'
+
+# Bad - bare string parameter values
+Get-Process -Name powershell
+Get-ChildItem -Path C:\Users -Filter *.txt
+```
+
+```powershell
 function Get-UserData {
     [CmdletBinding()]
     param(
