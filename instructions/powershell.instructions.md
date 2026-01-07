@@ -107,11 +107,11 @@ $users = Get-ADUser -Filter { Enabled -eq $true }
 ```powershell
 # Good - string parameter values are quoted
 Get-Process -Name 'powershell'
-Get-ChildItem -Path 'C:\Users' -Filter '*.txt'
+Get-ChildItem -Path 'C:\Program Files' -Filter '*.txt'
 
 # Bad - bare string parameter values
 Get-Process -Name powershell
-Get-ChildItem -Path C:\Users -Filter *.txt
+Get-ChildItem -Path C:\Program Files -Filter *.txt
 ```
 
 ```powershell
