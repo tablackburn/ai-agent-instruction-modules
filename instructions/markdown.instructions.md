@@ -26,7 +26,7 @@ Consistent Markdown formatting for documentation files.
 ## Lists
 
 - Use `-` for unordered lists
-- Use `1.` for ordered lists (let markdown handle numbering)
+- Use sequential numbering for ordered lists (`1.`, `2.`, `3.`, etc.)
 - Use 2 spaces for nested list indentation
 
 ```markdown

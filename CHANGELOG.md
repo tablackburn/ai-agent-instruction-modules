@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.8] - 2026-01-07
+
+### Changed
+
+- Update ordered list guidance in `markdown.instructions.md` to use sequential numbering (`1.`,
+  `2.`, `3.`, etc.) instead of repeating `1.` - improves readability for humans and agents
+
 ## [0.8.7] - 2026-01-06
 
 ### Added
@@ -232,7 +239,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.7...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.8...HEAD
+[0.8.8]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.7...v0.8.8
 [0.8.7]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.6...v0.8.7
 [0.8.6]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.5...v0.8.6
 [0.8.5]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.4...v0.8.5
