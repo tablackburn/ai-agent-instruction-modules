@@ -32,29 +32,29 @@ Thank you for your interest in contributing to AI Agent Instruction Modules!
    cd ai-agent-instruction-modules
    ```
 
-1. **Create a feature branch**
+2. **Create a feature branch**
 
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-1. **Make your changes**
+3. **Make your changes**
    - Follow existing patterns and conventions
    - Test your changes locally
 
-1. **Run tests**
+4. **Run tests**
 
    ```powershell
    Invoke-Pester -Path .\tests\
    ```
 
-1. **Commit with conventional commits**
+5. **Commit with conventional commits**
 
    ```bash
    git commit -m "feat: Add Python type hints module"
    ```
 
-1. **Push and create a Pull Request**
+6. **Push and create a Pull Request**
 
    ```bash
    git push origin feature/your-feature-name
@@ -98,8 +98,8 @@ description: 'Brief description of the module'
 Before submitting:
 
 1. Run `Invoke-Pester -Path .\tests\` to verify all tests pass
-1. Check that frontmatter is valid YAML with required fields
-1. Verify links and references work
+2. Check that frontmatter is valid YAML with required fields
+3. Verify links and references work
 
 ## Code of Conduct
 

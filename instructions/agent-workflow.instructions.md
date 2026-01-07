@@ -72,8 +72,8 @@ This builds trust and catches misunderstandings early.
 ## When in Doubt
 
 1. **Ask for clarification** - Better to ask than implement incorrectly
-1. **Check existing code** - Follow established patterns in the codebase
-1. **Keep it simple** - The simplest solution that works is usually best
+2. **Check existing code** - Follow established patterns in the codebase
+3. **Keep it simple** - The simplest solution that works is usually best
 
 ## Post-Task Protocol
 

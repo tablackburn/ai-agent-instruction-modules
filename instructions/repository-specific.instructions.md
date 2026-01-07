@@ -23,22 +23,22 @@ When editing files in `instruction-templates/`:
    - `applyTo`: Glob patterns for file matching (e.g., `'**/*'` or `'**/*.ps1'`)
    - `description`: Brief description of the instruction file
 
-1. Keep instructions generic and universal:
+2. Keep instructions generic and universal:
    - Avoid organization-specific references
    - Use placeholder examples (`<owner>`, `<repo>`)
    - Focus on best practices applicable to any project
 
-1. Use the `.instructions.md` file extension for all instruction files
+3. Use the `.instructions.md` file extension for all instruction files
 
-1. Follow Markdown conventions in `markdown.instructions.md`
+4. Follow Markdown conventions in `markdown.instructions.md`
 
 ### Adding New Instruction Files
 
 1. Create the file in `instruction-templates/` with `.instructions.md` extension
-1. Add YAML frontmatter with `applyTo` and `description`
-1. Update `AGENTS.template.md` to list the new file
-1. Update `AGENTS.md` to match the template
-1. Run tests to validate
+2. Add YAML frontmatter with `applyTo` and `description`
+3. Update `AGENTS.template.md` to list the new file
+4. Update `AGENTS.md` to match the template
+5. Run tests to validate
 
 ### Testing Changes
 
@@ -81,26 +81,26 @@ A release is required after ANY of the following:
    - Categorize changes: Added, Changed, Fixed, Removed
    - Update comparison links at bottom of file
 
-1. **Update version numbers**
+2. **Update version numbers**
    - `AGENTS.template.md`: Update "Template Version: X.Y.Z"
    - `AGENTS.md`: Update "Template Version: X.Y.Z"
    - Verify all three locations match (template, AGENTS.md, changelog)
 
-1. **Commit the release**
+3. **Commit the release**
 
    ```bash
    git add -A
    git commit -m "chore: Release vX.Y.Z"
    ```
 
-1. **Create and push tag**
+4. **Create and push tag**
 
    ```bash
    git tag -a vX.Y.Z -m "Release vX.Y.Z"
    git push && git push --tags
    ```
 
-1. **Create GitHub release**
+5. **Create GitHub release**
 
    ```bash
    gh release create vX.Y.Z --title "vX.Y.Z" --notes "Release notes here"

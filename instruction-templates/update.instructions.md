@@ -82,12 +82,12 @@ Based on `aim.config.json`:
 For each instruction file in the upstream `instruction-templates/` folder:
 
 1. Check if the module should be synced based on configuration
-1. Check if the file already exists in the downstream `instructions/` folder
-1. **If the file exists, ask the user:**
+2. Check if the file already exists in the downstream `instructions/` folder
+3. **If the file exists, ask the user:**
    - "File X already exists. Overwrite with upstream version? (yes/no/diff)"
    - If "diff", show the differences between local and upstream versions
    - Only overwrite if the user confirms
-1. **If the file is new**, copy it without prompting
+4. **If the file is new**, copy it without prompting
 
 ### 6. Handle External Sources
 
@@ -95,9 +95,9 @@ If `externalSources.enabled` is true and a needed language/framework instruction
 AIM:
 
 1. Check each configured external repository in order
-1. For awesome-copilot, look in the `instructions/` path for matching `.instructions.md` files
-1. Download the instruction file and copy to the downstream `instructions/` folder
-1. Inform the user which files were fetched from external sources
+2. For awesome-copilot, look in the `instructions/` path for matching `.instructions.md` files
+3. Download the instruction file and copy to the downstream `instructions/` folder
+4. Inform the user which files were fetched from external sources
 
 **Example external fetch:**
 
@@ -133,23 +133,23 @@ When the user requests a new instruction module that doesn't exist locally:
 ### From AIM Repository
 
 1. Check if the module exists in `instruction-templates/`
-1. If found, copy to `instructions/` and update `aim.config.json`
+2. If found, copy to `instructions/` and update `aim.config.json`
 
 ### From External Sources
 
 1. If not in AIM and `externalSources.enabled` is true:
-1. Search configured external repositories for matching instruction files
-1. Download and copy to `instructions/`
-1. Add the module name to `aim.config.json` modules.include
+2. Search configured external repositories for matching instruction files
+3. Download and copy to `instructions/`
+4. Add the module name to `aim.config.json` modules.include
 
 ### New Language Detection
 
 If the user adds new source files in a language not currently covered:
 
 1. Detect new file extensions (e.g., `*.py` files added)
-1. Check if corresponding instruction exists locally
-1. If not, suggest fetching from external sources
-1. Ask user: "Python files detected but no python.instructions.md found. Fetch from awesome-copilot?"
+2. Check if corresponding instruction exists locally
+3. If not, suggest fetching from external sources
+4. Ask user: "Python files detected but no python.instructions.md found. Fetch from awesome-copilot?"
 
 ## Sync Checklist
 
