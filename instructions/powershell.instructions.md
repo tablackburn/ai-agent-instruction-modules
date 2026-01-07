@@ -7,6 +7,13 @@ description: 'PowerShell coding standards and best practices'
 
 Style rules for PowerShell code based on Microsoft guidelines and community standards.
 
+## Common Mistakes to Avoid
+
+**IMPORTANT**: These are frequent violations that MUST be avoided:
+
+1. **Plural nouns in function names** - ALWAYS use singular nouns regardless of how many items the
+   function returns. Use `Get-User` not `Get-Users`, `Get-Item` not `Get-Items`.
+
 ## Function Structure
 
 1. Always start functions with `[CmdletBinding()]` attribute
