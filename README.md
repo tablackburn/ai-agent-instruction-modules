@@ -106,10 +106,10 @@ missing tests, security concerns).
 ### Manual Alternative
 
 1. Copy `AGENTS.template.md` to your repository root as `AGENTS.md`
-1. Copy `aim.config.json.example` to `aim.config.json` and configure your modules
-1. Copy desired instruction files from `instruction-templates/` to your `instructions/` folder
-1. Create a new `repository-specific.instructions.md` file tailored to your repository
-1. Update the sync date and remove the HTML comment from `AGENTS.md`
+2. Copy `aim.config.json.example` to `aim.config.json` and configure your modules
+3. Copy desired instruction files from `instruction-templates/` to your `instructions/` folder
+4. Create a new `repository-specific.instructions.md` file tailored to your repository
+5. Update the sync date and remove the HTML comment from `AGENTS.md`
 
 ## Updating Instructions
 
@@ -239,11 +239,11 @@ and many other languages and frameworks.
 To update centralized instructions:
 
 1. Edit files in `instruction-templates/` folder
-1. Sync changes to `instructions/` for this repository
-1. Update `AGENTS.template.md` version and content
-1. Update `AGENTS.md` to match (sync from template)
-1. Update `CHANGELOG.md` with changes
-1. Commit and push
+2. Sync changes to `instructions/` for this repository
+3. Update `AGENTS.template.md` version and content
+4. Update `AGENTS.md` to match (sync from template)
+5. Update `CHANGELOG.md` with changes
+6. Commit and push
 
 Downstream repositories must manually request updates from AI agents.
 
