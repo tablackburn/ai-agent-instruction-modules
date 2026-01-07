@@ -256,9 +256,9 @@ adminUser = createTestUser({ role: "admin" })
 Prioritize testing:
 
 1. Business-critical functionality
-1. Error handling and edge cases
-1. Security-sensitive code
-1. Complex algorithms
+2. Error handling and edge cases
+3. Security-sensitive code
+4. Complex algorithms
 
 ### Coverage Goals
 

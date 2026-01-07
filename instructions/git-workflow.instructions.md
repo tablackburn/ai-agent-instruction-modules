@@ -94,9 +94,9 @@ asdfasdf
 ### Before Creating a PR
 
 1. Ensure your branch is up to date with the base branch
-1. Run tests locally and verify they pass
-1. Review your own changes first
-1. Remove debugging code and console logs
+2. Run tests locally and verify they pass
+3. Review your own changes first
+4. Remove debugging code and console logs
 
 ### PR Title
 
@@ -158,10 +158,10 @@ None
 ### Feature Branches
 
 1. Create feature branch from `main`
-1. Make changes in small, logical commits
-1. Push branch and create PR
-1. After review and approval, merge to `main`
-1. Delete feature branch after merge
+2. Make changes in small, logical commits
+3. Push branch and create PR
+4. After review and approval, merge to `main`
+5. Delete feature branch after merge
 
 ### Keeping Branches Updated
 
