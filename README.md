@@ -270,7 +270,6 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
-
 ## Acknowledgments
 
 This project was developed with assistance from [Claude](https://claude.ai) by Anthropic.
