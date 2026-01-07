@@ -7,9 +7,26 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  test:
-    name: Run Pester Tests
+  markdownlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: |
+            **/*.md
+            !node_modules
+
+  pester-tests:
+    name: Pester Tests (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -19,6 +36,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Cache Pester module
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Documents/PowerShell/Modules
+            ~/.local/share/powershell/Modules
+          key: ${{ runner.os }}-pester-5.x
 
       - name: Install Pester
         shell: pwsh
@@ -44,3 +69,4 @@ jobs:
         with:
           name: test-results-${{ matrix.os }}
           path: test-results.xml
+          retention-days: 30
