@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Cache Pester module
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             ~/Documents/PowerShell/Modules
