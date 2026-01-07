@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.7] - 2026-01-06
+
+### Added
+
+- "Discovering Existing Test Tooling" section in `testing.instructions.md` - agents should check
+  for build systems and existing tooling before creating scripts for test-related tasks
+
 ## [0.8.6] - 2026-01-06
 
 ### Added
@@ -225,7 +232,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.6...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.7...HEAD
+[0.8.7]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.6...v0.8.7
 [0.8.6]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.5...v0.8.6
 [0.8.5]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.4...v0.8.5
 [0.8.4]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.3...v0.8.4
