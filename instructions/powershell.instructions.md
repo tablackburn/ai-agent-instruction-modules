@@ -22,8 +22,34 @@ Style rules for PowerShell code based on Microsoft guidelines and community stan
 4. For system-modifying cmdlets, use `[CmdletBinding(SupportsShouldProcess)]`
 5. Document output types with `[OutputType([TypeName])]` attribute
 6. Include comment-based help for all functions
+7. Do not define nested functions inside other functions; define helper functions at module or script scope
 
 ```powershell
+# Bad - nested function
+function Get-Data {
+    [CmdletBinding()]
+    param()
+
+    function Format-Result {
+        param($Value)
+        # Helper logic
+    }
+
+    $result = Get-RawData
+    Format-Result -Value $result
+}
+
+# Good - separate functions at module/script scope
+function Format-Result {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        $Value
+    )
+    # Helper logic
+}
+
+
 function Get-Data {
     [CmdletBinding()]
     [OutputType([hashtable])]

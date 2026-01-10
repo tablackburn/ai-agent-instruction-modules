@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.10] - 2026-01-10
+
+### Added
+
+- Nested function avoidance guideline in `powershell.instructions.md` - define helper functions at
+  module or script scope rather than inside other functions
+
 ## [0.8.9] - 2026-01-07
 
 ### Added
@@ -246,7 +253,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.9...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.10...HEAD
+[0.8.10]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.9...v0.8.10
 [0.8.9]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.8...v0.8.9
 [0.8.8]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.7...v0.8.8
 [0.8.7]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.6...v0.8.7
