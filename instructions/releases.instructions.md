@@ -65,7 +65,7 @@ Before creating a release:
    that version. NEVER release a version that already exists.
 2. **Check repository-specific instructions**: Review `repository-specific.instructions.md` for
    any additional release requirements specific to this repository
-3. **Create release branch**: Create a release branch (see `git-workflow.instructions.md` for
+3. **Create branch**: Create a branch for the release (see `git-workflow.instructions.md` for
    naming conventions)
 4. **Update CHANGELOG.md**: Add new version section with all changes
 5. **Update version numbers**: Bump version in relevant files as needed
@@ -74,7 +74,7 @@ Before creating a release:
 7. **Run tests**: Ensure all tests pass
 8. **Review changes**: Self-review all changes for errors, typos, and correctness before committing
 9. **Commit changes**: Commit all version updates
-10. **Push and create PR**: Push the release branch to remote and create a pull request
+10. **Push and create PR**: Push the branch to remote and create a pull request
 11. **Monitor CI**: Wait for CI checks to complete and verify they pass
 12. **Check for comments**: Review the PR for any unresolved comments or feedback
 13. **Report status and wait**: Report the PR status to the user and wait for further instructions
