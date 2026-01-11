@@ -7,6 +7,13 @@ description: 'PowerShell coding standards and best practices'
 
 Style rules for PowerShell code based on Microsoft guidelines and community standards.
 
+## Common Mistakes to Avoid
+
+**IMPORTANT**: These are frequent violations that MUST be avoided:
+
+1. **Plural nouns in function names** - ALWAYS use singular nouns regardless of how many items the
+   function returns. Use `Get-User` not `Get-Users`, `Get-Item` not `Get-Items`.
+
 ## Function Structure
 
 1. Always start functions with `[CmdletBinding()]` attribute
@@ -15,8 +22,35 @@ Style rules for PowerShell code based on Microsoft guidelines and community stan
 4. For system-modifying cmdlets, use `[CmdletBinding(SupportsShouldProcess)]`
 5. Document output types with `[OutputType([TypeName])]` attribute
 6. Include comment-based help for all functions
+7. Do not define nested functions inside other functions; define helper functions at module or
+   script scope
 
 ```powershell
+# Bad - nested function
+function Get-Data {
+    [CmdletBinding()]
+    param()
+
+    function Format-Result {
+        param($Value)
+        # Helper logic
+    }
+
+    $result = Get-RawData
+    Format-Result -Value $result
+}
+
+# Good - separate functions at module/script scope
+function Format-Result {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        $Value
+    )
+    # Helper logic
+}
+
+
 function Get-Data {
     [CmdletBinding()]
     [OutputType([hashtable])]
@@ -103,6 +137,16 @@ $users = Get-ADUser -Filter { Enabled -eq $true }
 2. Always use quotes around string parameter values
 3. Include validation on every parameter
 4. Place each component on its own line
+
+```powershell
+# Good - string parameter values are quoted
+Get-Process -Name 'powershell'
+Get-ChildItem -Path 'C:\Program Files' -Filter '*.txt'
+
+# Bad - bare string parameter values
+Get-Process -Name powershell
+Get-ChildItem -Path C:\Program Files -Filter *.txt
+```
 
 ```powershell
 function Get-UserData {

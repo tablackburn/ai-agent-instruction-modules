@@ -7,6 +7,20 @@ description: 'Git workflow conventions including branching, commits, and pull re
 
 Guidelines for consistent Git usage across repositories.
 
+## Working on Branches
+
+**Agents must always work on branches, never directly on main.**
+
+Before starting any work:
+
+1. Create a branch from `main` using the naming conventions below
+2. Make changes in small, logical commits
+3. Push the branch and create a pull request
+4. Wait for CI checks and address any review feedback
+5. Report status and wait for instructions before merging
+
+This ensures all changes go through review and CI validation before reaching the main branch.
+
 ## Branch Naming
 
 Use descriptive, lowercase branch names with hyphens.
@@ -167,6 +181,13 @@ None
 - Keep PRs focused and small when possible
 - Large changes should be split into logical commits
 - If a PR is too large, consider breaking it into smaller PRs
+
+### After Creating a PR
+
+1. **Monitor CI**: Wait for CI checks to complete and verify they pass
+2. **Check for comments**: Review the PR for any feedback or requested changes
+3. **Address feedback**: Make additional commits to address review comments
+4. **Report status**: Report the PR status to the user and wait for instructions before merging
 
 ## Branching Strategy
 

@@ -57,7 +57,8 @@ Follow [Semantic Versioning](https://semver.org/):
 
 ## Pre-Release Checklist
 
-Before creating a release:
+Follow `git-workflow.instructions.md` for branching and PR workflow. The steps below are
+release-specific:
 
 1. **Verify current release state**: Run `gh release list --limit 5` to check the most recent
    releases. Compare the latest released version against the version in CHANGELOG.md. If they
@@ -70,9 +71,9 @@ Before creating a release:
 5. **Update changelog links**: Add comparison link for the new version at the bottom of
    CHANGELOG.md (e.g., `[0.2.0]: https://github.com/owner/repo/compare/v0.1.0...v0.2.0`)
 6. **Run tests**: Ensure all tests pass
-7. **Commit changes**: Commit all version updates before creating the release
-8. **Push to remote**: Push commits to the repository
-9. **Create release**: Use the `gh release create` command with `--notes-file`
+7. **Commit changes**: Commit all version updates
+8. **Create PR and wait for merge**: Follow the PR workflow in `git-workflow.instructions.md`
+9. **Create release**: After PR is merged, use `gh release create` with `--notes-file`
 
 ## Post-Release
 
