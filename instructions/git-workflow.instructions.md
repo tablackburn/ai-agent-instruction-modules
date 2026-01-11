@@ -7,39 +7,81 @@ description: 'Git workflow conventions including branching, commits, and pull re
 
 Guidelines for consistent Git usage across repositories.
 
+## Working on Branches
+
+**Agents must always work on branches, never directly on main.**
+
+Before starting any work:
+
+1. Create a branch from `main` using the naming conventions below
+2. Make changes in small, logical commits
+3. Push the branch and create a pull request
+4. Wait for CI checks and address any review feedback
+5. Report status and wait for instructions before merging
+
+This ensures all changes go through review and CI validation before reaching the main branch.
+
 ## Branch Naming
 
-Use descriptive, lowercase branch names with hyphens:
+Use descriptive, lowercase branch names with hyphens.
+
+### Basic Format
 
 ```text
 <type>/<short-description>
 ```
 
-**Types:**
+### Format with Ticket Numbers
 
-- `feature/` - New functionality
-- `fix/` - Bug fixes
-- `docs/` - Documentation only
-- `refactor/` - Code restructuring
-- `test/` - Adding or updating tests
-- `chore/` - Maintenance tasks
-
-**Examples:**
+When using project management tools, include the ticket identifier:
 
 ```text
-feature/user-authentication
-fix/login-validation-error
-docs/api-documentation
-refactor/database-queries
-test/payment-integration
-chore/update-dependencies
+<type>/<ticket-id>-<short-description>
 ```
 
-**Avoid:**
+### Branch Types
 
-- Spaces or special characters
+| Prefix      | Purpose                              | Example                              |
+| ----------- | ------------------------------------ | ------------------------------------ |
+| `feature/`  | New functionality                    | `feature/user-authentication`        |
+| `bugfix/`   | Bug fixes                            | `bugfix/login-validation-error`      |
+| `hotfix/`   | Urgent production patches            | `hotfix/security-vulnerability`      |
+| `release/`  | Release preparation                  | `release/v1.2.0`                     |
+| `docs/`     | Documentation only                   | `docs/api-documentation`             |
+| `refactor/` | Code restructuring                   | `refactor/database-queries`          |
+| `test/`     | Adding or updating tests             | `test/payment-integration`           |
+| `chore/`    | Maintenance tasks                    | `chore/update-dependencies`          |
+
+### Examples with Ticket Numbers
+
+```text
+feature/PROJ-123-add-user-authentication
+bugfix/PROJ-456-fix-login-validation
+hotfix/PROJ-789-patch-security-issue
+```
+
+### Best Practices
+
+- **Be descriptive**: Names should reflect the branch's purpose or task
+- **Be concise**: Keep names brief but meaningful
+- **Be consistent**: Follow the same conventions across the team
+- **Use lowercase**: Avoid mixed case for cross-platform compatibility
+- **Use hyphens**: Separate words with hyphens, not underscores or spaces
+
+### Technical Constraints
+
+Avoid the following in branch names:
+
+- Dots at the start of the name
+- Trailing slashes
+- Reserved Git names (`HEAD`, `FETCH_HEAD`)
+- Spaces or special characters (except hyphens and forward slashes)
+
+### Avoid
+
 - Overly long names
 - Generic names like `fix`, `update`, `changes`
+- Names without context or purpose
 
 ## Commit Messages
 
@@ -139,6 +181,13 @@ None
 - Keep PRs focused and small when possible
 - Large changes should be split into logical commits
 - If a PR is too large, consider breaking it into smaller PRs
+
+### After Creating a PR
+
+1. **Monitor CI**: Wait for CI checks to complete and verify they pass
+2. **Check for comments**: Review the PR for any feedback or requested changes
+3. **Address feedback**: Make additional commits to address review comments
+4. **Report status**: Report the PR status to the user and wait for instructions before merging
 
 ## Branching Strategy
 

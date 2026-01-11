@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.11] - 2026-01-11
+
+### Added
+
+- "Working on Branches" section in `git-workflow.instructions.md` - agents must always work on
+  branches, never directly on main
+- "After Creating a PR" section in `git-workflow.instructions.md` - agents should monitor CI, check
+  for comments, address feedback, and report status before merging
+- Expanded branch naming conventions with table of branch types, ticket number format, best
+  practices, and technical constraints
+
+### Changed
+
+- Simplify `releases.instructions.md` pre-release checklist to reference general git workflow
+  instead of duplicating branching and PR steps
+
 ## [0.8.10] - 2026-01-10
 
 ### Added
@@ -253,7 +269,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.10...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...HEAD
+[0.8.11]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.10...v0.8.11
 [0.8.10]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.9...v0.8.10
 [0.8.9]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.8...v0.8.9
 [0.8.8]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.7...v0.8.8
