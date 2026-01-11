@@ -65,14 +65,20 @@ Before creating a release:
    that version. NEVER release a version that already exists.
 2. **Check repository-specific instructions**: Review `repository-specific.instructions.md` for
    any additional release requirements specific to this repository
-3. **Update CHANGELOG.md**: Add new version section with all changes
-4. **Update version numbers**: Bump version in relevant files as needed
-5. **Update changelog links**: Add comparison link for the new version at the bottom of
+3. **Create feature branch**: Create a release branch (see `git-workflow.instructions.md` for
+   naming conventions)
+4. **Update CHANGELOG.md**: Add new version section with all changes
+5. **Update version numbers**: Bump version in relevant files as needed
+6. **Update changelog links**: Add comparison link for the new version at the bottom of
    CHANGELOG.md (e.g., `[0.2.0]: https://github.com/owner/repo/compare/v0.1.0...v0.2.0`)
-6. **Run tests**: Ensure all tests pass
-7. **Commit changes**: Commit all version updates before creating the release
-8. **Push to remote**: Push commits to the repository
-9. **Create release**: Use the `gh release create` command with `--notes-file`
+7. **Run tests**: Ensure all tests pass
+8. **Review changes**: Self-review all changes for errors, typos, and correctness before committing
+9. **Commit changes**: Commit all version updates
+10. **Push and create PR**: Push the feature branch to remote and create a pull request
+11. **Monitor CI**: Wait for CI checks to complete and verify they pass
+12. **Check for comments**: Review the PR for any unresolved comments or feedback
+13. **Report status and wait**: Report the PR status to the user and wait for further instructions
+    before merging or creating the release
 
 ## Post-Release
 

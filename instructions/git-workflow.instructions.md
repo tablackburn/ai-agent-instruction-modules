@@ -9,37 +9,65 @@ Guidelines for consistent Git usage across repositories.
 
 ## Branch Naming
 
-Use descriptive, lowercase branch names with hyphens:
+Use descriptive, lowercase branch names with hyphens.
+
+### Basic Format
 
 ```text
 <type>/<short-description>
 ```
 
-**Types:**
+### Format with Ticket Numbers
 
-- `feature/` - New functionality
-- `fix/` - Bug fixes
-- `docs/` - Documentation only
-- `refactor/` - Code restructuring
-- `test/` - Adding or updating tests
-- `chore/` - Maintenance tasks
-
-**Examples:**
+When using project management tools, include the ticket identifier:
 
 ```text
-feature/user-authentication
-fix/login-validation-error
-docs/api-documentation
-refactor/database-queries
-test/payment-integration
-chore/update-dependencies
+<type>/<ticket-id>-<short-description>
 ```
 
-**Avoid:**
+### Branch Types
 
-- Spaces or special characters
+| Prefix      | Purpose                              | Example                              |
+| ----------- | ------------------------------------ | ------------------------------------ |
+| `feature/`  | New functionality                    | `feature/user-authentication`        |
+| `bugfix/`   | Bug fixes                            | `bugfix/login-validation-error`      |
+| `hotfix/`   | Urgent production patches            | `hotfix/security-vulnerability`      |
+| `release/`  | Release preparation                  | `release/v1.2.0`                     |
+| `docs/`     | Documentation only                   | `docs/api-documentation`             |
+| `refactor/` | Code restructuring                   | `refactor/database-queries`          |
+| `test/`     | Adding or updating tests             | `test/payment-integration`           |
+| `chore/`    | Maintenance tasks                    | `chore/update-dependencies`          |
+
+### Examples with Ticket Numbers
+
+```text
+feature/PROJ-123-add-user-authentication
+bugfix/PROJ-456-fix-login-validation
+hotfix/PROJ-789-patch-security-issue
+```
+
+### Best Practices
+
+- **Be descriptive**: Names should reflect the branch's purpose or task
+- **Be concise**: Keep names brief but meaningful
+- **Be consistent**: Follow the same conventions across the team
+- **Use lowercase**: Avoid mixed case for cross-platform compatibility
+- **Use hyphens**: Separate words with hyphens, not underscores or spaces
+
+### Technical Constraints
+
+Avoid the following in branch names:
+
+- Dots at the start of the name
+- Trailing slashes
+- Reserved Git names (`HEAD`, `FETCH_HEAD`)
+- Spaces or special characters (except hyphens and forward slashes)
+
+### Avoid
+
 - Overly long names
 - Generic names like `fix`, `update`, `changes`
+- Names without context or purpose
 
 ## Commit Messages
 
