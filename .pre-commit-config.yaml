@@ -1,3 +1,6 @@
+ci:
+  skip: [ggshield]
+
 repos:
   - repo: https://github.com/gitguardian/ggshield
     rev: v1.46.0
