@@ -131,6 +131,24 @@ $files = Get-ChildItem -Path $backupPath -Filter '*.bak'
 $users = Get-ADUser -Filter { Enabled -eq $true }
 ```
 
+### Directory vs Path Naming
+
+Use the appropriate suffix to indicate what the variable represents:
+
+- Use `Path` when the value could be a file or directory
+- Use `Directory` when the value is specifically a folder/container
+
+```powershell
+# Good - clear distinction
+$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'settings.json'  # A file
+$outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'          # A folder
+$logPath = $Arguments.LogPath  # Could be file or directory, context determines
+
+# Bad - ambiguous or incorrect
+$configurationDirectory = 'C:\App\settings.json'  # Not a directory
+$outputPath = 'C:\App\results'                    # Actually a directory
+```
+
 ## Parameters
 
 1. Use full parameter names in scripts and functions
