@@ -123,11 +123,12 @@ function Get-Setting {
 
 ```powershell
 # Good - descriptive variable names
-$backupFiles = Get-ChildItem -Path $backupPath -Filter '*.bak'
+$backupDirectory = 'C:\Backups'
+$backupFiles = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
 $activeUsers = Get-ADUser -Filter { Enabled -eq $true }
 
 # Bad - generic variable names
-$files = Get-ChildItem -Path $backupPath -Filter '*.bak'
+$files = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
 $users = Get-ADUser -Filter { Enabled -eq $true }
 ```
 
@@ -135,19 +136,19 @@ $users = Get-ADUser -Filter { Enabled -eq $true }
 
 Use the appropriate suffix to indicate what the variable represents:
 
-- Use `Path` when the value is a file path or when the type is ambiguous
+- Use `Path` when the value is specifically a file path
 - Use `Directory` when the value is specifically a folder/container
-- Use a neutral name without suffix when the variable genuinely could represent either type
+- Use a neutral name without suffix when the variable could represent either type by design
 
 ```powershell
 # Good - clear distinction
-$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'settings.json'  # A file
-$outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'          # A folder
-$destination = $Arguments.Target  # Ambiguous by design, could be file or folder
+$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
+$outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'
+$destination = $Arguments.Target  # Intentionally ambiguous, could be file or folder
 
-# Bad - ambiguous or incorrect
-$configurationDirectory = 'C:\App\settings.json'  # Not a directory
-$outputPath = 'C:\App\results'                    # Actually a directory
+# Bad - misleading suffix
+$configurationDirectory = 'C:\App\config.json'  # Not a directory
+$outputPath = 'C:\App\results'                  # Actually a directory
 ```
 
 ## Parameters
@@ -252,7 +253,7 @@ $documentsDirectory = '~\Documents'
 
 ```powershell
 try {
-    Get-Item -Path $path -ErrorAction Stop
+    Get-Item -Path $filePath -ErrorAction 'Stop'
 }
 catch {
     $errorRecord = $_  # Capture immediately
