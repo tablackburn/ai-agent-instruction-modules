@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.12] - 2026-01-14
+
+### Added
+
+- `Dir` → `Directory` mapping in `shorthand.instructions.md` abbreviations table
+- "Directory vs Path Naming" subsection in `powershell.instructions.md` - guidance for when to use
+  `Path` suffix (file paths), `Directory` suffix (folders), or neutral names (intentionally flexible)
+
+### Changed
+
+- Updated "Paths and File System" section in `powershell.instructions.md` to use consistent naming
+  (`$configurationPath`, `$documentsDirectory`) aligned with new Directory vs Path guidance
+- Defined `$backupDirectory` and `$filePath` variables before use in PowerShell examples
+
 ## [0.8.11] - 2026-01-11
 
 ### Added
@@ -269,7 +283,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...HEAD
+[0.8.12]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...v0.8.12
 [0.8.11]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.10...v0.8.11
 [0.8.10]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.9...v0.8.10
 [0.8.9]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.8...v0.8.9

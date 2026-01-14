@@ -123,12 +123,32 @@ function Get-Setting {
 
 ```powershell
 # Good - descriptive variable names
-$backupFiles = Get-ChildItem -Path $backupPath -Filter '*.bak'
+$backupDirectory = 'C:\Backups'
+$backupFiles = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
 $activeUsers = Get-ADUser -Filter { Enabled -eq $true }
 
 # Bad - generic variable names
-$files = Get-ChildItem -Path $backupPath -Filter '*.bak'
+$files = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
 $users = Get-ADUser -Filter { Enabled -eq $true }
+```
+
+### Directory vs Path Naming
+
+Use the appropriate suffix to indicate what the variable represents:
+
+- Use `Path` when the value is specifically a file path
+- Use `Directory` when the value is specifically a folder/container
+- Use a neutral name without suffix when the variable could represent either type by design
+
+```powershell
+# Good - clear distinction
+$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
+$outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'
+$destination = $Target  # Neutral - parameter accepts file or directory path
+
+# Bad - misleading suffix
+$configurationDirectory = 'C:\App\config.json'  # Not a directory
+$outputPath = 'C:\App\results'                  # Actually a directory
 ```
 
 ## Parameters
@@ -218,12 +238,12 @@ Invoke-RestMethod @parameters
 
 ```powershell
 # Good
-$configPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
-$userPath = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
+$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
+$documentsDirectory = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
 
 # Bad
-$configPath = '.\config.json'
-$userPath = '~\Documents'
+$configurationPath = '.\config.json'
+$documentsDirectory = '~\Documents'
 ```
 
 ## Error Handling
@@ -232,8 +252,9 @@ $userPath = '~\Documents'
 2. Immediately copy `$_` in catch blocks before other commands
 
 ```powershell
+$filePath = 'C:\Data\settings.json'
 try {
-    Get-Item -Path $path -ErrorAction Stop
+    Get-Item -Path $filePath -ErrorAction 'Stop'
 }
 catch {
     $errorRecord = $_  # Capture immediately

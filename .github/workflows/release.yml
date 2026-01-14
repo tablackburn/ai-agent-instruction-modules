@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from CHANGELOG
+        id: changelog
+        shell: pwsh
+        run: |
+          $content = Get-Content -Path 'CHANGELOG.md' -Raw
+
+          # Extract the first version section (excluding [Unreleased])
+          if ($content -match '## \[(\d+\.\d+\.\d+)\] - (\d{4}-\d{2}-\d{2})') {
+              $version = $matches[1]
+              $date = $matches[2]
+              Write-Output "version=$version" >> $env:GITHUB_OUTPUT
+              Write-Output "tag=v$version" >> $env:GITHUB_OUTPUT
+              Write-Output "date=$date" >> $env:GITHUB_OUTPUT
+              Write-Output "Found version: $version ($date)"
+          }
+          else {
+              Write-Error "Could not extract version from CHANGELOG.md"
+              exit 1
+          }
+
+          # Extract release notes for this version
+          $pattern = "(?s)## \[$version\] - $date\s*\n(.*?)(?=\n## \[|$)"
+          if ($content -match $pattern) {
+              $notes = $matches[1].Trim()
+              # Write to file to preserve formatting
+              $notes | Out-File -FilePath 'release-notes.md' -Encoding utf8
+              Write-Output "Extracted release notes"
+          }
+          else {
+              Write-Error "Could not extract release notes for version $version"
+              exit 1
+          }
+
+      - name: Check if release exists
+        id: check_release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "${{ steps.changelog.outputs.tag }}" > /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Release ${{ steps.changelog.outputs.tag }} already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Release ${{ steps.changelog.outputs.tag }} does not exist"
+          fi
+
+      - name: Create release
+        if: steps.check_release.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ steps.changelog.outputs.tag }}" \
+            --title "${{ steps.changelog.outputs.tag }}" \
+            --notes-file release-notes.md
+
+      - name: Skip release
+        if: steps.check_release.outputs.exists == 'true'
+        run: |
+          echo "Release ${{ steps.changelog.outputs.tag }} already exists, skipping creation"
