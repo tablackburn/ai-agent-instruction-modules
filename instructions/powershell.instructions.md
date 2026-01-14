@@ -142,7 +142,7 @@ Use the appropriate suffix to indicate what the variable represents:
 # Good - clear distinction
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'settings.json'  # A file
 $outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'          # A folder
-$logPath = $Arguments.LogPath  # Could be file or directory, context determines
+$logPath = 'C:\Logs\application.log'  # Could be file or directory, context determines
 
 # Bad - ambiguous or incorrect
 $configurationDirectory = 'C:\App\settings.json'  # Not a directory
