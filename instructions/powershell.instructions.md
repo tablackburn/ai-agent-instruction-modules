@@ -135,14 +135,15 @@ $users = Get-ADUser -Filter { Enabled -eq $true }
 
 Use the appropriate suffix to indicate what the variable represents:
 
-- Use `Path` when the value could be a file or directory
+- Use `Path` when the value is a file path or when the type is ambiguous
 - Use `Directory` when the value is specifically a folder/container
+- Use a neutral name without suffix when the variable genuinely could represent either type
 
 ```powershell
 # Good - clear distinction
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'settings.json'  # A file
 $outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'          # A folder
-$logPath = 'C:\Logs\application.log'  # Could be file or directory, context determines
+$destination = $Arguments.Target  # Ambiguous by design, could be file or folder
 
 # Bad - ambiguous or incorrect
 $configurationDirectory = 'C:\App\settings.json'  # Not a directory
@@ -236,12 +237,12 @@ Invoke-RestMethod @parameters
 
 ```powershell
 # Good
-$configPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
-$userPath = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
+$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
+$documentsDirectory = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
 
 # Bad
-$configPath = '.\config.json'
-$userPath = '~\Documents'
+$configurationPath = '.\config.json'
+$documentsDirectory = '~\Documents'
 ```
 
 ## Error Handling
