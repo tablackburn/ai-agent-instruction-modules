@@ -144,7 +144,7 @@ Use the appropriate suffix to indicate what the variable represents:
 # Good - clear distinction
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
 $outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'
-$destination = $Arguments.Target  # Intentionally ambiguous, could be file or folder
+$destination = $Target  # Neutral - parameter accepts file or directory path
 
 # Bad - misleading suffix
 $configurationDirectory = 'C:\App\config.json'  # Not a directory
@@ -252,6 +252,7 @@ $documentsDirectory = '~\Documents'
 2. Immediately copy `$_` in catch blocks before other commands
 
 ```powershell
+$filePath = 'C:\Data\settings.json'
 try {
     Get-Item -Path $filePath -ErrorAction 'Stop'
 }
