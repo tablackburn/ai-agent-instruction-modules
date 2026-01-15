@@ -8,8 +8,10 @@ jobs:
   scanning:
     name: GitGuardian Scan
     runs-on: ubuntu-latest
+    # Skip for Dependabot PRs - they don't have access to secrets and only update dependencies
+    if: github.actor != 'dependabot[bot]'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: GitGuardian/ggshield-action@v1
