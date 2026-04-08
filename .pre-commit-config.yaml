@@ -1,4 +1,6 @@
 ci:
+  autoupdate_schedule: weekly
+  autoupdate_commit_msg: "chore: pre-commit autoupdate"
   skip: [ggshield]
 
 repos:
