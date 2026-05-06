@@ -123,32 +123,33 @@ function Get-Setting {
 
 ```powershell
 # Good - descriptive variable names
-$backupDirectory = 'C:\Backups'
-$backupFiles = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
+$backupPath = 'C:\Backups'
+$backupFiles = Get-ChildItem -Path $backupPath -Filter '*.bak'
 $activeUsers = Get-ADUser -Filter { Enabled -eq $true }
 
 # Bad - generic variable names
-$files = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
+$files = Get-ChildItem -Path $backupPath -Filter '*.bak'
 $users = Get-ADUser -Filter { Enabled -eq $true }
 ```
 
-### Directory vs Path Naming
+### Path vs Directory Naming
 
-Use the appropriate suffix to indicate what the variable represents:
+Use the appropriate suffix to indicate what the variable holds:
 
-- Use `Path` when the value is specifically a file path
-- Use `Directory` when the value is specifically a folder/container
-- Use a neutral name without suffix when the variable could represent either type by design
+- Use `Path` for any path string (file or folder)
+- Reserve `Directory` for directory objects (e.g., `[System.IO.DirectoryInfo]`) or bare folder names
 
 ```powershell
-# Good - clear distinction
+# Good - Path suffix for path strings
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
-$outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'
-$destination = $Target  # Neutral - parameter accepts file or directory path
+$outputPath = Join-Path -Path $PSScriptRoot -ChildPath 'results'
+$backupPath = 'C:\Backups'
 
-# Bad - misleading suffix
-$configurationDirectory = 'C:\App\config.json'  # Not a directory
-$outputPath = 'C:\App\results'                  # Actually a directory
+# Good - Directory suffix for a directory object
+$logDirectory = [System.IO.DirectoryInfo]::new('C:\Logs')
+
+# Bad - Directory suffix on a path string
+$outputDirectory = 'C:\App\results'
 ```
 
 ## Parameters
@@ -275,11 +276,11 @@ Copy-Item -Path $sourcePath `
 ```powershell
 # Good
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
-$documentsDirectory = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
+$documentsPath = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
 
 # Bad
 $configurationPath = '.\config.json'
-$documentsDirectory = '~\Documents'
+$documentsPath = '~\Documents'
 ```
 
 ## Error Handling

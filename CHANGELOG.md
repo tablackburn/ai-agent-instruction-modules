@@ -15,6 +15,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   continuation (hard to spot, breaks silently with trailing whitespace) and points at splatting,
   parenthesized continuation, and pipe-at-end-of-line as the preferred alternatives
 
+### Changed
+
+- Revised "Path vs Directory Naming" subsection in `powershell.instructions.md` - `Path` suffix
+  is now recommended for any variable holding a path string (file or folder); `Directory` is
+  reserved for directory objects (e.g., `[System.IO.DirectoryInfo]`) or bare folder names. Aligns
+  with Microsoft's cmdlet design guidance (`-Path` is the canonical parameter name for "a file or
+  a data source") and the dominant convention in PowerShell Core, PSReadLine, Pester, and dbatools
+- Renamed `$backupDirectory` → `$backupPath` and `$documentsDirectory` → `$documentsPath` in
+  `powershell.instructions.md` examples to follow the revised naming rule
+
+### Fixed
+
+- Sync drift in `instruction-templates/powershell.instructions.md` (downstream-distributed
+  template was behind active copy after 0.8.12): added "Path vs Directory Naming" subsection;
+  added `$backupPath` predefinition in Naming Conventions example; renamed `$configPath` →
+  `$configurationPath` and `$userPath` → `$documentsPath` in Paths examples; added `$filePath`
+  predefinition and quoted `'Stop'` in Error Handling example
+
 ## [0.8.12] - 2026-01-14
 
 ### Added

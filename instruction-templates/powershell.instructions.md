@@ -123,12 +123,33 @@ function Get-Setting {
 
 ```powershell
 # Good - descriptive variable names
+$backupPath = 'C:\Backups'
 $backupFiles = Get-ChildItem -Path $backupPath -Filter '*.bak'
 $activeUsers = Get-ADUser -Filter { Enabled -eq $true }
 
 # Bad - generic variable names
 $files = Get-ChildItem -Path $backupPath -Filter '*.bak'
 $users = Get-ADUser -Filter { Enabled -eq $true }
+```
+
+### Path vs Directory Naming
+
+Use the appropriate suffix to indicate what the variable holds:
+
+- Use `Path` for any path string (file or folder)
+- Reserve `Directory` for directory objects (e.g., `[System.IO.DirectoryInfo]`) or bare folder names
+
+```powershell
+# Good - Path suffix for path strings
+$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
+$outputPath = Join-Path -Path $PSScriptRoot -ChildPath 'results'
+$backupPath = 'C:\Backups'
+
+# Good - Directory suffix for a directory object
+$logDirectory = [System.IO.DirectoryInfo]::new('C:\Logs')
+
+# Bad - Directory suffix on a path string
+$outputDirectory = 'C:\App\results'
 ```
 
 ## Parameters
@@ -254,12 +275,12 @@ Copy-Item -Path $sourcePath `
 
 ```powershell
 # Good
-$configPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
-$userPath = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
+$configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
+$documentsPath = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
 
 # Bad
-$configPath = '.\config.json'
-$userPath = '~\Documents'
+$configurationPath = '.\config.json'
+$documentsPath = '~\Documents'
 ```
 
 ## Error Handling
@@ -268,8 +289,9 @@ $userPath = '~\Documents'
 2. Immediately copy `$_` in catch blocks before other commands
 
 ```powershell
+$filePath = 'C:\Data\settings.json'
 try {
-    Get-Item -Path $path -ErrorAction Stop
+    Get-Item -Path $filePath -ErrorAction 'Stop'
 }
 catch {
     $errorRecord = $_  # Capture immediately
