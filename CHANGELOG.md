@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.13] - 2026-05-06
+
+### Added
+
+- "Line Continuation" section in `powershell.instructions.md` - forbids backtick (`` ` ``) line
+  continuation (hard to spot, breaks silently with trailing whitespace) and points at splatting,
+  parenthesized continuation, and pipe-at-end-of-line as the preferred alternatives
+
 ## [0.8.12] - 2026-01-14
 
 ### Added
@@ -283,7 +291,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.13...HEAD
+[0.8.13]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...v0.8.13
 [0.8.12]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...v0.8.12
 [0.8.11]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.10...v0.8.11
 [0.8.10]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.9...v0.8.10
