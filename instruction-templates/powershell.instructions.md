@@ -212,32 +212,31 @@ Invoke-RestMethod @parameters
 
 ## Line Continuation
 
-1. Do not use backtick (`` ` ``) line continuation - it is hard to spot at typical font sizes and
-   silently breaks if trailing whitespace is added after the backtick
+1. Do not use backtick (`` ` ``) line continuation
 2. Prefer splatting (`@parameters`) for long parameter lists
 3. Use natural continuation inside `()`, `@{}`, or `@()` when grouping expressions or collections
 4. Pipelines continue without backticks when the line ends with `|`
 
 ```powershell
 # Good - splatting for long parameter lists
-$parameters = @{
+$copyItemParameters = @{
     Path        = $sourcePath
     Destination = $destinationPath
     Recurse     = $true
     Force       = $true
 }
-Copy-Item @parameters
+Copy-Item @copyItemParameters
 
 # Good - pipeline continues across lines
 Get-ChildItem -Path $sourceDirectory -Recurse |
     Where-Object { $_.Length -gt 1MB } |
-    Sort-Object -Property Length -Descending
+    Sort-Object -Property 'Length' -Descending
 
 # Good - natural continuation inside parentheses
-$total = (
-    $firstValue +
-    $secondValue +
-    $thirdValue
+$summaryMessage = (
+    "Processed $successCount of $totalCount records. " +
+    "Skipped $skipCount records. " +
+    "Encountered $errorCount errors."
 )
 
 # Bad - backtick line continuation
