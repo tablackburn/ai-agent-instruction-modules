@@ -14,7 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Line Continuation" section in `powershell.instructions.md` - forbids backtick (`` ` ``) line
   continuation (hard to spot, breaks silently with trailing whitespace) and semicolon-chained
   statements; points at splatting, parenthesized continuation, and pipe-at-end-of-line as the
-  preferred alternatives
+  preferred alternatives. Includes an explicit Good example showing `for`-loop syntactic
+  semicolons (`for ($i = 0; $i -lt 10; $i++)`) as a carve-out from the no-chaining rule
 
 ### Changed
 

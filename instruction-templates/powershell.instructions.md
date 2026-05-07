@@ -265,6 +265,11 @@ $summaryMessage = (
     "Encountered $errorCount errors."
 )
 
+# Good - for-loop semicolons are syntactic, not statement chaining
+for ($i = 0; $i -lt 10; $i++) {
+    Write-Output -InputObject $i
+}
+
 # Bad - backtick line continuation
 Copy-Item -Path $sourcePath `
     -Destination $destinationPath `
