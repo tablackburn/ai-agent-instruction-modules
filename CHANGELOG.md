@@ -12,8 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - "Line Continuation" section in `powershell.instructions.md` - forbids backtick (`` ` ``) line
-  continuation (hard to spot, breaks silently with trailing whitespace) and points at splatting,
-  parenthesized continuation, and pipe-at-end-of-line as the preferred alternatives
+  continuation (hard to spot, breaks silently with trailing whitespace) and semicolon-chained
+  statements; points at splatting, parenthesized continuation, and pipe-at-end-of-line as the
+  preferred alternatives
 
 ### Changed
 
@@ -24,6 +25,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a data source") and the dominant convention in PowerShell Core, PSReadLine, Pester, and dbatools
 - Renamed `$backupDirectory` → `$backupPath` and `$documentsDirectory` → `$documentsPath` in
   `powershell.instructions.md` examples to follow the revised naming rule
+- Audited remaining "Good" code examples in `powershell.instructions.md` against the file's own
+  rules and updated each one for full compliance: `$parameters` → `$invokeRestMethodParameters`
+  in Formatting splatting (descriptive name); `$options` → `$webRequestOptions` in Semicolons
+  (descriptive name); `Process-Item $item` → `Format-Item -InputObject $item` in Output
+  (approved verb + named parameter); added `[OutputType([psobject])]`, `[ValidateNotNull()]`,
+  and `[psobject]` to Format-Result helper; added `[ValidateNotNull()]` to Get-Setting's
+  `$Configuration` parameter; updated Line Continuation rule #2 reference from `@parameters` to
+  `@copyItemParameters` to match the example below the rules
 
 ### Fixed
 

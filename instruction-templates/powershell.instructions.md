@@ -43,8 +43,11 @@ function Get-Data {
 # Good - separate functions at module/script scope
 function Format-Result {
     [CmdletBinding()]
+    [OutputType([psobject])]
     param(
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
+        [psobject]
         $Value
     )
     # Helper logic
@@ -95,6 +98,7 @@ function Get-Setting {
     [OutputType([PSCustomObject])]
     param(
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [hashtable]
         $Configuration
     )
@@ -222,21 +226,22 @@ function Test-Code {
 }
 
 # Good - splatting for readability
-$parameters = @{
+$invokeRestMethodParameters = @{
     Uri     = 'https://api.example.com/endpoint'
     Method  = 'Post'
     Headers = $headers
     Body    = $body
 }
-Invoke-RestMethod @parameters
+Invoke-RestMethod @invokeRestMethodParameters
 ```
 
 ## Line Continuation
 
 1. Do not use backtick (`` ` ``) line continuation
-2. Prefer splatting (`@parameters`) for long parameter lists
-3. Use natural continuation inside `()`, `@{}`, or `@()` when grouping expressions or collections
-4. Pipelines continue without backticks when the line ends with `|`
+2. Do not use semicolons (`;`) to chain multiple statements on one line
+3. Prefer splatting (`@copyItemParameters`) for long parameter lists
+4. Use natural continuation inside `()`, `@{}`, or `@()` when grouping expressions or collections
+5. Pipelines continue without backticks when the line ends with `|`
 
 ```powershell
 # Good - splatting for long parameter lists
@@ -265,6 +270,9 @@ Copy-Item -Path $sourcePath `
     -Destination $destinationPath `
     -Recurse `
     -Force
+
+# Bad - semicolons chaining statements
+Import-Module -Name 'PSReadLine'; Set-PSReadLineOption -EditMode 'Emacs'
 ```
 
 ## Paths and File System
@@ -339,14 +347,14 @@ function Connect-Service {
 ```powershell
 # Good - immediate output
 foreach ($item in $collection) {
-    $result = Process-Item $item
+    $result = Format-Item -InputObject $item
     $result  # Output immediately
 }
 
 # Bad - batching
 $results = @()
 foreach ($item in $collection) {
-    $results += Process-Item $item
+    $results += Format-Item -InputObject $item
 }
 $results
 ```
