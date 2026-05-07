@@ -241,7 +241,8 @@ Invoke-RestMethod @invokeRestMethodParameters
 2. Do not use semicolons (`;`) to chain multiple statements on one line
 3. Prefer splatting (`@copyItemParameters`) for long parameter lists
 4. Use natural continuation inside `()`, `@{}`, or `@()` when grouping expressions or collections
-5. Pipelines continue without backticks when the line ends with `|`
+5. Place each hashtable element on its own line in multi-line hashtables
+6. Pipelines continue without backticks when the line ends with `|`
 
 ```powershell
 # Good - splatting for long parameter lists
@@ -270,6 +271,12 @@ for ($i = 0; $i -lt 10; $i++) {
     Write-Output -InputObject $i
 }
 
+# Good - hashtable with each element on its own line
+$webRequestOptions = @{
+    Name = 'Value'
+    Size = 100
+}
+
 # Bad - backtick line continuation
 Copy-Item -Path $sourcePath `
     -Destination $destinationPath `
@@ -278,6 +285,9 @@ Copy-Item -Path $sourcePath `
 
 # Bad - semicolons chaining statements
 Import-Module -Name 'PSReadLine'; Set-PSReadLineOption -EditMode 'Emacs'
+
+# Bad - hashtable elements chained with semicolons on one line
+$webRequestOptions = @{ Name = 'Value'; Size = 100 }
 ```
 
 ## Paths and File System
@@ -424,22 +434,6 @@ $title = 'Static string'
 2. Spaces around comparison operators: `$value -eq 10`
 3. Space after commas and semicolons
 4. No trailing spaces
-
-## Semicolons
-
-1. Do not use semicolons as line terminators
-2. Place each hashtable element on its own line
-
-```powershell
-# Good
-$options = @{
-    Name = 'Value'
-    Size = 100
-}
-
-# Bad
-$options = @{ Name = 'Value'; Size = 100 }
-```
 
 ## Build Systems
 
