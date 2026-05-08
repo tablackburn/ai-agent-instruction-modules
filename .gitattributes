@@ -1,0 +1,6 @@
+# Normalize line endings to LF in both the repo and the working tree, regardless of
+# the contributor's global core.autocrlf setting. PowerShell on Windows handles LF
+# fine. Without this, Windows clones with core.autocrlf=true emit "LF will be
+# replaced by CRLF the next time Git touches it" warnings on every commit when
+# files are edited by tooling that writes LF (most editors and AI agents do).
+* text=auto eol=lf
