@@ -47,6 +47,8 @@ Text after list.
 - Always specify language for fenced code blocks
 - Ensure closing triple backticks are on their own line
 - No trailing whitespace after closing backticks
+- Code inside fenced blocks should follow the conventions of the relevant language's instruction
+  file (e.g., PowerShell snippets follow `powershell.instructions.md`)
 
 ```javascript
 // JavaScript code here

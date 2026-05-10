@@ -43,8 +43,11 @@ function Get-Data {
 # Good - separate functions at module/script scope
 function Format-Result {
     [CmdletBinding()]
+    [OutputType([psobject])]
     param(
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
+        [psobject]
         $Value
     )
     # Helper logic
@@ -95,6 +98,7 @@ function Get-Setting {
     [OutputType([PSCustomObject])]
     param(
         [Parameter(Mandatory)]
+        [ValidateNotNull()]
         [hashtable]
         $Configuration
     )
@@ -123,32 +127,33 @@ function Get-Setting {
 
 ```powershell
 # Good - descriptive variable names
-$backupDirectory = 'C:\Backups'
-$backupFiles = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
+$backupPath = 'C:\Backups'
+$backupFiles = Get-ChildItem -Path $backupPath -Filter '*.bak'
 $activeUsers = Get-ADUser -Filter { Enabled -eq $true }
 
 # Bad - generic variable names
-$files = Get-ChildItem -Path $backupDirectory -Filter '*.bak'
+$files = Get-ChildItem -Path $backupPath -Filter '*.bak'
 $users = Get-ADUser -Filter { Enabled -eq $true }
 ```
 
-### Directory vs Path Naming
+### Path vs Directory Naming
 
-Use the appropriate suffix to indicate what the variable represents:
+Use the appropriate suffix to indicate what the variable holds:
 
-- Use `Path` when the value is specifically a file path
-- Use `Directory` when the value is specifically a folder/container
-- Use a neutral name without suffix when the variable could represent either type by design
+- Use `Path` for any path string (file or folder)
+- Reserve `Directory` for directory objects (e.g., `[System.IO.DirectoryInfo]`) or bare folder names
 
 ```powershell
-# Good - clear distinction
+# Good - Path suffix for path strings
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
-$outputDirectory = Join-Path -Path $PSScriptRoot -ChildPath 'results'
-$destination = $Target  # Neutral - parameter accepts file or directory path
+$outputPath = Join-Path -Path $PSScriptRoot -ChildPath 'results'
+$backupPath = 'C:\Backups'
 
-# Bad - misleading suffix
-$configurationDirectory = 'C:\App\config.json'  # Not a directory
-$outputPath = 'C:\App\results'                  # Actually a directory
+# Good - Directory suffix for a directory object
+$logDirectory = [System.IO.DirectoryInfo]::new('C:\Logs')
+
+# Bad - Directory suffix on a path string
+$outputDirectory = 'C:\App\results'
 ```
 
 ## Parameters
@@ -221,13 +226,68 @@ function Test-Code {
 }
 
 # Good - splatting for readability
-$parameters = @{
+$invokeRestMethodParameters = @{
     Uri     = 'https://api.example.com/endpoint'
     Method  = 'Post'
     Headers = $headers
     Body    = $body
 }
-Invoke-RestMethod @parameters
+Invoke-RestMethod @invokeRestMethodParameters
+```
+
+## Line Continuation
+
+1. Do not use backtick (`` ` ``) line continuation
+2. Do not use semicolons (`;`) to chain multiple statements on one line
+3. Prefer splatting (`@copyItemParameters`) for long parameter lists
+4. Use natural continuation inside `()`, `@{}`, or `@()` when grouping expressions or collections
+5. Place each hashtable element on its own line in multi-line hashtables
+6. Pipelines continue without backticks when the line ends with `|`
+
+```powershell
+# Good - splatting for long parameter lists
+$copyItemParameters = @{
+    Path        = $sourcePath
+    Destination = $destinationPath
+    Recurse     = $true
+    Force       = $true
+}
+Copy-Item @copyItemParameters
+
+# Good - pipeline continues across lines
+Get-ChildItem -Path $sourceDirectory -Recurse |
+    Where-Object { $_.Length -gt 1MB } |
+    Sort-Object -Property 'Length' -Descending
+
+# Good - natural continuation inside parentheses
+$summaryMessage = (
+    "Processed $successCount of $totalCount records. " +
+    "Skipped $skipCount records. " +
+    "Encountered $errorCount errors."
+)
+
+# Good - for-loop semicolons are syntactic, not statement chaining
+for ($i = 0; $i -lt 10; $i++) {
+    Write-Output -InputObject $i
+}
+
+# Good - hashtable with each element on its own line
+$webRequestOptions = @{
+    Name = 'Value'
+    Size = 100
+}
+
+# Bad - backtick line continuation
+Copy-Item -Path $sourcePath `
+    -Destination $destinationPath `
+    -Recurse `
+    -Force
+
+# Bad - semicolons chaining statements
+Import-Module -Name 'PSReadLine'; Set-PSReadLineOption -EditMode 'Emacs'
+
+# Bad - hashtable elements chained with semicolons on one line
+$webRequestOptions = @{ Name = 'Value'; Size = 100 }
 ```
 
 ## Paths and File System
@@ -239,11 +299,11 @@ Invoke-RestMethod @parameters
 ```powershell
 # Good
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
-$documentsDirectory = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
+$documentsPath = Join-Path -Path $Env:UserProfile -ChildPath 'Documents'
 
 # Bad
 $configurationPath = '.\config.json'
-$documentsDirectory = '~\Documents'
+$documentsPath = '~\Documents'
 ```
 
 ## Error Handling
@@ -302,14 +362,14 @@ function Connect-Service {
 ```powershell
 # Good - immediate output
 foreach ($item in $collection) {
-    $result = Process-Item $item
+    $result = Format-Item -InputObject $item
     $result  # Output immediately
 }
 
 # Bad - batching
 $results = @()
 foreach ($item in $collection) {
-    $results += Process-Item $item
+    $results += Format-Item -InputObject $item
 }
 $results
 ```
@@ -374,22 +434,6 @@ $title = 'Static string'
 2. Spaces around comparison operators: `$value -eq 10`
 3. Space after commas and semicolons
 4. No trailing spaces
-
-## Semicolons
-
-1. Do not use semicolons as line terminators
-2. Place each hashtable element on its own line
-
-```powershell
-# Good
-$options = @{
-    Name = 'Value'
-    Size = 100
-}
-
-# Bad
-$options = @{ Name = 'Value'; Size = 100 }
-```
 
 ## Build Systems
 

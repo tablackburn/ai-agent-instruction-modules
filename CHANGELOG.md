@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.13] - 2026-05-06
+
+### Added
+
+- "Line Continuation" section in `powershell.instructions.md` - forbids backtick (`` ` ``) line
+  continuation (hard to spot, breaks silently with trailing whitespace) and semicolon-chained
+  statements; points at splatting, parenthesized continuation, pipe-at-end-of-line, and one
+  hashtable-element-per-line as the preferred alternatives. Includes an explicit Good example
+  showing `for`-loop syntactic semicolons (`for ($i = 0; $i -lt 10; $i++)`) as a carve-out
+  from the no-chaining rule
+- Cross-reference in `markdown.instructions.md` Code Blocks section pointing readers to the
+  relevant language's instruction file (e.g., `powershell.instructions.md`) for code-block
+  content conventions, so PowerShell snippets in markdown follow the PowerShell rules without
+  needing to broaden the PowerShell module's `applyTo` glob
+
+### Changed
+
+- Revised "Path vs Directory Naming" subsection in `powershell.instructions.md` - `Path` suffix
+  is now recommended for any variable holding a path string (file or folder); `Directory` is
+  reserved for directory objects (e.g., `[System.IO.DirectoryInfo]`) or bare folder names. Aligns
+  with Microsoft's cmdlet design guidance (`-Path` is the canonical parameter name for "a file or
+  a data source") and the dominant convention in PowerShell Core, PSReadLine, Pester, and dbatools
+- Renamed `$backupDirectory` → `$backupPath` and `$documentsDirectory` → `$documentsPath` in
+  `powershell.instructions.md` examples to follow the revised naming rule
+- Audited remaining "Good" code examples in `powershell.instructions.md` against the file's own
+  rules and updated each one for full compliance: `$parameters` → `$invokeRestMethodParameters`
+  in Formatting splatting (descriptive name); `$options` → `$webRequestOptions` in the hashtable
+  formatting example (descriptive name); `Process-Item $item` → `Format-Item -InputObject $item`
+  in Output (approved verb + named parameter); added `[OutputType([psobject])]`,
+  `[ValidateNotNull()]`, and `[psobject]` to Format-Result helper; added `[ValidateNotNull()]`
+  to Get-Setting's `$Configuration` parameter; updated Line Continuation rule #2 reference
+  from `@parameters` to `@copyItemParameters` to match the example below the rules
+- Consolidated the standalone "Semicolons" section in `powershell.instructions.md` into "Line
+  Continuation" - both forbid the same anti-pattern (chained statements via `;`), so the
+  hashtable element rule and Good/Bad examples now appear within Line Continuation alongside
+  the backtick guidance instead of as a separate section
+
+### Fixed
+
+- Sync drift in `instruction-templates/powershell.instructions.md` (downstream-distributed
+  template was behind active copy after 0.8.12): added "Path vs Directory Naming" subsection;
+  added `$backupPath` predefinition in Naming Conventions example; renamed `$configPath` →
+  `$configurationPath` and `$userPath` → `$documentsPath` in Paths examples; added `$filePath`
+  predefinition and quoted `'Stop'` in Error Handling example
+
 ## [0.8.12] - 2026-01-14
 
 ### Added
@@ -283,7 +328,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.13...HEAD
+[0.8.13]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...v0.8.13
 [0.8.12]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...v0.8.12
 [0.8.11]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.10...v0.8.11
 [0.8.10]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.9...v0.8.10
