@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.14] - 2026-05-16
+
+### Fixed
+
+- `contributing.instructions.md` "Make Changes" section pointed contributors at the wrong
+  folder for new instruction files (`instructions/` instead of `instruction-templates/`),
+  contradicting `CONTRIBUTING.md` and the README's folder description. Following the bad
+  guidance landed new modules in the dogfood mirror where downstream sync workflows would
+  not pick them up. Fix mirrored into both `instruction-templates/` and `instructions/`.
+  Surfaced during Copilot review of `psake/PowerShellBuild#122`
+- `github-cli.instructions.md` "Creating Releases" example used `gh release create --notes`,
+  contradicting `releases.instructions.md` which mandates `--notes-file` to avoid escaping
+  issues with backticks, backslashes, and quotes. Replaced the example with a temp-file
+  pattern and added an explicit note that `releases.instructions.md` takes precedence for
+  project releases. Mirrored into both `instruction-templates/` and `instructions/`
+- Sync drift in `instruction-templates/shorthand.instructions.md` (downstream-distributed
+  template was missing the `Dir → Directory` row added in 0.8.12 to the active copy).
+  Backfilled to bring the template in line with `instructions/shorthand.instructions.md`
+
 ## [0.8.13] - 2026-05-06
 
 ### Added
@@ -328,7 +347,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.13...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.14...HEAD
+[0.8.14]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.13...v0.8.14
 [0.8.13]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...v0.8.13
 [0.8.12]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...v0.8.12
 [0.8.11]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.10...v0.8.11
