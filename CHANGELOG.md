@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `powershell.instructions.md` "Parameters" rule 1 ("Use full parameter names") read as an
+  absolute, which over-applied to single-argument calls and prompted over-naming such as
+  `Test-Path -Path $path`. Scoped the rule to calls with two or more arguments; single-argument
+  calls may stay positional. Added examples and retuned the quoting example to a positional
+  single-argument call for consistency. Mirrored into both `instruction-templates/` and `instructions/`
+
 ## [0.8.14] - 2026-05-16
 
 ### Fixed
