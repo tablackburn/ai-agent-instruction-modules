@@ -29,6 +29,18 @@ Repositories control AIM behavior through `aim.config.json` in the repository ro
         "description": "Community-contributed instructions from GitHub"
       }
     ]
+  },
+  "skills": {
+    "enabled": true,
+    "dependencies": [
+      {
+        "name": "psake",
+        "source": "psake/psake-llm-tools",
+        "path": "plugins/psake/skills/psake",
+        "format": "skill-md",
+        "description": "psake build authoring (Agent Skill, agentskills.io)"
+      }
+    ]
   }
 }
 ```
@@ -40,6 +52,11 @@ Repositories control AIM behavior through `aim.config.json` in the repository ro
 - `modules.exclude` - List of modules to exclude (takes precedence over include)
 - `externalSources.enabled` - Enable fetching from external repositories
 - `externalSources.repositories` - List of external instruction sources
+- `skills.enabled` - Enable resolving declared Agent Skill (SKILL.md) dependencies
+- `skills.dependencies` - List of external skills, each with `name`, `source` (repo),
+  `path` (skill folder within the repo), `format` (`skill-md`), and `description`. Unlike
+  `externalSources` (which copies instruction files), skills are installed via the agent's own
+  skill mechanism, not copied into `instructions/`
 
 ## Update Procedure
 
@@ -106,21 +123,40 @@ Fetching python.instructions.md from github/awesome-copilot...
 Fetching react.instructions.md from github/awesome-copilot...
 ```
 
-### 7. Update AGENTS.md
+### 7. Handle Skill Dependencies
+
+If `skills.enabled` is true, for each entry in `skills.dependencies`, make the declared Agent Skill
+(SKILL.md format) available to the user's agent. Skills are not instruction files, so they are NOT
+copied into `instructions/` - they are installed through the agent's own skill mechanism.
+
+1. Tell the user which skills are declared and why (use each entry's `description`)
+2. **With the user's confirmation**, install each skill - offer methods most-portable first:
+   - **Cross-agent (recommended):** `npx skills add <source>/<path>`
+     (e.g., `npx skills add psake/psake-llm-tools/plugins/psake/skills/psake`), which installs into
+     whichever agents are present
+   - **Manual (zero-dependency):** copy the `SKILL.md` folder from `<source>` at `<path>` into the
+     agent's skills directory
+   - **Claude Code only:** `claude plugin marketplace add <source>` then
+     `claude plugin install <name>@<marketplace>`, if the source ships a Claude plugin wrapper
+3. If the user declines, surface the commands so they can install later
+4. Never install without confirmation - installing modifies the user's agent environment (same
+   posture as the ask-before-overwrite rule for instruction files)
+
+### 8. Update AGENTS.md
 
 - Replace the HTML comment block at the top (the comment starting with `<!-- THIS IS THE TEMPLATE`)
 - Update the sync date to today's date
 - Update the template version to match the upstream version
 - Preserve any "Repository-Specific" sections from the existing file
 
-### 8. Update Configuration
+### 9. Update Configuration
 
 If new modules were added or configuration changed during the update:
 
 - Update `aim.config.json` to reflect the current module selection
 - Ask the user if they want to enable/disable any modules going forward
 
-### 9. Validate and Clean Up
+### 10. Validate and Clean Up
 
 - List all files in the local instructions directory
 - Verify file structure matches expected configuration
@@ -161,6 +197,7 @@ If the user adds new source files in a language not currently covered:
 - [ ] User prompted before overwriting existing files
 - [ ] New modules copied without prompting
 - [ ] External sources checked for missing modules (if enabled)
+- [ ] Skill dependencies resolved (if enabled) - user confirmed an install method
 - [ ] AGENTS.md updated with new version and sync date
 - [ ] Repository-specific content preserved
 - [ ] Configuration updated with any changes

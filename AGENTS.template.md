@@ -21,7 +21,7 @@ AI agents **must**:
 2. **Read `instructions/agent-workflow.instructions.md` FIRST to determine which other instruction
    files apply to your task.** Follow all applicable instructions before proceeding with work.
 
-3. **Check `aim.config.json`** for module configuration and external source settings.
+3. **Check `aim.config.json`** for module configuration, external source, and skill dependency settings.
 
 ## Instruction Applicability Matrix
 
@@ -75,3 +75,12 @@ Use this matrix to determine which instruction files to read based on your task:
 ## Repository-Specific Instructions
 
 See `instructions/repository-specific.instructions.md` for customizations specific to this repository.
+
+## Skill Dependencies
+
+This repository may declare Agent Skills (SKILL.md format) it depends on in `aim.config.json` under
+`skills`. These are capability packages installed through your agent's own skill mechanism (for a
+cross-agent install, `npx skills add <source>/<path>`), not instruction files copied into
+`instructions/`. When a skill is declared for a domain (for example, build and test tooling), prefer
+its guidance over ad-hoc commands. See `instructions/update.instructions.md` for how skill
+dependencies are resolved during sync.

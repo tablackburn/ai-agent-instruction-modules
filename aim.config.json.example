@@ -21,5 +21,24 @@
         "description": "Community-contributed instructions from GitHub's awesome-copilot repository"
       }
     ]
+  },
+  "skills": {
+    "enabled": true,
+    "dependencies": [
+      {
+        "name": "psake",
+        "source": "psake/psake-llm-tools",
+        "path": "plugins/psake/skills/psake",
+        "format": "skill-md",
+        "description": "psake build authoring and patterns (Agent Skill, agentskills.io)"
+      },
+      {
+        "name": "powershellbuild",
+        "source": "psake/psake-llm-tools",
+        "path": "plugins/powershellbuild/skills/powershellbuild",
+        "format": "skill-md",
+        "description": "PowerShell module build/test/publish via PowerShellBuild (Agent Skill)"
+      }
+    ]
   }
 }
