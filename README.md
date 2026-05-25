@@ -196,7 +196,8 @@ Tests verify:
 ## Configuration
 
 AIM uses `aim.config.json` to control which instruction modules are active, enable external
-sources for additional language coverage, and declare Agent Skill (SKILL.md) dependencies.
+sources for additional language coverage, and vendor Agent Skill (SKILL.md) dependencies into the
+repository.
 
 ### Configuration Options
 
@@ -220,11 +221,13 @@ sources for additional language coverage, and declare Agent Skill (SKILL.md) dep
   },
   "skills": {
     "enabled": true,
+    "vendorPath": ".agents/skills",
     "dependencies": [
       {
         "name": "psake",
         "source": "psake/psake-llm-tools",
         "path": "plugins/psake/skills/psake",
+        "version": "v2.2.0",
         "format": "skill-md",
         "description": "psake build authoring (Agent Skill, agentskills.io)"
       }
@@ -238,9 +241,10 @@ sources for additional language coverage, and declare Agent Skill (SKILL.md) dep
 - **modules.exclude**: List of modules to exclude
 - **externalSources.enabled**: Enable fallback to external repositories for missing modules
 - **externalSources.repositories**: List of external instruction repositories
-- **skills.enabled**: Enable resolving declared Agent Skill (SKILL.md) dependencies
-- **skills.dependencies**: Agent Skills the repo expects (`source` repo, `path` to the skill
-  folder, `format`); installed via the agent's own mechanism, not copied into `instructions/`
+- **skills.enabled**: Enable vendoring declared Agent Skill (SKILL.md) dependencies into the repo
+- **skills.vendorPath**: Directory skills are vendored into (default `.agents/skills`)
+- **skills.dependencies**: Skills to vendor (`source` repo, `path` to the skill folder, `version`
+  to pin, `format`); copied to `vendorPath` and routed via `AGENTS.md`, not installed per-agent
 
 ### External Sources
 
@@ -251,14 +255,15 @@ and many other languages and frameworks.
 
 ### Skill Dependencies
 
-Beyond instruction files, a repository can declare **Agent Skills** (the portable `SKILL.md`
-format from [agentskills.io](https://agentskills.io)) it depends on, under `skills` in
-`aim.config.json`. Skills are on-demand capability packages, distinct from always-on instruction
-modules. AIM stays agent-neutral: it declares *what* skill and *where* (`source` repo + `path`),
-and installation is left to the agent's own mechanism. During sync the agent offers, in order:
-cross-agent `npx skills add <source>/<path>` ([skills.sh](https://www.skills.sh/)), a manual copy
-of the skill folder at `<path>` (which contains `SKILL.md`), or the Claude Code plugin CLI for
-Claude Code users.
+Beyond instruction files, a repository can vendor **Agent Skills** (the portable `SKILL.md`
+standard from [agentskills.io](https://agentskills.io)) it depends on, under `skills` in
+`aim.config.json`. Rather than a per-developer install, AIM copies each skill verbatim into
+`skills.vendorPath` (default `.agents/skills/`) - the cross-client convention - so it travels with
+the repository. The skill is routed from the `AGENTS.md` Instruction Applicability Matrix to its
+`SKILL.md`, and a `CLAUDE.md` that imports `AGENTS.md` (`@AGENTS.md`) carries that routing into
+Claude Code (which reads `CLAUDE.md`, not `AGENTS.md` or `.agents/skills/`). The pinned `version`
+and provenance live in `aim.config.json` so skills re-sync from upstream like instruction modules;
+attribution is recorded in `.agents/skills/NOTICE.md`.
 
 ## For Maintainers
 

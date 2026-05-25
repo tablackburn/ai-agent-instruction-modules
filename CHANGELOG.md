@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-05-25
+
+### Changed
+
+- Reframed the `skills` configuration block from "declare a dependency, install per-agent" (0.9.0)
+  to vendoring: AIM now copies each declared Agent Skill verbatim into `skills.vendorPath`
+  (default `.agents/skills/`, the cross-client [Agent Skills](https://agentskills.io) convention)
+  so skills travel with the repository like instruction modules instead of being installed into
+  each developer's agent. Skills are routed from the `AGENTS.md` Instruction Applicability Matrix
+  to their `SKILL.md`, and a `CLAUDE.md` that imports `AGENTS.md` (`@AGENTS.md`) carries that
+  routing into Claude Code, which reads `CLAUDE.md` and does not scan `AGENTS.md` or
+  `.agents/skills/`. Verified empirically against Claude Code 2.1.150: `.agents/skills/` is not
+  discovered natively, the `.claude/skills/` control is, and the `@AGENTS.md` bridge surfaces the
+  vendored skill on demand
+- `update.instructions.md` step 7 ("Handle Skill Dependencies") rewritten for the vendoring flow:
+  resolve `source` at the pinned `version`, copy the skill folder to `<vendorPath>/<name>/` with
+  confirm-before-overwrite, record attribution in `<vendorPath>/NOTICE.md`, add the matrix row, and
+  ensure the `CLAUDE.md` `@AGENTS.md` bridge. Mirrored into both `instruction-templates/` and
+  `instructions/`
+
+### Added
+
+- `skills.vendorPath` config field (default `.agents/skills`) and per-dependency `version` for
+  pinning and re-syncing the vendored skill from upstream. Reflected in `aim.config.json.example`,
+  `AGENTS.template.md`, `AGENTS.md`, and the README `Configuration` and `Skill Dependencies`
+  sections
+
 ## [0.9.0] - 2026-05-25
 
 ### Added
