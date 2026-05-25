@@ -239,7 +239,8 @@ sources for additional language coverage, and declare Agent Skill (SKILL.md) dep
 - **externalSources.enabled**: Enable fallback to external repositories for missing modules
 - **externalSources.repositories**: List of external instruction repositories
 - **skills.enabled**: Enable resolving declared Agent Skill (SKILL.md) dependencies
-- **skills.dependencies**: Agent Skills the repo expects (`source` repo, `path` to the skill folder, `format`); installed via the agent's own mechanism, not copied into `instructions/`
+- **skills.dependencies**: Agent Skills the repo expects (`source` repo, `path` to the skill
+  folder, `format`); installed via the agent's own mechanism, not copied into `instructions/`
 
 ### External Sources
 

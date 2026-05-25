@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-05-25
+
 ### Added
 
 - `skills` configuration block in `aim.config.json` for declaring Agent Skill (SKILL.md /
@@ -17,6 +19,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   convenience. Adds a "Handle Skill Dependencies" step (with confirm-before-install) to
   `update.instructions.md`, schema/field docs, a sync-checklist item, and a "Skill Dependencies"
   section in `AGENTS.template.md`. Mirrored into both `instruction-templates/` and `instructions/`
+
+## [0.8.15] - 2026-05-25
+
+### Fixed
+
+- `powershell.instructions.md` "Parameters" rule 1 ("Use full parameter names") read as an
+  absolute, which over-applied to single-argument calls and prompted over-naming such as
+  `Test-Path -Path $path`. Scoped the rule to calls with two or more arguments; single-argument
+  calls may stay positional. Added examples and retuned the quoting example to a positional
+  single-argument call for consistency. Mirrored into both `instruction-templates/` and `instructions/`
 
 ## [0.8.14] - 2026-05-16
 
@@ -358,7 +370,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.14...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.15...v0.9.0
+[0.8.15]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.14...v0.8.15
 [0.8.14]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.13...v0.8.14
 [0.8.13]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...v0.8.13
 [0.8.12]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...v0.8.12
