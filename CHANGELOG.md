@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.15] - 2026-05-25
+
 ### Fixed
 
 - `powershell.instructions.md` "Parameters" rule 1 ("Use full parameter names") read as an
@@ -355,7 +357,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.14...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.15...HEAD
+[0.8.15]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.14...v0.8.15
 [0.8.14]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.13...v0.8.14
 [0.8.13]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...v0.8.13
 [0.8.12]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.11...v0.8.12
