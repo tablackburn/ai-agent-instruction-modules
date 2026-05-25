@@ -195,8 +195,8 @@ Tests verify:
 
 ## Configuration
 
-AIM uses `aim.config.json` to control which instruction modules are active and enable external
-sources for additional language coverage.
+AIM uses `aim.config.json` to control which instruction modules are active, enable external
+sources for additional language coverage, and declare Agent Skill (SKILL.md) dependencies.
 
 ### Configuration Options
 
@@ -217,6 +217,18 @@ sources for additional language coverage.
         "description": "Community-contributed instructions from GitHub"
       }
     ]
+  },
+  "skills": {
+    "enabled": true,
+    "dependencies": [
+      {
+        "name": "psake",
+        "source": "psake/psake-llm-tools",
+        "path": "plugins/psake/skills/psake",
+        "format": "skill-md",
+        "description": "psake build authoring (Agent Skill, agentskills.io)"
+      }
+    ]
   }
 }
 ```
@@ -226,6 +238,9 @@ sources for additional language coverage.
 - **modules.exclude**: List of modules to exclude
 - **externalSources.enabled**: Enable fallback to external repositories for missing modules
 - **externalSources.repositories**: List of external instruction repositories
+- **skills.enabled**: Enable resolving declared Agent Skill (SKILL.md) dependencies
+- **skills.dependencies**: Agent Skills the repo expects (`source` repo, `path` to the skill
+  folder, `format`); installed via the agent's own mechanism, not copied into `instructions/`
 
 ### External Sources
 
@@ -233,6 +248,17 @@ When a language or framework isn't covered by AIM, the agent can fetch instructi
 external repositories like [github/awesome-copilot](https://github.com/github/awesome-copilot).
 This provides access to community-contributed instructions for Python, TypeScript, React,
 and many other languages and frameworks.
+
+### Skill Dependencies
+
+Beyond instruction files, a repository can declare **Agent Skills** (the portable `SKILL.md`
+format from [agentskills.io](https://agentskills.io)) it depends on, under `skills` in
+`aim.config.json`. Skills are on-demand capability packages, distinct from always-on instruction
+modules. AIM stays agent-neutral: it declares *what* skill and *where* (`source` repo + `path`),
+and installation is left to the agent's own mechanism. During sync the agent offers, in order:
+cross-agent `npx skills add <source>/<path>` ([skills.sh](https://www.skills.sh/)), a manual copy
+of the skill folder at `<path>` (which contains `SKILL.md`), or the Claude Code plugin CLI for
+Claude Code users.
 
 ## For Maintainers
 

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-05-25
+
+### Added
+
+- `skills` configuration block in `aim.config.json` for declaring Agent Skill (SKILL.md /
+  agentskills.io) dependencies a repository expects. Skills are declared agent-neutrally
+  (`source` repo + `path` to the skill folder + `format`), and installed through the agent's own
+  mechanism rather than copied into `instructions/`: cross-agent `npx skills add <source>/<path>`,
+  manual copy of the skill folder at `<path>` (containing `SKILL.md`), or the Claude Code plugin
+  CLI as an agent-specific convenience. Adds a "Handle Skill Dependencies" step (with
+  confirm-before-install) to
+  `update.instructions.md`, schema/field docs, a sync-checklist item, and a "Skill Dependencies"
+  section in `AGENTS.template.md`. Mirrored into both `instruction-templates/` and `instructions/`
+
 ## [0.8.15] - 2026-05-25
 
 ### Fixed
@@ -357,7 +371,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.15...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.15...v0.9.0
 [0.8.15]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.14...v0.8.15
 [0.8.14]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.13...v0.8.14
 [0.8.13]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.12...v0.8.13
