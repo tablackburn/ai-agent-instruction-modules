@@ -76,15 +76,16 @@ A release is required after ANY of the following:
 ### Release Steps
 
 Releases are automated. On every push to `main`, the `.github/workflows/release.yml` workflow
-reads the first dated section in `CHANGELOG.md`, creates the matching `vX.Y.Z` tag at the merge
-commit, and publishes a GitHub release with notes extracted from that section. The workflow is
-idempotent: it skips creation when the release already exists.
+reads the first dated section in `CHANGELOG.md`, creates the matching `vX.Y.Z` tag on the commit
+that was pushed to `main`, and publishes a GitHub release with notes extracted from that section.
+The workflow is idempotent: it skips creation when the release already exists.
 
 Your job is to prepare the release inside a pull request so the workflow has what it needs:
 
 1. **Update CHANGELOG.md**
    - Move the `[Unreleased]` changes into a new dated section: `## [X.Y.Z] - YYYY-MM-DD`
-   - Categorize changes: Added, Changed, Fixed, Removed
+   - Categorize changes using the standard Keep a Changelog sections (Added, Changed, Deprecated,
+     Removed, Fixed, Security); use the sections that apply
    - Repoint the `[Unreleased]` comparison link to `vX.Y.Z...HEAD` and add the `[X.Y.Z]` link
 
 2. **Update version numbers**
@@ -93,7 +94,7 @@ Your job is to prepare the release inside a pull request so the workflow has wha
    - Verify all three versions match (template, AGENTS.md, latest changelog section)
 
 3. **Open a pull request and merge it** following `git-workflow.instructions.md`. When the branch
-   lands on `main`, the Release workflow tags the merge commit and publishes the release.
+   lands on `main`, the Release workflow tags that pushed commit and publishes the release.
 
 Do not create the tag or run `gh release create` by hand. The workflow owns those steps, and a
 manual tag collides with it. If you ever need to author release notes manually, follow
