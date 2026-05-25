@@ -158,18 +158,33 @@ $outputDirectory = 'C:\App\results'
 
 ## Parameters
 
-1. Use full parameter names in scripts and functions
+1. Name parameters on calls that pass two or more arguments; a single-argument call may stay
+   positional. Naming disambiguates which value maps to which parameter when there are several;
+   with one argument there is nothing to disambiguate, so naming it only adds noise.
 2. Always use quotes around string parameter values
 3. Include validation on every parameter
 4. Place each component on its own line
 
 ```powershell
+# Good - 2+ arguments: name them (no positional guessing)
+Get-ChildItem -Path 'C:\Logs' -Filter '*.log' -Recurse
+Copy-Item -Path $sourcePath -Destination $destinationPath
+
+# Good - single argument: positional is fine
+Test-Path $configurationPath
+Import-Module $modulePath
+
+# Avoid - naming the only argument adds noise without removing ambiguity
+Test-Path -Path $configurationPath
+```
+
+```powershell
 # Good - string parameter values are quoted
-Get-Process -Name 'powershell'
+Get-Process 'powershell'
 Get-ChildItem -Path 'C:\Program Files' -Filter '*.txt'
 
 # Bad - bare string parameter values
-Get-Process -Name powershell
+Get-Process powershell
 Get-ChildItem -Path C:\Program Files -Filter *.txt
 ```
 
