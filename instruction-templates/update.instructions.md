@@ -134,8 +134,8 @@ copied into `instructions/` - they are installed through the agent's own skill m
    - **Cross-agent (recommended):** `npx skills add <source>/<path>`
      (e.g., `npx skills add psake/psake-llm-tools/plugins/psake/skills/psake`), which installs into
      whichever agents are present
-   - **Manual (zero-dependency):** copy the `SKILL.md` folder from `<source>` at `<path>` into the
-     agent's skills directory
+   - **Manual (zero-dependency):** copy the skill folder at `<path>` from `<source>` (the
+     directory containing `SKILL.md`) into the agent's skills directory
    - **Claude Code only:** `claude plugin marketplace add <source>` then
      `claude plugin install <name>@<marketplace>`, if the source ships a Claude plugin wrapper
 3. If the user declines, surface the commands so they can install later

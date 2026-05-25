@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   agentskills.io) dependencies a repository expects. Skills are declared agent-neutrally
   (`source` repo + `path` to the skill folder + `format`), and installed through the agent's own
   mechanism rather than copied into `instructions/`: cross-agent `npx skills add <source>/<path>`,
-  manual copy of the `SKILL.md` folder, or the Claude Code plugin CLI as an agent-specific
-  convenience. Adds a "Handle Skill Dependencies" step (with confirm-before-install) to
+  manual copy of the skill folder at `<path>` (containing `SKILL.md`), or the Claude Code plugin
+  CLI as an agent-specific convenience. Adds a "Handle Skill Dependencies" step (with
+  confirm-before-install) to
   `update.instructions.md`, schema/field docs, a sync-checklist item, and a "Skill Dependencies"
   section in `AGENTS.template.md`. Mirrored into both `instruction-templates/` and `instructions/`
 

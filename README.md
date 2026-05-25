@@ -257,7 +257,8 @@ format from [agentskills.io](https://agentskills.io)) it depends on, under `skil
 modules. AIM stays agent-neutral: it declares *what* skill and *where* (`source` repo + `path`),
 and installation is left to the agent's own mechanism. During sync the agent offers, in order:
 cross-agent `npx skills add <source>/<path>` ([skills.sh](https://www.skills.sh/)), a manual copy
-of the `SKILL.md` folder, or the Claude Code plugin CLI for Claude Code users.
+of the skill folder at `<path>` (which contains `SKILL.md`), or the Claude Code plugin CLI for
+Claude Code users.
 
 ## For Maintainers
 
