@@ -75,50 +75,39 @@ A release is required after ANY of the following:
 
 ### Release Steps
 
+Releases are automated. On every push to `main`, the `.github/workflows/release.yml` workflow
+reads the first dated section in `CHANGELOG.md`, creates the matching `vX.Y.Z` tag at the merge
+commit, and publishes a GitHub release with notes extracted from that section. The workflow is
+idempotent: it skips creation when the release already exists.
+
+Your job is to prepare the release inside a pull request so the workflow has what it needs:
+
 1. **Update CHANGELOG.md**
-   - Add new version section under `[Unreleased]`
-   - Use format: `## [X.Y.Z] - YYYY-MM-DD`
+   - Move the `[Unreleased]` changes into a new dated section: `## [X.Y.Z] - YYYY-MM-DD`
    - Categorize changes: Added, Changed, Fixed, Removed
-   - Update comparison links at bottom of file
+   - Repoint the `[Unreleased]` comparison link to `vX.Y.Z...HEAD` and add the `[X.Y.Z]` link
 
 2. **Update version numbers**
    - `AGENTS.template.md`: Update "Template Version: X.Y.Z"
-   - `AGENTS.md`: Update "Template Version: X.Y.Z"
-   - Verify all three locations match (template, AGENTS.md, changelog)
+   - `AGENTS.md`: Update "Template Version: X.Y.Z" and the "Last sync" date
+   - Verify all three versions match (template, AGENTS.md, latest changelog section)
 
-3. **Commit the release**
+3. **Open a pull request and merge it** following `git-workflow.instructions.md`. When the branch
+   lands on `main`, the Release workflow tags the merge commit and publishes the release.
 
-   ```bash
-   git add -A
-   git commit -m "chore: Release vX.Y.Z"
-   ```
-
-4. **Create and push tag**
-
-   ```bash
-   git tag -a vX.Y.Z -m "Release vX.Y.Z"
-   git push && git push --tags
-   ```
-
-5. **Create GitHub release**
-
-   ```bash
-   gh release create vX.Y.Z --title "vX.Y.Z" --notes "Release notes here"
-   ```
-
-   Or use `--generate-notes` to auto-generate from commits.
+Do not create the tag or run `gh release create` by hand. The workflow owns those steps, and a
+manual tag collides with it. If you ever need to author release notes manually, follow
+`releases.instructions.md` and use `--notes-file` rather than `--notes`.
 
 ### Release Checklist
 
-- [ ] CHANGELOG.md updated with new version section
+- [ ] CHANGELOG.md updated with new dated version section
 - [ ] CHANGELOG.md comparison links updated
 - [ ] AGENTS.template.md version updated
-- [ ] AGENTS.md version updated
+- [ ] AGENTS.md version and "Last sync" date updated
 - [ ] All three versions match
-- [ ] Release commit created
-- [ ] Git tag created (vX.Y.Z format)
-- [ ] Changes pushed to origin
-- [ ] GitHub release created
+- [ ] Pull request merged to `main`
+- [ ] Release workflow created the tag and GitHub release (verify on the Releases page)
 
 ## File Structure
 
