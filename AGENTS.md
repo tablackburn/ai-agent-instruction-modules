@@ -76,10 +76,11 @@ See `instructions/repository-specific.instructions.md` for customizations specif
 A repository can vendor Agent Skills (the open [Agent Skills](https://agentskills.io) `SKILL.md`
 standard) it depends on, declared in `aim.config.json` under `skills`. Unlike a per-developer
 install, the skills are checked in under `skills.vendorPath` (default `.agents/skills/`) - the
-cross-client convention - so they travel with the repository and any agent can use them. Each
-vendored skill is routed from the Instruction Applicability Matrix above to its
-`<vendorPath>/<name>/SKILL.md`; agents that natively scan `.agents/skills/` also pick it up
-directly. Because Claude Code reads `CLAUDE.md` rather than `AGENTS.md`, a `CLAUDE.md` that imports
+cross-client convention - so they travel with the repository and any agent can use them. When a
+skill is vendored, a row is added to the Instruction Applicability Matrix above mapping its task
+type to `<vendorPath>/<name>/SKILL.md`, routing it alongside the instruction files; agents that
+natively scan `.agents/skills/` also pick it up directly. Because Claude Code reads `CLAUDE.md`
+rather than `AGENTS.md`, a `CLAUDE.md` that imports
 this file (`@AGENTS.md`) carries the routing into Claude Code. When a skill covers a task (for
 example build and test tooling), prefer its guidance over ad-hoc commands. See
 `instructions/update.instructions.md` for how skills are vendored and routed during sync.

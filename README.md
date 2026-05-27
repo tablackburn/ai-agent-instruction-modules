@@ -263,7 +263,7 @@ the repository. The skill is routed from the `AGENTS.md` Instruction Applicabili
 `SKILL.md`, and a `CLAUDE.md` that imports `AGENTS.md` (`@AGENTS.md`) carries that routing into
 Claude Code (which reads `CLAUDE.md`, not `AGENTS.md` or `.agents/skills/`). The pinned `version`
 and provenance live in `aim.config.json` so skills re-sync from upstream like instruction modules;
-attribution is recorded in `.agents/skills/NOTICE.md`.
+attribution is recorded in `<vendorPath>/NOTICE.md` (default `.agents/skills/NOTICE.md`).
 
 ## For Maintainers
 

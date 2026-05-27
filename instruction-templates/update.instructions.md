@@ -137,8 +137,10 @@ under `skills.vendorPath` (default `.agents/skills`), the cross-client
 
 For each entry in `skills.dependencies`:
 
-1. Resolve `source` at the pinned `version` (a tag, or `latest`) and locate the skill folder at
-   `path` (the directory containing `SKILL.md`).
+1. Resolve `source` at the pinned `version` and locate the skill folder at `path` (the directory
+   containing `SKILL.md`). `version` is an exact tag or `latest`; `latest` means the most recent
+   release tag of `source` (its newest version tag when the source publishes no GitHub releases),
+   never the default branch's moving HEAD, so every agent vendors identical contents.
 2. Copy that folder verbatim to `<vendorPath>/<name>/` (the `SKILL.md` plus any `references/`,
    `scripts/`, or `assets/`). Do not edit the vendored copy - re-sync from upstream instead.
 3. **If `<vendorPath>/<name>/` already exists, ask the user** before overwriting (same posture as
