@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- "Pester" section in `powershell.instructions.md` - documents that `Set-ItResult -Skipped` and
+  `-Inconclusive` end the `It` block by throwing internally, so code after them (including a
+  trailing `return`) is unreachable dead code, and that `-Skip:$condition` is preferred for
+  discovery-time skips while `Set-ItResult` is reserved for runtime conditions. Mirrored into both
+  `instruction-templates/` and `instructions/`
+
 ## [0.10.0] - 2026-05-25
 
 ### Changed

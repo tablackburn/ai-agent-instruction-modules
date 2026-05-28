@@ -528,3 +528,42 @@ Suppressions without justification are not acceptable:
 # Never do this
 [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
 ```
+
+## Pester
+
+### Skipping Tests
+
+`Set-ItResult -Skipped` (and `-Inconclusive`) ends the `It` block immediately - it throws an
+internal error record that Pester catches and records as the test result. Code after the call
+does not run, so a trailing `return` is unreachable dead code; do not add one. Reviewers,
+including automated ones, recurrently suggest the redundant `return`.
+
+```powershell
+# Good - Set-ItResult ends the test; nothing after it runs
+It 'Validates the required version' {
+    if (-not $dependency.ContainsKey('RequiredVersion')) {
+        Set-ItResult -Skipped -Because 'No RequiredVersion to validate'
+    }
+    Test-VersionConstraint -Version $dependency.RequiredVersion | Should -BeTrue
+}
+
+# Bad - the return can never execute; Set-ItResult already threw
+It 'Validates the required version' {
+    if (-not $dependency.ContainsKey('RequiredVersion')) {
+        Set-ItResult -Skipped -Because 'No RequiredVersion to validate'
+        return
+    }
+    Test-VersionConstraint -Version $dependency.RequiredVersion | Should -BeTrue
+}
+```
+
+Prefer `-Skip:$condition` on `It`, `Context`, or `Describe` when the condition is known at
+discovery time; reserve `Set-ItResult -Skipped` for conditions only knowable at runtime inside
+the test body.
+
+```powershell
+# Good - a discovery-time condition uses the -Skip parameter
+It 'Runs only on Windows' -Skip:(-not $IsWindows) {
+    Get-Service | Should -Not -BeNullOrEmpty
+}
+```
