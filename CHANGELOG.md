@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-05-28
+
 ### Added
 
 - "Pester" section in `powershell.instructions.md` - documents that `Set-ItResult -Skipped` and
@@ -406,7 +408,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.15...v0.9.0
 [0.8.15]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.14...v0.8.15
