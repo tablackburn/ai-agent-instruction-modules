@@ -167,7 +167,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json is valid JSON' {
             if (-not $script:configFileExists) {
                 Set-ItResult -Skipped -Because 'Config file does not exist'
-                return
             }
             { $script:configContent | ConvertFrom-Json } | Should -Not -Throw
         }
@@ -175,7 +174,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json has version field' {
             if (-not $script:configFileExists) {
                 Set-ItResult -Skipped -Because 'Config file does not exist'
-                return
             }
             $script:config.version | Should -Not -BeNullOrEmpty
         }
@@ -183,7 +181,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json has modules field' {
             if (-not $script:configFileExists) {
                 Set-ItResult -Skipped -Because 'Config file does not exist'
-                return
             }
             $script:config.modules | Should -Not -BeNull
         }
@@ -191,7 +188,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json has modules.include field' {
             if (-not $script:configFileExists) {
                 Set-ItResult -Skipped -Because 'Config file does not exist'
-                return
             }
             $script:config.modules.include | Should -Not -BeNullOrEmpty
         }
@@ -199,7 +195,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json has externalSources field' {
             if (-not $script:configFileExists) {
                 Set-ItResult -Skipped -Because 'Config file does not exist'
-                return
             }
             $script:config.externalSources | Should -Not -BeNull
         }
@@ -207,7 +202,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json.example is valid JSON' {
             if (-not $script:configExampleExists) {
                 Set-ItResult -Skipped -Because 'Config example file does not exist'
-                return
             }
             { $script:configExampleContent | ConvertFrom-Json } | Should -Not -Throw
         }
@@ -215,7 +209,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json.example has externalSources.enabled set to true' {
             if (-not $script:configExampleExists) {
                 Set-ItResult -Skipped -Because 'Config example file does not exist'
-                return
             }
             $script:configExample.externalSources.enabled | Should -BeTrue
         }
@@ -223,7 +216,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'aim.config.json.example has awesome-copilot in repositories' {
             if (-not $script:configExampleExists) {
                 Set-ItResult -Skipped -Because 'Config example file does not exist'
-                return
             }
             $awesomeCopilot = $script:configExample.externalSources.repositories | Where-Object { $_.name -eq 'awesome-copilot' }
             $awesomeCopilot | Should -Not -BeNull
@@ -236,7 +228,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'AGENTS.template.md contains valid version number' {
             if (-not $script:templateFileExists) {
                 Set-ItResult -Skipped -Because 'Template file does not exist'
-                return
             }
             $script:templateVersion | Should -Not -BeNullOrEmpty
         }
@@ -244,7 +235,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'AGENTS.md contains valid version number' {
             if (-not $script:agentsFileExists) {
                 Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
-                return
             }
             $script:agentsVersion | Should -Not -BeNullOrEmpty
         }
@@ -252,7 +242,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'CHANGELOG.md contains valid version number' {
             if (-not $script:changelogFileExists) {
                 Set-ItResult -Skipped -Because 'Changelog does not exist'
-                return
             }
             $script:changelogVersion | Should -Not -BeNullOrEmpty
         }
@@ -260,7 +249,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'Template version matches AGENTS.md version' {
             if (-not ($script:templateFileExists -and $script:agentsFileExists)) {
                 Set-ItResult -Skipped -Because 'Required files do not exist'
-                return
             }
             $script:agentsVersion | Should -Be $script:templateVersion
         }
@@ -268,7 +256,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'Template version matches latest changelog version' {
             if (-not ($script:templateFileExists -and $script:changelogFileExists)) {
                 Set-ItResult -Skipped -Because 'Required files do not exist'
-                return
             }
             $script:templateVersion | Should -Be $script:changelogVersion
         }
@@ -279,7 +266,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'Changelog contains version entry with date' {
             if (-not $script:changelogFileExists) {
                 Set-ItResult -Skipped -Because 'Changelog does not exist'
-                return
             }
             $script:changelogContent | Should -Match $script:changelogDatePattern
         }
@@ -287,7 +273,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'Changelog contains standard sections' {
             if (-not $script:changelogFileExists) {
                 Set-ItResult -Skipped -Because 'Changelog does not exist'
-                return
             }
             $script:changelogContent | Should -Match $script:changelogSectionPattern
         }
@@ -298,7 +283,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'AGENTS.md contains last sync date' {
             if (-not $script:agentsFileExists) {
                 Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
-                return
             }
             $script:agentsContent | Should -Match $script:lastSyncPattern
         }
@@ -306,7 +290,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'AGENTS.md last sync date is valid format' {
             if (-not $script:agentsFileExists) {
                 Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
-                return
             }
             if ($script:agentsContent -match $script:lastSyncPattern) {
                 $syncDate = $matches[1]
@@ -317,7 +300,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'AGENTS.md references agent-workflow.instructions.md' {
             if (-not $script:agentsFileExists) {
                 Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
-                return
             }
             $script:agentsContent | Should -Match 'agent-workflow\.instructions\.md'
         }
@@ -325,7 +307,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'AGENTS.template.md references agent-workflow.instructions.md' {
             if (-not $script:templateFileExists) {
                 Set-ItResult -Skipped -Because 'Template does not exist'
-                return
             }
             $script:templateContent | Should -Match 'agent-workflow\.instructions\.md'
         }
@@ -333,7 +314,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'AGENTS.md references aim.config.json' {
             if (-not $script:agentsFileExists) {
                 Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
-                return
             }
             $script:agentsContent | Should -Match 'aim\.config\.json'
         }
@@ -442,7 +422,6 @@ Describe 'AI Agent Instructions Validation' {
         It 'All internal file references in AGENTS.md point to existing files' {
             if (-not $script:agentsFileExists) {
                 Set-ItResult -Skipped -Because 'AGENTS.md does not exist'
-                return
             }
             $linkPattern = '\[([^\]]+)\]\(\.?/?([^)]+\.md)\)'
             $matches = [regex]::Matches($script:agentsContent, $linkPattern)
