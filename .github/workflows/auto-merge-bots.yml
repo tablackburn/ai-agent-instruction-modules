@@ -12,11 +12,6 @@ jobs:
     if: github.actor == 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
-      - uses: dependabot/fetch-metadata@v3
-        id: meta
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-
       - name: Auto-merge dependency updates
         run: gh pr merge --auto --squash --delete-branch "$PR_URL"
         env:
