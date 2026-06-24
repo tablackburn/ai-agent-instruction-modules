@@ -17,7 +17,7 @@ jobs:
     env:
       GGSHIELD_ENABLED: ${{ secrets.GITGUARDIAN_API_KEY != '' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         if: env.GGSHIELD_ENABLED == 'true'
         with:
           fetch-depth: 0
