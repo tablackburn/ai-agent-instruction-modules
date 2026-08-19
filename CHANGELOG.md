@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-08-19
+
+### Added
+
+- Six empirically verified findings to the "Pester" section of `powershell.instructions.md`,
+  all measured during a fleet-wide Pester 5 to 6 migration: never pin Pester to an exact
+  version in a dependency manifest, because Pester 6's per-file discovery autoloads the
+  highest installed version and a lower pin fails with "Assembly with same name is already
+  loaded"; an empty or `$null` `-ForEach` now throws during discovery, killing the container
+  without incrementing `FailedCount`, so `-AllowNullOrEmptyForEach` belongs only on
+  collections that can legitimately be empty; gate the build on `FailedContainersCount` and
+  on `PassedCount + FailedCount -gt 0`, because a container that died during discovery still
+  reports `Passed = $true` and `TotalCount` counts tests that never ran; keep `InModuleScope`
+  inside `Context`/`It` so it does not force a module import during discovery and trigger
+  "Multiple script or manifest modules named X are currently loaded"; `-Skip:` is evaluated
+  during discovery, so it can read `-ForEach` data but never a `BeforeAll` variable, and it
+  should compare against `$null` rather than truthiness so a configured `0` does not skip;
+  and `Get-ChildItem -Filter` is case-sensitive on Linux, so cross-platform build scripts
+  should match test file names with `Where-Object` and `-like`. Mirrored into both
+  `instruction-templates/` and `instructions/`
+
+### Fixed
+
+- `powershell.instructions.md` presented `Format-Result`, `Get-Data`, and `Get-PipelineInput`
+  as good examples without comment-based help, contradicting the file's own "Include
+  comment-based help for all functions" rule. Added help to all three
+- `powershell.instructions.md` "Credential Handling" required the `[PSCredential]` type
+  accelerator but its own example used the full
+  `[System.Management.Automation.PSCredential]` form. Switched the example to the accelerator
+- `powershell.instructions.md` "Path vs Directory Naming" assigned `Path` to any path string
+  while also permitting `Directory` for bare folder names, so the two bullets contradicted
+  each other. Made it one rule: `Path` for any location string including bare folder names,
+  `Directory` only for directory objects
+- `powershell.instructions.md` "Skipping Tests" said `Set-ItResult` is for conditions "only
+  knowable at runtime"; changed to the standard "only known at runtime"
+- `git-workflow.instructions.md` required lowercase branch names but its ticket examples used
+  uppercase `PROJ-123`. Lowercased the examples and stated that tracker identifiers are
+  lowercased in branch names
+
 ## [0.11.0] - 2026-05-28
 
 ### Added
@@ -409,6 +448,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - awesome-copilot fallback support for additional languages and frameworks
 
 [Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.11.0...HEAD
+[0.12.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.8.15...v0.9.0
