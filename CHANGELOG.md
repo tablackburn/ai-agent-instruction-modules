@@ -17,15 +17,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   highest installed version and a lower pin fails with "Assembly with same name is already
   loaded"; an empty or `$null` `-ForEach` now throws during discovery, killing the container
   without incrementing `FailedCount`, so `-AllowNullOrEmptyForEach` belongs only on
-  collections that can legitimately be empty; gate the build on `FailedContainersCount` and
-  on `PassedCount + FailedCount -gt 0`, because a container that died during discovery still
-  reports `Passed = $true` and `TotalCount` counts tests that never ran; keep `InModuleScope`
-  inside `Context`/`It` so it does not force a module import during discovery and trigger
-  "Multiple script or manifest modules named X are currently loaded"; `-Skip:` is evaluated
-  during discovery, so it can read `-ForEach` data but never a `BeforeAll` variable, and it
-  should compare against `$null` rather than truthiness so a configured `0` does not skip;
-  and `Get-ChildItem -Filter` is case-sensitive on Linux, so cross-platform build scripts
-  should match test file names with `Where-Object` and `-like`. Mirrored into both
+  collections that can legitimately be empty; gate the build on `Run.PassThru = $true` plus
+  `FailedCount`, `FailedBlocksCount`, `FailedContainersCount`, and
+  `PassedCount + FailedCount -gt 0`, because `Invoke-Pester -Configuration` returns `$null`
+  without `PassThru`, a container that died during discovery still reports `Passed = $true`,
+  an `AfterAll` failure lands only in `FailedBlocksCount`, and `TotalCount` counts tests that
+  never ran; keep `InModuleScope` inside `Context`/`It` so it does not force a module import
+  during discovery and trigger "Multiple script or manifest modules named X are currently
+  loaded"; `-Skip:` is evaluated during discovery, so it can read `-ForEach` data from an
+  enclosing `Context` but never from the `It`'s own `-ForEach` nor a `BeforeAll` variable,
+  and it should compare against `$null` rather than truthiness so a configured `0` does not
+  skip; and `Get-ChildItem -Filter` is case-sensitive on Linux, so cross-platform build
+  scripts should match test file names with `Where-Object` and `-like`. Mirrored into both
   `instruction-templates/` and `instructions/`
 
 ### Fixed

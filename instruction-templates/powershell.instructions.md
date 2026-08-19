@@ -593,17 +593,12 @@ It 'Runs only on Windows' -Skip:(-not $IsWindows) {
 ```
 
 `-Skip:` is evaluated during discovery, so its expression can only read state that exists at
-discovery time: automatic variables, script-scope values, and the current `-ForEach` item. A
-`-Skip:` expression that reads a variable assigned in `BeforeAll` sees `$null`, because
-`BeforeAll` does not run until execution. The test then skips unconditionally, and a skipped
-test reads as a passing build.
+discovery time: automatic variables, script-scope values, and `-ForEach` data bound by an
+enclosing block. A `-Skip:` expression that reads a variable assigned in `BeforeAll` sees
+`$null`, because `BeforeAll` does not run until execution. The test then skips
+unconditionally, and a skipped test reads as a passing build.
 
 ```powershell
-# Good - the condition reads -ForEach data, which exists during discovery
-It 'Reports the expected track count' -ForEach $albums -Skip:($null -eq $_.ExpectedTracks) {
-    (Get-Album -Name $_.Name).Tracks.Count | Should -Be $_.ExpectedTracks
-}
-
 # Bad - $expectedTracks is assigned in BeforeAll, so -Skip: sees $null and always skips
 BeforeAll {
     $expectedTracks = Get-ExpectedTrackCount
@@ -614,26 +609,67 @@ It 'Reports the expected track count' -Skip:($null -eq $expectedTracks) {
 }
 ```
 
+`$_` inside a `-Skip:` expression is bound by an *enclosing* `Context` or `Describe`
+`-ForEach`, never by the `It`'s own `-ForEach`. PowerShell evaluates the `-Skip:` argument
+before `It` receives its `-ForEach` collection, so on an `It`-level `-ForEach` the `$_` in
+the skip condition is always `$null` and the condition skips every generated case, including
+the ones that should have run. Put the `-ForEach` on an enclosing `Context` when the skip
+condition needs to read the current item.
+
+Measured on Pester 6.1.0 with two cases, one of which should run: the `It`-level form skipped
+both, and moving `-ForEach` to the enclosing `Context` correctly ran one and skipped the other.
+
+```powershell
+# Good - -ForEach on the enclosing Context, so $_ is bound when -Skip: is evaluated
+BeforeDiscovery {
+    $albums = @(
+        @{ Name = 'First'; ExpectedTracks = 9 }
+        @{ Name = 'Second'; ExpectedTracks = $null }
+    )
+}
+
+Describe 'Get-Album' {
+    Context 'Album <_.Name>' -ForEach $albums {
+        It 'Reports the expected track count' -Skip:($null -eq $_.ExpectedTracks) {
+            (Get-Album -Name $_.Name).Tracks.Count | Should -Be $_.ExpectedTracks
+        }
+    }
+}
+
+# Bad - $_ is not bound yet on the It's own -ForEach, so every case skips
+Describe 'Get-Album' {
+    It 'Reports the expected track count' -ForEach $albums -Skip:($null -eq $_.ExpectedTracks) {
+        (Get-Album -Name $_.Name).Tracks.Count | Should -Be $_.ExpectedTracks
+    }
+}
+```
+
 Compare against `$null` explicitly in skip conditions instead of relying on truthiness.
 `-not 0` is `$true`, so a legitimately configured `0` silently skips the test that was meant
 to verify it.
 
 ```powershell
 # Good - only a missing value skips
-It 'Honors the retry limit' -ForEach $cases -Skip:($null -eq $_.RetryLimit) {
-    (Get-RetryPolicy).Limit | Should -Be $_.RetryLimit
+Context 'Case <_.Name>' -ForEach $cases {
+    It 'Honors the retry limit' -Skip:($null -eq $_.RetryLimit) {
+        (Get-RetryPolicy).Limit | Should -Be $_.RetryLimit
+    }
 }
 
 # Bad - a configured RetryLimit of 0 skips too
-It 'Honors the retry limit' -ForEach $cases -Skip:(-not $_.RetryLimit) {
-    (Get-RetryPolicy).Limit | Should -Be $_.RetryLimit
+Context 'Case <_.Name>' -ForEach $cases {
+    It 'Honors the retry limit' -Skip:(-not $_.RetryLimit) {
+        (Get-RetryPolicy).Limit | Should -Be $_.RetryLimit
+    }
 }
 ```
 
 ### Pester Version Pinning
 
-Never pin Pester to an exact version in a dependency manifest such as `*.depend.psd1`; use
-`Version = 'latest'`. Pester 6 runs discovery for each test file separately, and resolving
+This rule is specific to Pester. Pin other dependencies normally.
+
+Never pin Pester itself to an exact version in a dependency manifest such as `*.depend.psd1`;
+use `Version = 'latest'`. Pester 6 runs discovery for each test file separately, and resolving
 `Describe` triggers PowerShell module autoloading. Autoloading always selects the highest
 installed version, overriding whatever version was explicitly imported beforehand. A pin below
 the version already baked into the CI runner image therefore can never be honored, and the run
@@ -662,6 +698,16 @@ was red for eight days for the same reason.
     }
 }
 ```
+
+`Version = 'latest'` does cost reproducibility, and a new Pester release can land in a build
+that was green yesterday. That trade-off is real, but for Pester there is no alternative that
+works: an exact pin below the installed version cannot be honored however it is expressed.
+`Import-Module -RequiredVersion` does not rescue it either, because autoloading re-resolves
+`Describe` for every test file during discovery and picks the highest installed version
+regardless of what was imported first. The only way to make a lower pin stick is to remove the
+higher version from the machine before discovery starts, which a dependency manifest cannot
+express. The real choice is between a build that resolves the newest Pester and a build that
+does not run at all.
 
 ### Data-Driven Tests with -ForEach
 
@@ -692,19 +738,37 @@ Describe 'Public function' -ForEach $publicFunction -AllowNullOrEmptyForEach {
 
 ### Gating the Build on Pester Results
 
+Set `Run.PassThru = $true` before gating on anything. With `-Configuration` and no `PassThru`,
+`Invoke-Pester` returns nothing at all, so `$testResult` is `$null`, every gate below reads
+`$null` as `0`, and the build passes unconditionally - the exact failure this section exists to
+prevent.
+
 Gate the build on `$testResult.FailedContainersCount`, not on filtering `Containers` by
 `Passed`. A container that died during discovery still reports `Passed = $true`, so the obvious
 filter matches nothing and silently reproduces the very failure it was written to catch.
+
+Gate on `FailedBlocksCount` as well. `FailedCount` counts failed tests, and a `BeforeAll` or
+`AfterAll` that throws is not a test. An `AfterAll` failure is the clearest case: its tests have
+already passed, so the run reports `FailedCount = 0` and `FailedContainersCount = 0` while
+`FailedBlocksCount = 1`. Without that gate a broken teardown ships green.
 
 Also assert that tests actually ran, using `PassedCount + FailedCount`. `TotalCount` includes
 tests that never ran, and skipped tests report `Executed = $true` and are not counted in
 `NotRunCount`, so only passed plus failed distinguishes a suite that ran from one that did not.
 
 ```powershell
-# Good - catches failed tests, dead containers, and a suite that never ran
+# Good - catches failed tests, broken setup/teardown, dead containers, and an empty run
+$pesterConfiguration = New-PesterConfiguration
+$pesterConfiguration.Run.Path = './tests'
+$pesterConfiguration.Run.PassThru = $true
+
 $testResult = Invoke-Pester -Configuration $pesterConfiguration
 if ($testResult.FailedCount -gt 0) {
     throw "$($testResult.FailedCount) test(s) failed"
+}
+
+if ($testResult.FailedBlocksCount -gt 0) {
+    throw "$($testResult.FailedBlocksCount) block(s) failed in setup or teardown"
 }
 
 if ($testResult.FailedContainersCount -gt 0) {
@@ -714,6 +778,9 @@ if ($testResult.FailedContainersCount -gt 0) {
 if (($testResult.PassedCount + $testResult.FailedCount) -eq 0) {
     throw 'No tests executed'
 }
+
+# Bad - without Run.PassThru, Invoke-Pester returns $null and every gate below is a no-op
+$testResult = Invoke-Pester -Configuration $pesterConfiguration
 
 # Bad - a container that failed discovery still reports Passed = $true, so this matches nothing
 $failedContainer = $testResult.Containers | Where-Object { -not $_.Passed }
@@ -726,6 +793,12 @@ if ($testResult.TotalCount -eq 0) {
     throw 'No tests executed'
 }
 ```
+
+`Set-ItResult -Inconclusive` interacts with the last gate. An inconclusive test executes but
+lands in `InconclusiveCount` without incrementing `PassedCount` or `FailedCount`, so a suite
+whose tests are all inconclusive reports `0 + 0` and trips the "No tests executed" check even
+though it ran. Where inconclusive results are an expected outcome, include `InconclusiveCount`
+in the sum; where they are not, leave it out so an all-inconclusive suite is caught.
 
 ### InModuleScope Placement
 
@@ -740,11 +813,17 @@ Multiple script or manifest modules named 'ExampleModule' are currently loaded
 ```
 
 Prefer the documented `InModuleScope -ModuleName <Name> -ScriptBlock { }` form inside the block
-that needs module-internal access.
+that needs module-internal access. `InModuleScope` requires the module to be loaded already -
+otherwise the test fails with `No modules named 'X' are currently loaded` - so import it in
+`BeforeAll`, which runs during execution rather than discovery.
 
 ```powershell
 # Good - the module loads during execution, inside the block that needs it
 Describe 'Get-Thing' {
+    BeforeAll {
+        Import-Module 'ExampleModule'
+    }
+
     It 'Calls the private helper' {
         InModuleScope -ModuleName 'ExampleModule' -ScriptBlock {
             Get-Thing -Name 'example' | Should -Not -BeNullOrEmpty
