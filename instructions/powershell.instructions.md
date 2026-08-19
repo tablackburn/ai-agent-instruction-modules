@@ -729,11 +729,11 @@ if ($testResult.TotalCount -eq 0) {
 
 ### InModuleScope Placement
 
-Put `InModuleScope` inside the `Context` or `It` that needs it; never wrap it around `Describe`.
-Pester's own documentation advises against placing it around `Describe` or `It`, because doing
-so forces the module to load during discovery rather than execution. Combined with Pester 6
-discovering each test file separately, those discovery-time imports accumulate across files
-until a later file's discovery hard-errors:
+Put `InModuleScope` inside the `Context` or `It` that needs it; never wrap it around `Describe`
+or `It`. Pester's own documentation advises against that enclosing placement, because a
+wrapping `InModuleScope` forces the module to load during discovery rather than execution.
+Combined with Pester 6 discovering each test file separately, those discovery-time imports
+accumulate across files until a later file's discovery hard-errors:
 
 ```text
 Multiple script or manifest modules named 'ExampleModule' are currently loaded
