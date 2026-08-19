@@ -42,6 +42,13 @@ function Get-Data {
 
 # Good - separate functions at module/script scope
 function Format-Result {
+    <#
+    .SYNOPSIS
+    Formats a raw result object for display.
+
+    .PARAMETER Value
+    The raw result object to format.
+    #>
     [CmdletBinding()]
     [OutputType([psobject])]
     param(
@@ -55,6 +62,13 @@ function Format-Result {
 
 
 function Get-Data {
+    <#
+    .SYNOPSIS
+    Retrieves the data record for a named entity.
+
+    .PARAMETER Name
+    The name of the entity to retrieve.
+    #>
     [CmdletBinding()]
     [OutputType([hashtable])]
     param(
@@ -69,6 +83,13 @@ function Get-Data {
 
 # Function with pipeline input
 function Get-PipelineInput {
+    <#
+    .SYNOPSIS
+    Processes each item received from the pipeline.
+
+    .PARAMETER InputData
+    The item to process, accepted from the pipeline.
+    #>
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param(
@@ -140,20 +161,23 @@ $users = Get-ADUser -Filter { Enabled -eq $true }
 
 Use the appropriate suffix to indicate what the variable holds:
 
-- Use `Path` for any path string (file or folder)
-- Reserve `Directory` for directory objects (e.g., `[System.IO.DirectoryInfo]`) or bare folder names
+- Use `Path` for any string that names a location, whether it points at a file or a folder,
+  and whether it is absolute, relative, or a bare folder name
+- Reserve `Directory` for directory objects (e.g., `[System.IO.DirectoryInfo]`)
 
 ```powershell
 # Good - Path suffix for path strings
 $configurationPath = Join-Path -Path $PSScriptRoot -ChildPath 'config.json'
 $outputPath = Join-Path -Path $PSScriptRoot -ChildPath 'results'
 $backupPath = 'C:\Backups'
+$moduleFolderPath = 'MyModule'
 
 # Good - Directory suffix for a directory object
 $logDirectory = [System.IO.DirectoryInfo]::new('C:\Logs')
 
 # Bad - Directory suffix on a path string
 $outputDirectory = 'C:\App\results'
+$moduleFolderDirectory = 'MyModule'
 ```
 
 ## Parameters
@@ -353,13 +377,13 @@ function Connect-Service {
 
         [Parameter()]
         [ValidateNotNull()]
-        [System.Management.Automation.PSCredential]
+        [PSCredential]
         [System.Management.Automation.Credential()]
-        $Credential = [System.Management.Automation.PSCredential]::Empty
+        $Credential = [PSCredential]::Empty
     )
 
     # Check if credentials were provided
-    if ($Credential -eq [System.Management.Automation.PSCredential]::Empty) {
+    if ($Credential -eq [PSCredential]::Empty) {
         # Use current user context
     }
     else {
@@ -558,7 +582,7 @@ It 'Validates the required version' {
 ```
 
 Prefer `-Skip:$condition` on `It`, `Context`, or `Describe` when the condition is known at
-discovery time; reserve `Set-ItResult -Skipped` for conditions only knowable at runtime inside
+discovery time; reserve `Set-ItResult -Skipped` for conditions only known at runtime inside
 the test body.
 
 ```powershell
@@ -566,4 +590,190 @@ the test body.
 It 'Runs only on Windows' -Skip:(-not $IsWindows) {
     Get-Service | Should -Not -BeNullOrEmpty
 }
+```
+
+`-Skip:` is evaluated during discovery, so its expression can only read state that exists at
+discovery time: automatic variables, script-scope values, and the current `-ForEach` item. A
+`-Skip:` expression that reads a variable assigned in `BeforeAll` sees `$null`, because
+`BeforeAll` does not run until execution. The test then skips unconditionally, and a skipped
+test reads as a passing build.
+
+```powershell
+# Good - the condition reads -ForEach data, which exists during discovery
+It 'Reports the expected track count' -ForEach $albums -Skip:($null -eq $_.ExpectedTracks) {
+    (Get-Album -Name $_.Name).Tracks.Count | Should -Be $_.ExpectedTracks
+}
+
+# Bad - $expectedTracks is assigned in BeforeAll, so -Skip: sees $null and always skips
+BeforeAll {
+    $expectedTracks = Get-ExpectedTrackCount
+}
+
+It 'Reports the expected track count' -Skip:($null -eq $expectedTracks) {
+    (Get-Album -Name 'Example').Tracks.Count | Should -Be $expectedTracks
+}
+```
+
+Compare against `$null` explicitly in skip conditions instead of relying on truthiness.
+`-not 0` is `$true`, so a legitimately configured `0` silently skips the test that was meant
+to verify it.
+
+```powershell
+# Good - only a missing value skips
+It 'Honors the retry limit' -ForEach $cases -Skip:($null -eq $_.RetryLimit) {
+    (Get-RetryPolicy).Limit | Should -Be $_.RetryLimit
+}
+
+# Bad - a configured RetryLimit of 0 skips too
+It 'Honors the retry limit' -ForEach $cases -Skip:(-not $_.RetryLimit) {
+    (Get-RetryPolicy).Limit | Should -Be $_.RetryLimit
+}
+```
+
+### Pester Version Pinning
+
+Never pin Pester to an exact version in a dependency manifest such as `*.depend.psd1`; use
+`Version = 'latest'`. Pester 6 runs discovery for each test file separately, and resolving
+`Describe` triggers PowerShell module autoloading. Autoloading always selects the highest
+installed version, overriding whatever version was explicitly imported beforehand. A pin below
+the version already baked into the CI runner image therefore can never be honored, and the run
+fails during discovery:
+
+```text
+Could not load file or assembly 'Pester, Version=6.0.1.0'. Assembly with same name is already loaded
+```
+
+This was observed twice on hosted runners: one module repository pinned `6.0.1` against an
+image carrying `6.1.0` and all 19 of its test files failed to run, and another repository's CI
+was red for eight days for the same reason.
+
+```powershell
+# Good - always resolve whatever Pester the runner already has
+@{
+    Pester = @{
+        Version = 'latest'
+    }
+}
+
+# Bad - a pin below the runner's installed version can never win against autoloading
+@{
+    Pester = @{
+        Version = '6.0.1'
+    }
+}
+```
+
+### Data-Driven Tests with -ForEach
+
+An empty or `$null` `-ForEach` collection throws in Pester 6; Pester 5 silently generated no
+tests instead. The throw happens during discovery, so it kills the whole container, and a
+container that dies during discovery does not increment `FailedCount`. The build stays green
+while every test in that file silently disappears.
+
+Add `-AllowNullOrEmptyForEach` only to collections that can legitimately be empty. Leave it off
+wherever an empty collection means something upstream is broken - there the throw is the signal
+that is wanted.
+
+```powershell
+# Good - an optional set of extra cases may legitimately be empty
+Describe 'Optional case' -ForEach $optionalCase -AllowNullOrEmptyForEach {
+    It 'Runs when the case exists' {
+        $_ | Should -Not -BeNullOrEmpty
+    }
+}
+
+# Bad - hides a glob that matched no public functions at all
+Describe 'Public function' -ForEach $publicFunction -AllowNullOrEmptyForEach {
+    It 'Has comment-based help' {
+        Get-Help -Name $_.Name | Should -Not -BeNullOrEmpty
+    }
+}
+```
+
+### Gating the Build on Pester Results
+
+Gate the build on `$testResult.FailedContainersCount`, not on filtering `Containers` by
+`Passed`. A container that died during discovery still reports `Passed = $true`, so the obvious
+filter matches nothing and silently reproduces the very failure it was written to catch.
+
+Also assert that tests actually ran, using `PassedCount + FailedCount`. `TotalCount` includes
+tests that never ran, and skipped tests report `Executed = $true` and are not counted in
+`NotRunCount`, so only passed plus failed distinguishes a suite that ran from one that did not.
+
+```powershell
+# Good - catches failed tests, dead containers, and a suite that never ran
+$testResult = Invoke-Pester -Configuration $pesterConfiguration
+if ($testResult.FailedCount -gt 0) {
+    throw "$($testResult.FailedCount) test(s) failed"
+}
+
+if ($testResult.FailedContainersCount -gt 0) {
+    throw "$($testResult.FailedContainersCount) container(s) failed during discovery"
+}
+
+if (($testResult.PassedCount + $testResult.FailedCount) -eq 0) {
+    throw 'No tests executed'
+}
+
+# Bad - a container that failed discovery still reports Passed = $true, so this matches nothing
+$failedContainer = $testResult.Containers | Where-Object { -not $_.Passed }
+if ($failedContainer) {
+    throw 'Container failure'
+}
+
+# Bad - TotalCount includes tests that never ran, so it hides an empty run
+if ($testResult.TotalCount -eq 0) {
+    throw 'No tests executed'
+}
+```
+
+### InModuleScope Placement
+
+Put `InModuleScope` inside the `Context` or `It` that needs it; never wrap it around `Describe`.
+Pester's own documentation advises against placing it around `Describe` or `It`, because doing
+so forces the module to load during discovery rather than execution. Combined with Pester 6
+discovering each test file separately, those discovery-time imports accumulate across files
+until a later file's discovery hard-errors:
+
+```text
+Multiple script or manifest modules named 'ExampleModule' are currently loaded
+```
+
+Prefer the documented `InModuleScope -ModuleName <Name> -ScriptBlock { }` form inside the block
+that needs module-internal access.
+
+```powershell
+# Good - the module loads during execution, inside the block that needs it
+Describe 'Get-Thing' {
+    It 'Calls the private helper' {
+        InModuleScope -ModuleName 'ExampleModule' -ScriptBlock {
+            Get-Thing -Name 'example' | Should -Not -BeNullOrEmpty
+        }
+    }
+}
+
+# Bad - forces a module import during discovery of every file that does this
+InModuleScope 'ExampleModule' {
+    Describe 'Get-Thing' {
+        It 'Calls the private helper' {
+            Get-Thing -Name 'example' | Should -Not -BeNullOrEmpty
+        }
+    }
+}
+```
+
+### Matching Test Files Cross-Platform
+
+`Get-ChildItem -Filter` is case-sensitive on Linux and case-insensitive on Windows. A build
+script that collects test files with `-Filter` therefore finds them on Windows runners and
+silently finds none on Linux ones, which reads as a passing build with zero tests. Match on
+`Where-Object` with `-like`, which is case-insensitive on every platform.
+
+```powershell
+# Good - matches on Windows and Linux runners alike
+$testFiles = Get-ChildItem -Path $testPath -Recurse -File |
+    Where-Object { $_.Name -like '*.Tests.ps1' }
+
+# Bad - case-sensitive on Linux, so 'Example.tests.ps1' is never found there
+$testFiles = Get-ChildItem -Path $testPath -Recurse -File -Filter '*.Tests.ps1'
 ```
