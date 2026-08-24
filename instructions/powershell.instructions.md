@@ -683,7 +683,7 @@ This was observed twice on hosted runners: one module repository pinned `6.0.1` 
 image carrying `6.1.0` and all 19 of its test files failed to run, and another repository's CI
 was red for eight days for the same reason.
 
-The rule governs the Pester the suite itself runs on. A deliberate side-by-side compatibility
+The rule governs the Pester version the suite itself runs on. A deliberate side-by-side compatibility
 matrix is the exception: a repository that verifies its code against more than one Pester major
 installs those extra versions on purpose, from a manifest that is installed but never imported,
 and selects one explicitly inside a separate process. Autoloading never competes with that pin,
