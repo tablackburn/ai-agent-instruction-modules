@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.1] - 2026-08-24
+
 ### Fixed
 
 - `powershell.instructions.md` "InModuleScope Placement" contradicted itself. It said a wrapping
@@ -22,8 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   repository verifying its code against more than one Pester major pins those versions on purpose,
   in a manifest that is installed but never imported, and selects one explicitly inside a separate
   process -- autoloading never competes with that pin, because a version is already imported by
-  the time discovery runs. Scoped the rule to the Pester the suite itself runs on and documented
-  the install-only matrix as the exception. Surfaced during the 0.12.0 sync of
+  the time discovery runs. Scoped the rule to the Pester version the suite itself runs on,
+  and documented the install-only matrix as the exception. Surfaced during the 0.12.0 sync of
   `psake/PowerShellBuild`, whose `requirements.pester-matrix.psd1` is exactly this case
 - `powershell.instructions.md` used the contraction `It's` where the possessive was meant, in the
   `-ForEach` binding example comment
@@ -471,7 +473,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tools/github-cli` - GitHub CLI usage guidelines
 - awesome-copilot fallback support for additional languages and frameworks
 
-[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.12.1...HEAD
+[0.12.1]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/tablackburn/ai-agent-instruction-modules/compare/v0.9.0...v0.10.0

@@ -2,9 +2,9 @@
 
 AI agents working in this repository must follow these instructions.
 
-Template Version: 0.12.0
+Template Version: 0.12.1
 
-Last sync: 2026-05-25
+Last sync: 2026-08-24
 
 ## Instructions for AI Agents
 
