@@ -5,7 +5,7 @@ ci:
 
 repos:
   - repo: https://github.com/gitguardian/ggshield
-    rev: 1.54.0-rc4
+    rev: v1.54.0
     hooks:
       - id: ggshield
         language_version: python3
